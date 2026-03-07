@@ -13,7 +13,7 @@ def get_async_engine(database_url: str, echo: bool = False) -> AsyncEngine:
     """Create async database engine.
 
     Args:
-        database_url: Database connection URL (postgresql+asyncpg:// or sqlite+aiosqlite://)
+        database_url: Database connection URL (postgresql+asyncpg://)
         echo: Whether to log all SQL statements
 
     Returns:

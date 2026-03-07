@@ -11,7 +11,7 @@ setup(
     install_requires=[
         "sqlalchemy>=2.0.0",
         "asyncpg>=0.29.0",
-        "aiosqlite>=0.19.0",
+        "psycopg2-binary>=2.9.9",
         "alembic>=1.13.0",
     ],
     python_requires=">=3.10",

@@ -23,7 +23,7 @@ Centralized SQLAlchemy models ensuring schema synchronization between all projec
 
 **Key Features**:
 - Single source of truth for database schema
-- Supports PostgreSQL (production) and SQLite (development)
+- PostgreSQL database support
 - Automatic migrations via Alembic
 - Type-safe ORM models
 
@@ -103,10 +103,11 @@ python -m bcsrvsqlmq.main_srv
 
 ### Prerequisites
 
-- Python 3.10 or higher
-- PostgreSQL 15+ (production) or SQLite (development)
+- **Python 3.10 - 3.12** (3.13 not compatible with pymqi - see [PYTHON312_SETUP.md](PYTHON312_SETUP.md))
+- PostgreSQL 15+
 - IBM MQ Client 9.x (for BCSrvSqlMq)
 - Git
+- Visual Studio 2022 with C++ tools (for pymqi compilation)
 
 ### Setup All Projects
 
@@ -157,25 +158,19 @@ All projects share the same database schema via `spb-shared` package.
 
 ## 📊 Database Configuration
 
-### Development (SQLite)
+### PostgreSQL Setup
 
 ```bash
 # spbsite/.env
-DATABASE_URL=sqlite+aiosqlite:///./spbsite.db
-CATALOG_DATABASE_URL=sqlite+aiosqlite:///./spb_messages.db
-```
-
-### Production (PostgreSQL)
-
-```bash
-# spbsite/.env
-DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/spbsite
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPB
+CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR
 
 # BCSrvSqlMq.ini
 [Database]
 Server=localhost
 Port=5432
-Database=spbsite
+Database=BCSPB
+DBAliasName=BCSPBSTR
 User=postgres
 Password=password
 ```
@@ -217,12 +212,12 @@ pytest tests/ -v
 │  (FastAPI)  │         │   (Models)   │         │  (MQ Srv)   │
 └─────────────┘         └──────────────┘         └─────────────┘
       │                        │                        │
-      │                        │                        │
-      ▼                        ▼                        ▼
-┌─────────────┐         ┌──────────────┐         ┌─────────────┐
-│   SQLite    │         │  PostgreSQL  │         │    IBM MQ   │
-│    (Dev)    │         │   (Prod)     │         │             │
-└─────────────┘         └──────────────┘         └─────────────┘
+      └────────────────────────┼────────────────────────┘
+                               ▼
+                        ┌──────────────┐         ┌─────────────┐
+                        │  PostgreSQL  │         │    IBM MQ   │
+                        │    BCSPB     │         │             │
+                        └──────────────┘         └─────────────┘
 ```
 
 ## 🛠️ Technology Stack
@@ -231,7 +226,7 @@ pytest tests/ -v
 |-----------|------------|
 | Backend Framework | FastAPI |
 | ORM | SQLAlchemy 2.0 (Async) |
-| Database | PostgreSQL / SQLite |
+| Database | PostgreSQL |
 | Message Queue | IBM MQ |
 | Template Engine | Jinja2 |
 | Frontend | Bootstrap 5 |
@@ -244,10 +239,10 @@ pytest tests/ -v
 
 ```bash
 # .env
-DATABASE_URL=sqlite+aiosqlite:///./spbsite.db
-CATALOG_DATABASE_URL=sqlite+aiosqlite:///./spb_messages.db
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPB
+CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR
 SECRET_KEY=your-secret-key-here
-ISPB_LOCAL=61377677
+ISPB_LOCAL=36266751
 ISPB_BACEN=00038166
 ISPB_SELIC=00038121
 ```
