@@ -79,7 +79,7 @@ spbsite/
 - `.env` uses **SQLite** for local dev: `DATABASE_URL=sqlite+aiosqlite:///./spbsite.db`
 - For production PostgreSQL: `DATABASE_URL=postgresql+asyncpg://postgres:Rama1248@localhost:5432/spbsite`
 - SECRET_KEY: `Rama8421$`
-- ISPB: local=61377677, BACEN=00038166, SELIC=00038121
+- ISPB: local=36266751, BACEN=00038166, SELIC=00038121
 - Admin login: `admin` / `admin`
 
 ### Commands

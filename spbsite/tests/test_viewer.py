@@ -3,7 +3,7 @@
 Covers: viewer from various tables, allowed tables whitelist, missing XML.
 """
 
-from app.models.messages import SPBBacenToLocal
+from spb_shared.models import SPBBacenToLocal
 from datetime import datetime
 
 
@@ -25,7 +25,7 @@ async def test_viewer_bacen_to_local(authenticated_client, inbound_messages, db_
 async def test_viewer_fila(authenticated_client, queue_data, db_session):
     """#58 — GET /viewer/fila/{seq} → 200, fetches msg_xml, renders tree."""
     from sqlalchemy import select
-    from app.models.queue import Fila
+    from spb_shared.models import Fila
     result = await db_session.execute(select(Fila).where(Fila.msg_xml.isnot(None)).limit(1))
     fila = result.scalar_one()
 
@@ -44,15 +44,22 @@ async def test_viewer_invalid_table(authenticated_client):
 async def test_viewer_no_xml_content(authenticated_client, db_session):
     """#60 — GET /viewer/{table}/{id} with no XML content → 200, shows warning."""
     # Insert a row with NULL msg
+    dt = datetime(2001, 1, 1)
     row = SPBBacenToLocal(
-        mq_msg_id="EMPTY", db_datetime=datetime(2001, 1, 1),
-        status_msg="N", msg=None,
+        mq_msg_id=b"EMPTY", mq_correl_id=b"CORREL",
+        db_datetime=dt,
+        status_msg="N", flag_proc="N",
+        mq_qn_origem="QR.REQ.00038166.36266751.01",
+        mq_datetime=dt,
+        mq_header=b"HEADER", security_header=b"SECURITY",
+        msg=None,
     )
     db_session.add(row)
     await db_session.commit()
-    await db_session.refresh(row)
 
-    response = await authenticated_client.get(f"/viewer/spb_bacen_to_local/{row.id}")
+    # Composite PK requires both db_datetime and mq_msg_id as hex
+    record_id = f"{dt.isoformat()}_{b'EMPTY'.hex()}"
+    response = await authenticated_client.get(f"/viewer/spb_bacen_to_local/{record_id}")
     assert response.status_code == 200
 
 

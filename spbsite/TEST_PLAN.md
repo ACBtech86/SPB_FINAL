@@ -169,7 +169,7 @@ Test stack: pytest-asyncio + httpx.AsyncClient + SQLite in-memory (aiosqlite).
 ### 7.2 operation_number.py (4 tests)
 | # | Test Case | Expected Result |
 |---|-----------|-----------------|
-| 73 | `generate_operation_number()` | Returns 23-char string starting with "61377677" |
+| 73 | `generate_operation_number()` | Returns 23-char string starting with "36266751" |
 | 74 | Date portion matches today | Characters [8:16] = today's YYYYMMDD |
 | 75 | Sequence increments | Two consecutive calls produce different numbers |
 | 76 | 100 calls produce 100 unique numbers | Thread-safe uniqueness |

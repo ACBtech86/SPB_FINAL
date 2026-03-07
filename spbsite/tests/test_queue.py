@@ -7,7 +7,7 @@ from decimal import Decimal
 
 from sqlalchemy import select
 
-from app.models.queue import Fila
+from spb_shared.models import Fila
 from app.services.queue_manager import process_selected
 
 

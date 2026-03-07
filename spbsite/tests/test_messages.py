@@ -85,7 +85,7 @@ async def test_submit_valid_data(authenticated_client, field_definitions):
         "/messages/submit",
         data={
             "formName": "STR0001",
-            "NUOp": "61377677202603020000001",
+            "NUOp": "36266751202603020000001",
             "DtMovto": "02/03/2026",
             "VlrLanc": "1000.00",
         },
@@ -113,7 +113,7 @@ async def test_submit_invalid_date(authenticated_client, field_definitions):
         "/messages/submit",
         data={
             "formName": "STR0001",
-            "NUOp": "61377677202603020000001",
+            "NUOp": "36266751202603020000001",
             "DtMovto": "bad",  # invalid date
         },
     )
@@ -139,7 +139,7 @@ async def test_xml_destination_table(authenticated_client, field_definitions, db
         "/messages/submit",
         data={
             "formName": "STR0001",
-            "NUOp": "61377677202603020000001",
+            "NUOp": "36266751202603020000001",
             "DtMovto": "02/03/2026",
         },
     )
@@ -147,7 +147,7 @@ async def test_xml_destination_table(authenticated_client, field_definitions, db
 
     # Verify the message was inserted into spb_local_to_bacen
     from sqlalchemy import select
-    from app.models.messages import SPBLocalToBacen
+    from spb_shared.models import SPBLocalToBacen
     result = await db_session.execute(select(SPBLocalToBacen))
     rows = result.scalars().all()
     assert len(rows) >= 1
@@ -190,7 +190,7 @@ def test_determine_queue_name_response():
     """#82 — _determine_queue_name('STR0001R1', '00038166') → contains 'QR.RSP'."""
     queue = _determine_queue_name("STR0001R1", "00038166")
     assert "QR.RSP" in queue
-    assert "61377677" in queue
+    assert "36266751" in queue
     assert "00038166" in queue
 
 
@@ -198,7 +198,7 @@ def test_determine_queue_name_request():
     """#83 — _determine_queue_name('STR0001', '00038166') → contains 'QR.REQ'."""
     queue = _determine_queue_name("STR0001", "00038166")
     assert "QR.REQ" in queue
-    assert "61377677" in queue
+    assert "36266751" in queue
     assert "00038166" in queue
 
 

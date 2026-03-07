@@ -218,7 +218,7 @@ def test_operation_number_format():
     """#73 — generate_operation_number() returns 23-char string starting with ISPB."""
     nu_ope = generate_operation_number()
     assert len(nu_ope) == 23
-    assert nu_ope.startswith("61377677")
+    assert nu_ope.startswith("36266751")
 
 
 def test_operation_number_date_portion():

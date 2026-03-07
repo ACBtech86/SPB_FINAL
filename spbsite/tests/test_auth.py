@@ -110,7 +110,7 @@ async def test_protected_route_without_session(client):
 
 async def test_protected_route_invalid_user_id(client, db_session):
     """#11 — Access protected route with deactivated user → redirect to /login."""
-    from app.models.auth import User
+    from spb_shared.models import User
     user = User(username="temp", password_hash=bcrypt.hash("temp"), is_active=True)
     db_session.add(user)
     await db_session.commit()
@@ -133,7 +133,7 @@ async def test_protected_route_invalid_user_id(client, db_session):
 
 async def test_protected_route_deleted_user(client, db_session):
     """#12 — Access protected route with deleted user → redirect to /login."""
-    from app.models.auth import User
+    from spb_shared.models import User
     user = User(username="toremove", password_hash=bcrypt.hash("toremove"), is_active=True)
     db_session.add(user)
     await db_session.commit()

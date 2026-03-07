@@ -12,17 +12,17 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 
 from app.database import Base, get_db
 from app.main import app
-from app.models.auth import User
-from app.models.catalog import SPBDicionario, SPBMensagem, SPBMsgField
-from app.models.control import BacenControle, SPBControle
-from app.models.logs import SPBLogBacen, SPBLogSelic
-from app.models.messages import (
+from spb_shared.models import User
+from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField
+from spb_shared.models import BacenControle, SPBControle
+from spb_shared.models import SPBLogBacen, SPBLogSelic
+from spb_shared.models import (
     SPBBacenToLocal,
     SPBLocalToBacen,
     SPBLocalToSelic,
     SPBSelicToLocal,
 )
-from app.models.queue import Camaras, Fila
+from spb_shared.models import Camaras, Fila
 
 # Use SQLite for testing (in-memory)
 TEST_DATABASE_URL = "sqlite+aiosqlite://"
@@ -115,7 +115,7 @@ async def authenticated_client(
 async def control_data(db_session: AsyncSession):
     """Seed SPBControle (3 rows: N, I, E) + BacenControle (2 rows)."""
     local_rows = [
-        SPBControle(ispb="61377677", nome_ispb="Banco Local", msg_seq=100,
+        SPBControle(ispb="36266751", nome_ispb="Banco Local", msg_seq=100,
                      status_geral="N", dthr_eco=datetime(2001, 3, 22, 14, 30),
                      ultmsg="STR0001", dthr_ultmsg=datetime(2001, 3, 22, 14, 31)),
         SPBControle(ispb="00038166", nome_ispb="BACEN", msg_seq=200,
@@ -126,7 +126,7 @@ async def control_data(db_session: AsyncSession):
                      ultmsg="STR0003", dthr_ultmsg=datetime(2001, 3, 22, 14, 41)),
     ]
     bacen_rows = [
-        BacenControle(ispb="61377677", nome_ispb="Banco Local Bacen", msg_seq=50,
+        BacenControle(ispb="36266751", nome_ispb="Banco Local Bacen", msg_seq=50,
                        status_geral="N", dthr_eco=datetime(2001, 3, 22, 15, 0)),
         BacenControle(ispb="00038166", nome_ispb="BACEN Controle", msg_seq=60,
                        status_geral="S", dthr_eco=datetime(2001, 3, 22, 15, 5)),
@@ -144,18 +144,24 @@ async def control_data(db_session: AsyncSession):
 async def inbound_messages(db_session: AsyncSession):
     """Seed 5 SPBBacenToLocal + 3 SPBSelicToLocal."""
     bacen = [
-        SPBBacenToLocal(mq_msg_id=f"BMQ{i}", db_datetime=datetime(2001, 3, 22, 10+i),
+        SPBBacenToLocal(mq_msg_id=f"BMQ{i}".encode(), mq_correl_id=b"CORREL",
+                        db_datetime=datetime(2001, 3, 22, 10+i),
                         status_msg="N", flag_proc="S",
-                        mq_qn_origem=f"QR.REQ.00038166.61377677.01",
-                        nu_ope=f"6137767720010322000{i:04d}", cod_msg=f"STR000{i}",
+                        mq_qn_origem=f"QR.REQ.00038166.36266751.01",
+                        mq_datetime=datetime(2001, 3, 22, 10+i),
+                        mq_header=b"HEADER", security_header=b"SECURITY",
+                        nu_ope=f"3626675120010322000{i:04d}", cod_msg=f"STR000{i}",
                         msg=f"<SPBDOC><MSG>msg{i}</MSG></SPBDOC>")
         for i in range(1, 6)
     ]
     selic = [
-        SPBSelicToLocal(mq_msg_id=f"SMQ{i}", db_datetime=datetime(2001, 3, 22, 8+i),
+        SPBSelicToLocal(mq_msg_id=f"SMQ{i}".encode(), mq_correl_id=b"CORREL",
+                        db_datetime=datetime(2001, 3, 22, 8+i),
                         status_msg="N", flag_proc="S",
-                        mq_qn_origem=f"QR.RSP.00038121.61377677.01",
-                        nu_ope=f"6137767720010322001{i:04d}", cod_msg=f"SEL000{i}",
+                        mq_qn_origem=f"QR.RSP.00038121.36266751.01",
+                        mq_datetime=datetime(2001, 3, 22, 8+i),
+                        mq_header=b"HEADER", security_header=b"SECURITY",
+                        nu_ope=f"3626675120010322001{i:04d}", cod_msg=f"SEL000{i}",
                         msg=f"<SPBDOC><MSG>selic{i}</MSG></SPBDOC>")
         for i in range(1, 4)
     ]
@@ -168,20 +174,20 @@ async def inbound_messages(db_session: AsyncSession):
 async def outbound_messages(db_session: AsyncSession):
     """Seed 4 SPBLocalToBacen + 2 SPBLocalToSelic with MQ timestamps."""
     bacen_out = [
-        SPBLocalToBacen(nu_ope=f"6137767720010322002{i:04d}", cod_msg=f"STR000{i}",
+        SPBLocalToBacen(nu_ope=f"3626675120010322002{i:04d}", cod_msg=f"STR000{i}",
                         db_datetime=datetime(2001, 3, 22, 12+i),
                         msg=f"<SPBDOC><OUT>bacen{i}</OUT></SPBDOC>",
                         status_msg="E", flag_proc="S",
-                        mq_qn_destino=f"QR.REQ.61377677.00038166.01",
+                        mq_qn_destino=f"QR.REQ.36266751.00038166.01",
                         mq_datetime_put=datetime(2001, 3, 22, 12+i, 1))
         for i in range(1, 5)
     ]
     selic_out = [
-        SPBLocalToSelic(nu_ope=f"6137767720010322003{i:04d}", cod_msg=f"SEL000{i}",
+        SPBLocalToSelic(nu_ope=f"3626675120010322003{i:04d}", cod_msg=f"SEL000{i}",
                         db_datetime=datetime(2001, 3, 22, 14+i),
                         msg=f"<SPBDOC><OUT>selic{i}</OUT></SPBDOC>",
                         status_msg="E", flag_proc="S",
-                        mq_qn_destino=f"QR.RSP.61377677.00038121.01",
+                        mq_qn_destino=f"QR.RSP.36266751.00038121.01",
                         mq_datetime_put=datetime(2001, 3, 22, 14+i, 1))
         for i in range(1, 3)
     ]
@@ -198,14 +204,20 @@ async def outbound_messages(db_session: AsyncSession):
 async def log_entries(db_session: AsyncSession):
     """Seed 4 SPBLogBacen + 3 SPBLogSelic."""
     bacen_log = [
-        SPBLogBacen(db_datetime=datetime(2001, 3, 22, 10+i), status_msg=s,
-                    mq_qn_origem=f"QR.REQ.00038166.61377677.01",
+        SPBLogBacen(mq_msg_id=f"LOG{i}".encode(), mq_correl_id=b"CORREL",
+                    db_datetime=datetime(2001, 3, 22, 10+i), status_msg=s,
+                    mq_qn_origem=f"QR.REQ.00038166.36266751.01",
+                    mq_datetime=datetime(2001, 3, 22, 10+i),
+                    mq_header=b"HEADER",
                     nu_ope=f"LOG{i}", cod_msg=f"STR{i}")
         for i, s in enumerate(["N", "N", "S", "N"], start=1)
     ]
     selic_log = [
-        SPBLogSelic(db_datetime=datetime(2001, 3, 22, 8+i), status_msg=s,
-                    mq_qn_origem=f"QR.REP.00038121.61377677.01",
+        SPBLogSelic(mq_msg_id=f"SLOG{i}".encode(), mq_correl_id=b"CORREL",
+                    db_datetime=datetime(2001, 3, 22, 8+i), status_msg=s,
+                    mq_qn_origem=f"QR.REP.00038121.36266751.01",
+                    mq_datetime=datetime(2001, 3, 22, 8+i),
+                    mq_header=b"HEADER",
                     nu_ope=f"SLOG{i}", cod_msg=f"SEL{i}")
         for i, s in enumerate(["N", "S", "N"], start=1)
     ]

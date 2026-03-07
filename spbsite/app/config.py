@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     app_title: str = "SPBSite"
 
     # SPB domain constants
-    ispb_local: str = "61377677"
+    ispb_local: str = "36266751"
     ispb_bacen: str = "00038166"
     ispb_selic: str = "00038121"
 
