@@ -17,7 +17,9 @@ async def test_viewer_bacen_to_local(authenticated_client, inbound_messages, db_
     result = await db_session.execute(select(SPBBacenToLocal).limit(1))
     row = result.scalar_one()
 
-    response = await authenticated_client.get(f"/viewer/spb_bacen_to_local/{row.id}")
+    # Construct composite PK: {datetime}_{mq_msg_id_hex}
+    record_id = f"{row.db_datetime.isoformat()}_{row.mq_msg_id.hex()}"
+    response = await authenticated_client.get(f"/viewer/spb_bacen_to_local/{record_id}")
     assert response.status_code == 200
     assert "SPBDOC" in response.text or "MSG" in response.text
 

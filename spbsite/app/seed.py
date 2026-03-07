@@ -8,17 +8,21 @@ import asyncio
 from passlib.hash import bcrypt
 from sqlalchemy import select
 
-from app.database import Base, async_session, engine
+from app.database import Base, async_session, catalog_async_session, engine, catalog_engine
 from spb_shared.models import User
 from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField
 
 
 async def seed():
     """Create database tables and seed initial data."""
-    # Create all tables
+    # Create all tables in BOTH databases
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+    async with catalog_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+    # Seed main database (users, operational tables)
     async with async_session() as db:
         # Create admin user if not exists
         result = await db.execute(select(User).where(User.username == "admin"))
@@ -31,8 +35,12 @@ async def seed():
             db.add(admin)
             print("Created admin user (username: admin, password: admin)")
 
+        await db.commit()
+
+    # Seed catalog database (message definitions, fields, dictionary)
+    async with catalog_async_session() as catalog_db:
         # Seed message types
-        result = await db.execute(select(SPBMensagem).limit(1))
+        result = await catalog_db.execute(select(SPBMensagem).limit(1))
         if not result.scalar_one_or_none():
             sample_messages = [
                 SPBMensagem(msg_id="STR0001", msg_descr="Requisicao de Transferencia de Fundos"),
@@ -46,11 +54,11 @@ async def seed():
                 SPBMensagem(msg_id="RCO0001", msg_descr="Requisicao de Compra/Venda de Cambio"),
                 SPBMensagem(msg_id="SEL0001", msg_descr="Requisicao SELIC - Operacao Compromissada"),
             ]
-            db.add_all(sample_messages)
+            catalog_db.add_all(sample_messages)
             print(f"Created {len(sample_messages)} sample message types")
 
         # Seed field dictionary (SPB_DICIONARIO)
-        result = await db.execute(select(SPBDicionario).limit(1))
+        result = await catalog_db.execute(select(SPBDicionario).limit(1))
         if not result.scalar_one_or_none():
             dicionario = [
                 # Common field types
@@ -81,18 +89,19 @@ async def seed():
                 SPBDicionario(msg_cpotag="TipoHrio", msg_cpotipo="alfanumerico", msg_cpotam="1", msg_cpoform=""),
                 SPBDicionario(msg_cpotag="CodRCO", msg_cpotipo="alfanumerico", msg_cpotam="5", msg_cpoform=""),
             ]
-            db.add_all(dicionario)
+            catalog_db.add_all(dicionario)
             print(f"Created {len(dicionario)} dictionary entries")
 
         # Seed field definitions (SPB_MSGFIELD)
-        result = await db.execute(select(SPBMsgField).limit(1))
+        result = await catalog_db.execute(select(SPBMsgField).limit(1))
         if not result.scalar_one_or_none():
             fields = _build_field_definitions()
-            db.add_all(fields)
+            catalog_db.add_all(fields)
             print(f"Created {len(fields)} field definitions")
 
-        await db.commit()
-        print("Seed completed successfully.")
+        await catalog_db.commit()
+
+    print("Seed completed successfully.")
 
 
 def _build_field_definitions() -> list[SPBMsgField]:
