@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>SPBSite - Painel de Monitoramento</h1>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-card">
+        <h3>Controle</h3>
+        <ul>
+            <li><a href="/monitoring/control/local">STR Local</a></li>
+            <li><a href="/monitoring/control/bacen">STR BACEN</a></li>
+        </ul>
+    </div>
+    <div class="dashboard-card">
+        <h3>Mensagens Recebidas</h3>
+        <ul>
+            <li><a href="/monitoring/messages/inbound/all">Todas (SPB)</a></li>
+            <li><a href="/monitoring/messages/inbound/bacen">BACEN</a></li>
+            <li><a href="/monitoring/messages/inbound/selic">SELIC</a></li>
+        </ul>
+    </div>
+    <div class="dashboard-card">
+        <h3>Mensagens Enviadas</h3>
+        <ul>
+            <li><a href="/monitoring/messages/outbound/all">Todas (SPB)</a></li>
+            <li><a href="/monitoring/messages/outbound/bacen">BACEN</a></li>
+            <li><a href="/monitoring/messages/outbound/selic">SELIC</a></li>
+        </ul>
+    </div>
+    <div class="dashboard-card">
+        <h3>Logs</h3>
+        <ul>
+            <li><a href="/logs/all">Todos</a></li>
+            <li><a href="/logs/bacen">BACEN</a></li>
+            <li><a href="/logs/selic">SELIC</a></li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

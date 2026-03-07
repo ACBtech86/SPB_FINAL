@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+    <span class="page-date">em {{ current_date }}</span>
+</div>
+
+<div class="page-layout">
+    <aside class="sidebar-stats">
+        <p>{{ "%03d"|format(stats.total_req) }} REQs</p>
+        <p>{{ "%03d"|format(stats.total_rep) }} REPs</p>
+        <p>{{ "%03d"|format(stats.total_s) }} GerS</p>
+        <p>{{ "%03d"|format(stats.total_n) }} GerN</p>
+        <p><strong>{{ "%03d"|format(stats.total) }} Msgs</strong></p>
+        <p class="sidebar-hint">Clique no cabecalho da coluna para classificar.</p>
+    </aside>
+
+    <div class="table-container">
+        <table class="data-table sortable" id="logTable">
+            <thead>
+                <tr>
+                    <th data-sort="db_datetime">DB_DATETIME</th>
+                    <th data-sort="status_msg">STATUS_MSG</th>
+                    <th data-sort="mq_qn_origem">MQ_QN_ORIGEM</th>
+                    <th data-sort="mq_datetime">MQ_DATETIME</th>
+                    <th data-sort="nu_ope">NU_OPE</th>
+                    <th data-sort="cod_msg">COD_MSG</th>
+                    <th>MSG</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="{% if row.status_msg == 'N' %}status-normal{% else %}status-error{% endif %}">
+                    <td>{{ row.db_datetime.strftime('%d/%m/%Y.%H:%M:%S') if row.db_datetime else '' }}</td>
+                    <td>{{ row.status_msg or '' }}</td>
+                    <td>{{ row.mq_qn_origem or '' }}</td>
+                    <td>{{ row.mq_datetime.strftime('%d/%m/%Y.%H:%M:%S') if row.mq_datetime else '' }}</td>
+                    <td>{{ row.nu_ope or '' }}</td>
+                    <td>{{ row.cod_msg or '' }}</td>
+                    <td class="msg-cell">{{ (row.msg or '')[:80] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

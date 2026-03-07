@@ -1,0 +1,631 @@
+<!DOCTYPE html><html><head>
+      <title>MESSAGE_FLOWS</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="file:///c:\Users\AntonioBosco\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.20\crossnote\dependencies\katex\katex.min.css">
+      
+      
+      <script type="text/javascript" src="file:///c:\Users\AntonioBosco\.vscode\extensions\shd101wyy.markdown-preview-enhanced-0.8.20\crossnote\dependencies\mermaid\mermaid.min.js" charset="UTF-8"></script>
+      
+      
+      <style>
+      code[class*=language-],pre[class*=language-]{color:#333;background:0 0;font-family:Consolas,"Liberation Mono",Menlo,Courier,monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.4;-moz-tab-size:8;-o-tab-size:8;tab-size:8;-webkit-hyphens:none;-moz-hyphens:none;-ms-hyphens:none;hyphens:none}pre[class*=language-]{padding:.8em;overflow:auto;border-radius:3px;background:#f5f5f5}:not(pre)>code[class*=language-]{padding:.1em;border-radius:.3em;white-space:normal;background:#f5f5f5}.token.blockquote,.token.comment{color:#969896}.token.cdata{color:#183691}.token.doctype,.token.macro.property,.token.punctuation,.token.variable{color:#333}.token.builtin,.token.important,.token.keyword,.token.operator,.token.rule{color:#a71d5d}.token.attr-value,.token.regex,.token.string,.token.url{color:#183691}.token.atrule,.token.boolean,.token.code,.token.command,.token.constant,.token.entity,.token.number,.token.property,.token.symbol{color:#0086b3}.token.prolog,.token.selector,.token.tag{color:#63a35c}.token.attr-name,.token.class,.token.class-name,.token.function,.token.id,.token.namespace,.token.pseudo-class,.token.pseudo-element,.token.url-reference .token.variable{color:#795da3}.token.entity{cursor:help}.token.title,.token.title .token.punctuation{font-weight:700;color:#1d3e81}.token.list{color:#ed6a43}.token.inserted{background-color:#eaffea;color:#55a532}.token.deleted{background-color:#ffecec;color:#bd2c00}.token.bold{font-weight:700}.token.italic{font-style:italic}.language-json .token.property{color:#183691}.language-markup .token.tag .token.punctuation{color:#333}.language-css .token.function,code.language-css{color:#0086b3}.language-yaml .token.atrule{color:#63a35c}code.language-yaml{color:#183691}.language-ruby .token.function{color:#333}.language-markdown .token.url{color:#795da3}.language-makefile .token.symbol{color:#795da3}.language-makefile .token.variable{color:#183691}.language-makefile .token.builtin{color:#0086b3}.language-bash .token.keyword{color:#0086b3}pre[data-line]{position:relative;padding:1em 0 1em 3em}pre[data-line] .line-highlight-wrapper{position:absolute;top:0;left:0;background-color:transparent;display:block;width:100%}pre[data-line] .line-highlight{position:absolute;left:0;right:0;padding:inherit 0;margin-top:1em;background:hsla(24,20%,50%,.08);background:linear-gradient(to right,hsla(24,20%,50%,.1) 70%,hsla(24,20%,50%,0));pointer-events:none;line-height:inherit;white-space:pre}pre[data-line] .line-highlight:before,pre[data-line] .line-highlight[data-end]:after{content:attr(data-start);position:absolute;top:.4em;left:.6em;min-width:1em;padding:0 .5em;background-color:hsla(24,20%,50%,.4);color:#f4f1ef;font:bold 65%/1.5 sans-serif;text-align:center;vertical-align:.3em;border-radius:999px;text-shadow:none;box-shadow:0 1px #fff}pre[data-line] .line-highlight[data-end]:after{content:attr(data-end);top:auto;bottom:.4em}html body{font-family:'Helvetica Neue',Helvetica,'Segoe UI',Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ol,html body>ul{margin-bottom:16px}html body ol,html body ul{padding-left:2em}html body ol.no-list,html body ul.no-list{padding:0;list-style-type:none}html body ol ol,html body ol ul,html body ul ol,html body ul ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:700;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:700}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::after,html body code::before{letter-spacing:-.2em;content:'\00a0'}html body pre>code{padding:0;margin:0;word-break:normal;white-space:pre;background:0 0;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:after,html body pre code:before,html body pre tt:after,html body pre tt:before{content:normal}html body blockquote,html body dl,html body ol,html body p,html body pre,html body ul{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body code,html body pre{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview ul{list-style:disc}.markdown-preview ul ul{list-style:circle}.markdown-preview ul ul ul{list-style:square}.markdown-preview ol{list-style:decimal}.markdown-preview ol ol,.markdown-preview ul ol{list-style-type:lower-roman}.markdown-preview ol ol ol,.markdown-preview ol ul ol,.markdown-preview ul ol ol,.markdown-preview ul ul ol{list-style-type:lower-alpha}.markdown-preview .newpage,.markdown-preview .pagebreak{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center!important}.markdown-preview:not([data-for=preview]) .code-chunk .code-chunk-btn-group{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .status{display:none}.markdown-preview:not([data-for=preview]) .code-chunk .output-div{margin-bottom:16px}.markdown-preview .md-toc{padding:0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link div,.markdown-preview .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}.markdown-preview .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0;min-height:100vh}@media screen and (min-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode]) .markdown-preview{font-size:14px!important;padding:1em}}@media print{html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for=html-export]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,.66);border:4px solid rgba(150,150,150,.66);background-clip:content-box}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc{padding:0 16px}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link{display:inline;padding:.25rem 0}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link div,html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper .md-toc-link p{display:inline}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc .md-toc .md-toc-link-wrapper.highlighted .md-toc-link{font-weight:800}html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% - 300px);padding:2em calc(50% - 457px - 300px / 2);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for=html-export]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for=html-export]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+  document.addEventListener("DOMContentLoaded", function () {
+    // your code here
+  });
+</script></head><body for="html-export">
+    
+    
+      <div class="crossnote markdown-preview  ">
+      
+<h1 id="bcsrvsqlmq---message-flows">BCSrvSqlMq - Message Flows </h1>
+<h2 id="overview">Overview </h2>
+<p>BCSrvSqlMq has 8 worker threads split into two directions:</p>
+<table>
+<thead>
+<tr>
+<th>Direction</th>
+<th>Threads</th>
+<th>Flow</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>IF -&gt; Bacen</strong> (Outbound)</td>
+<td>CIFReq, CIFRsp, CIFRep, CIFSup</td>
+<td>DB -&gt; MQ</td>
+</tr>
+<tr>
+<td><strong>Bacen -&gt; IF</strong> (Inbound)</td>
+<td>CBacenReq, CBacenRsp, CBacenRep, CBacenSup</td>
+<td>MQ -&gt; DB</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="certificate-usage">Certificate Usage </h2>
+<table>
+<thead>
+<tr>
+<th>Key / Certificate</th>
+<th>File</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Finvest Private Key</strong></td>
+<td><code>finvest_sim.key</code> (sim) / <code>private.key</code> (prod)</td>
+<td>Sign outbound msgs (<code>func_assinar</code>) / Decrypt inbound msgs (<code>func_de_cript</code>)</td>
+</tr>
+<tr>
+<td><strong>Bacen Public Certificate</strong></td>
+<td><code>bacen_sim.cer</code> (sim) / <code>Bacen.cer</code> (prod)</td>
+<td>Encrypt outbound msgs (<code>func_cript</code>) / Verify inbound signatures (<code>func_verify_ass</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>INI mapping:</p>
+<ul>
+<li><code>privatekeyfile</code> = Finvest private key</li>
+<li><code>certificatefile</code> = Bacen public certificate</li>
+</ul>
+<hr>
+<h2 id="security-protocol-versions">Security Protocol Versions </h2>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>SECHDR Size</th>
+<th>RSA</th>
+<th>Hash</th>
+<th>Symmetric</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>V1</strong> (Versao=0x01)</td>
+<td>332 bytes</td>
+<td>RSA-1024</td>
+<td>MD5/SHA-1</td>
+<td>3DES-168</td>
+<td>Legacy (2001-2024)</td>
+</tr>
+<tr>
+<td><strong>V2</strong> (Versao=0x02)</td>
+<td>588 bytes</td>
+<td>RSA-2048</td>
+<td>SHA-256</td>
+<td>3DES-168</td>
+<td><strong>Current</strong> (2024+)</td>
+</tr>
+</tbody>
+</table>
+<p>Per Manual de Seguranca do SFN v5 (BACEN 2024 update).</p>
+<hr>
+<h2 id="flow-1-if---bacen-outbound">Flow 1: IF -&gt; Bacen (Outbound) </h2>
+<div class="mermaid">flowchart TD
+    subgraph FINVEST ["FINVEST (IF) -- ISPB 36266751"]
+        DB_OUT[("PostgreSQL\n---------\nspb_local_to_bacen\nflag_proc = 'P'")]
+        IFREQ["CIFReq Thread\n(if_req.py)"]
+        DB_UPD[("PostgreSQL\n---------\nflag_proc 'P' -&gt; 'E'\n+ INSERT spb_log_bacen")]
+        QL_IF["QL.36266751.01.ENTRADA.IF\n(local staging queue)"]
+    end
+
+    subgraph SECURITY_OUT ["Security Layer -- Outbound (V2)"]
+        SIGN["1. SIGN\nFinvest Private Key\nRSA-2048 + SHA-256\n-&gt; 256B signature in SECHDR"]
+        ENCRYPT["2. ENCRYPT\nBacen Public Cert\n3DES key wrapped with RSA-2048\npayload encrypted 3DES-CBC"]
+    end
+
+    subgraph MQ_OUT ["IBM MQ -- QM.36266751.01"]
+        QR_REQ["QR.REQ.36266751.00038166.01\n(remote queue definition)"]
+    end
+
+    subgraph BACEN ["BACEN -- ISPB 00038166"]
+        BC_QM["Bacen Queue Manager\nQL.REQ.00038166.36266751.01"]
+    end
+
+    DB_OUT --&gt;|"1. SELECT WHERE\nflag_proc='P'"| IFREQ
+    IFREQ --&gt;|"2. Read XML\n3. Build SECHDR (588 bytes)\n4. Encode Latin-1 -&gt; UTF-16BE"| SIGN
+    SIGN --&gt; ENCRYPT
+    ENCRYPT --&gt;|"5. MQPUT\n(syncpoint)\nSECHDR + encrypted payload"| QL_IF
+    QL_IF --&gt; QR_REQ
+    IFREQ --&gt;|"6. Update DB + MQCMIT"| DB_UPD
+    QR_REQ --&gt;|"MQ Channel\nto Bacen"| BC_QM
+
+    style FINVEST fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style SECURITY_OUT fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style MQ_OUT fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
+    style DB_OUT fill:#e8f5e9,stroke:#2e7d32
+    style DB_UPD fill:#e8f5e9,stroke:#2e7d32
+    style SIGN fill:#fff8e1,stroke:#f57f17
+    style ENCRYPT fill:#fff8e1,stroke:#f57f17
+    style QL_IF fill:#ede7f6,stroke:#4527a0
+    style QR_REQ fill:#ede7f6,stroke:#4527a0
+    style BC_QM fill:#ffcdd2,stroke:#c62828
+</div><h3 id="outbound-steps">Outbound Steps: </h3>
+<ol>
+<li>Poll DB for pending records (<code>flag_proc='P'</code>)</li>
+<li>Read XML message from <code>spb_local_to_bacen.msg</code> column</li>
+<li>Build Security Header (SECHDR V2, 588 bytes)</li>
+<li>Convert XML: Latin-1 -&gt; UTF-16BE (byte swap)</li>
+<li><strong>Sign</strong> payload with <strong>Finvest private key</strong> (RSA-2048 + SHA-256)</li>
+<li><strong>Encrypt</strong> payload with <strong>Bacen public certificate</strong> (3DES + RSA-2048 key wrap)</li>
+<li>MQPUT <code>SECHDR + encrypted_payload</code> under syncpoint</li>
+<li>Update app record <code>flag_proc = 'P' -&gt; 'E'</code></li>
+<li>Insert log record in <code>spb_log_bacen</code></li>
+<li>MQCMIT + DB COMMIT (atomic)</li>
+</ol>
+<hr>
+<h2 id="flow-2-bacen---if-inbound">Flow 2: Bacen -&gt; IF (Inbound) </h2>
+<div class="mermaid">flowchart TD
+    subgraph BACEN ["BACEN -- ISPB 00038166"]
+        BC_QM["Bacen Queue Manager\nsends encrypted message"]
+    end
+
+    subgraph MQ_IN ["IBM MQ -- QM.36266751.01"]
+        QL_BC["QL.REQ.00038166.36266751.01\n(local queue -- Bacen msgs\narriving for Finvest)"]
+    end
+
+    subgraph SECURITY_IN ["Security Layer -- Inbound (V2)"]
+        DECRYPT["1. DECRYPT\nFinvest Private Key\nRSA-2048 unwrap 3DES key\nthen 3DES-CBC decrypt"]
+        VERIFY["2. VERIFY SIGNATURE\nBacen Public Cert\nRSA-2048 + SHA-256\ncheck hash matches"]
+    end
+
+    subgraph FINVEST ["FINVEST (IF) -- ISPB 36266751"]
+        BCREQ["CBacenReq Thread\n(bacen_req.py)"]
+        PARSE["Parse XML\n---------\nExtract: NuOpe, CodMsg\nEmissor, Destinatario\n---------\nSpecial: GEN0001 (Echo)\nGEN0002 (Log)\nGEN0003 (UltMsg)"]
+        DB_IN[("PostgreSQL\n---------\nINSERT spb_bacen_to_local\nINSERT spb_log_bacen\nMQCMIT + DB COMMIT")]
+    end
+
+    BC_QM --&gt;|"MQ Channel\nfrom Bacen"| QL_BC
+    QL_BC --&gt;|"1. MQGET\n(exclusive, syncpoint, wait)"| BCREQ
+    BCREQ --&gt;|"2. Parse SECHDR\n(588 bytes V2 / 332 bytes V1)"| DECRYPT
+    DECRYPT --&gt; VERIFY
+    VERIFY --&gt;|"3. Decode\nUTF-16BE -&gt; Latin-1"| PARSE
+    PARSE --&gt;|"4. INSERT + COMMIT"| DB_IN
+
+    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
+    style MQ_IN fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style SECURITY_IN fill:#fff3e0,stroke:#e65100,stroke-width:2px
+    style FINVEST fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style BC_QM fill:#ffcdd2,stroke:#c62828
+    style QL_BC fill:#ede7f6,stroke:#4527a0
+    style DECRYPT fill:#fff8e1,stroke:#f57f17
+    style VERIFY fill:#fff8e1,stroke:#f57f17
+    style BCREQ fill:#bbdefb,stroke:#1565c0
+    style PARSE fill:#bbdefb,stroke:#1565c0
+    style DB_IN fill:#e8f5e9,stroke:#2e7d32
+</div><h3 id="inbound-steps">Inbound Steps: </h3>
+<ol>
+<li>MQGET from <code>QL.REQ.00038166.36266751.01</code> (exclusive, syncpoint, wait)</li>
+<li>Parse Security Header (auto-detect V1 332 bytes or V2 588 bytes)</li>
+<li><strong>Decrypt</strong> payload with <strong>Finvest private key</strong> (RSA-2048 unwrap 3DES key, then 3DES-CBC)</li>
+<li><strong>Verify signature</strong> with <strong>Bacen public certificate</strong> (RSA-2048 + SHA-256)</li>
+<li>Decode XML: UTF-16BE -&gt; Latin-1</li>
+<li>Parse XML to extract NuOpe, CodMsg, Emissor, Destinatario</li>
+<li>Handle special messages (GEN0001 Echo, GEN0002 Log, GEN0003 UltMsg)</li>
+<li>INSERT message into <code>spb_bacen_to_local</code></li>
+<li>INSERT audit record into <code>spb_log_bacen</code></li>
+<li>MQCMIT + DB COMMIT (atomic)</li>
+</ol>
+<hr>
+<h2 id="complete-architecture">Complete Architecture </h2>
+<div class="mermaid">flowchart LR
+    subgraph DB ["PostgreSQL -- bcspbstr"]
+        TBL_OUT[("spb_local_to_bacen\n(outbound msgs)")]
+        TBL_IN[("spb_bacen_to_local\n(inbound msgs)")]
+        TBL_LOG[("spb_log_bacen\n(audit log)")]
+        TBL_CTR[("spb_controle\n(control)")]
+    end
+
+    subgraph SRV ["BCSrvSqlMq Service"]
+        direction TB
+        subgraph OUT_THREADS ["Outbound Threads (DB -&gt; MQ)"]
+            IF_REQ["CIFReq"]
+            IF_RSP["CIFRsp"]
+            IF_REP["CIFRep"]
+            IF_SUP["CIFSup"]
+        end
+        subgraph IN_THREADS ["Inbound Threads (MQ -&gt; DB)"]
+            BC_REQ["CBacenReq"]
+            BC_RSP["CBacenRsp"]
+            BC_REP["CBacenRep"]
+            BC_SUP["CBacenSup"]
+        end
+        subgraph CRYPTO ["Security (V2)"]
+            PRV["Finvest RSA-2048\nprivate key"]
+            PUB["Bacen RSA-2048\npublic cert"]
+        end
+    end
+
+    subgraph MQ ["IBM MQ -- QM.36266751.01\nlocalhost:1414 / FINVEST.SVRCONN"]
+        direction TB
+        subgraph IF_QUEUES ["IF Staging Queues (local)"]
+            QL_E["QL...ENTRADA.IF"]
+            QL_S["QL...SAIDA.IF"]
+            QL_RP["QL...REPORT.IF"]
+            QL_SP["QL...SUPORTE.IF"]
+        end
+        subgraph QR_QUEUES ["Remote Queue Definitions"]
+            QR_REQ2["QR.REQ..."]
+            QR_RSP2["QR.RSP..."]
+            QR_REP2["QR.REP..."]
+            QR_SUP2["QR.SUP..."]
+        end
+        subgraph BC_QUEUES ["Bacen Local Queues"]
+            QL_REQ2["QL.REQ.00038166..."]
+            QL_RSP2["QL.RSP.00038166..."]
+            QL_REP2["QL.REP.00038166..."]
+            QL_SUP2["QL.SUP.00038166..."]
+        end
+    end
+
+    subgraph BACEN ["BACEN\nISPB 00038166"]
+        BC_NET["Bacen Network\n(RSFN)"]
+    end
+
+    TBL_OUT --&gt; IF_REQ &amp; IF_RSP &amp; IF_REP &amp; IF_SUP
+    IF_REQ --&gt; QL_E --&gt; QR_REQ2
+    IF_RSP --&gt; QL_S --&gt; QR_RSP2
+    IF_REP --&gt; QL_RP --&gt; QR_REP2
+    IF_SUP --&gt; QL_SP --&gt; QR_SUP2
+    QR_REQ2 &amp; QR_RSP2 &amp; QR_REP2 &amp; QR_SUP2 --&gt; BC_NET
+
+    BC_NET --&gt; QL_REQ2 &amp; QL_RSP2 &amp; QL_REP2 &amp; QL_SUP2
+    QL_REQ2 --&gt; BC_REQ
+    QL_RSP2 --&gt; BC_RSP
+    QL_REP2 --&gt; BC_REP
+    QL_SUP2 --&gt; BC_SUP
+    BC_REQ &amp; BC_RSP &amp; BC_REP &amp; BC_SUP --&gt; TBL_IN
+    BC_REQ &amp; BC_RSP &amp; BC_REP &amp; BC_SUP --&gt; TBL_LOG
+    IF_REQ &amp; IF_RSP &amp; IF_REP &amp; IF_SUP --&gt; TBL_LOG
+
+    style DB fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
+    style SRV fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style MQ fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
+    style OUT_THREADS fill:#bbdefb,stroke:#1565c0
+    style IN_THREADS fill:#bbdefb,stroke:#1565c0
+    style CRYPTO fill:#fff8e1,stroke:#f57f17
+    style IF_QUEUES fill:#ede7f6,stroke:#4527a0
+    style QR_QUEUES fill:#ede7f6,stroke:#4527a0
+    style BC_QUEUES fill:#ede7f6,stroke:#4527a0
+</div><hr>
+<h2 id="security-detail---message-envelope-v2">Security Detail -- Message Envelope V2 </h2>
+<div class="mermaid">flowchart LR
+    subgraph MSG ["MQ Message Payload"]
+        direction LR
+        subgraph HDR ["SECHDR V2 (588 bytes)"]
+            direction TB
+            H1["C01 TamSecHeader (2B)\n0x024C = 588"]
+            H2["C02 Versao (1B)\n0x00=clear, 0x02=V2"]
+            H3["C03 CodErro (1B)"]
+            H4["C04 TratamentoEspecial (1B)"]
+            H5["C05 Reservado (1B)"]
+            H6["C06 AlgAssymKey (1B)\n0x02=RSA-2048"]
+            H7["C07 AlgSymKey (1B)\n0x01=3DES-168"]
+            H8["C08 AlgAssymKeyLocal (1B)\n0x02=RSA-2048"]
+            H9["C09 AlgHash (1B)\n0x03=SHA-256"]
+            H10["C10 CADest (1B)"]
+            H11["C11 NumSerieCertDest (32B)"]
+            H12["C12 CALocal (1B)"]
+            H13["C13 NumSerieCertLocal (32B)"]
+            H14["C14 SymKeyCifr (256B)\nRSA-2048 wrapped 3DES key"]
+            H15["C15 HashCifrSign (256B)\nRSA-2048 digital signature"]
+        end
+        subgraph PAYLOAD ["Payload"]
+            PL["XML Document\n(UTF-16BE encoded)\n---------\nIf Versao=0x02:\nEncrypted with 3DES-CBC\n(zero IV)"]
+        end
+    end
+
+    style MSG fill:#f5f5f5,stroke:#424242,stroke-width:2px
+    style HDR fill:#fff8e1,stroke:#f57f17,stroke-width:2px
+    style PAYLOAD fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+</div><h3 id="v1-vs-v2-header-comparison">V1 vs V2 Header Comparison </h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>V1 (332 bytes)</th>
+<th>V2 (588 bytes)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>C01 TamSecHeader</td>
+<td>0x014C (332)</td>
+<td>0x024C (588)</td>
+</tr>
+<tr>
+<td>C02 Versao</td>
+<td>0x01</td>
+<td>0x02</td>
+</tr>
+<tr>
+<td>C04-C05</td>
+<td>Reservado (2B)</td>
+<td>TratamentoEspecial (1B) + Reservado (1B)</td>
+</tr>
+<tr>
+<td>C06 AlgAssymKey</td>
+<td>0x01 (RSA-1024)</td>
+<td>0x02 (RSA-2048)</td>
+</tr>
+<tr>
+<td>C09 AlgHash</td>
+<td>0x01 (MD5) / 0x02 (SHA-1)</td>
+<td>0x03 (SHA-256)</td>
+</tr>
+<tr>
+<td>C14 SymKeyCifr</td>
+<td>1+127 = 128 bytes</td>
+<td>256 bytes</td>
+</tr>
+<tr>
+<td>C15 HashCifrSign</td>
+<td>1+127 = 128 bytes</td>
+<td>256 bytes</td>
+</tr>
+</tbody>
+</table>
+<p>The inbound handler auto-detects V1/V2 from the first 2 bytes (TamSecHeader).</p>
+<hr>
+<h2 id="bacen-simulator">Bacen Simulator </h2>
+<p>The Bacen Simulator (<code>python/scripts/bacen_simulator.py</code>) acts as the Central Bank side for local testing. It runs on the <strong>same queue manager</strong> and uses simulation certificates to exchange messages with the Finvest server.</p>
+<h3 id="simulator-architecture">Simulator Architecture </h3>
+<div class="mermaid">flowchart LR
+    subgraph FINVEST_SRV ["BCSrvSqlMq Service (Finvest)"]
+        direction TB
+        IF_REQ["CIFReq\n(outbound DB-&gt;MQ)"]
+        BC_REQ["CBacenReq\n(inbound MQ-&gt;DB)"]
+        subgraph FIN_CRYPTO ["Finvest Crypto"]
+            FIN_PRV["finvest_sim.key\n(sign + decrypt)"]
+            FIN_PUB["bacen_sim.cer\n(encrypt + verify)"]
+        end
+    end
+
+    subgraph MQ ["IBM MQ -- QM.36266751.01"]
+        direction TB
+        QL_IF["QL.36266751.01.ENTRADA.IF\n(IF staging queue)"]
+        QL_BC["QL.REQ.00038166.36266751.01\n(Bacen local queue)"]
+    end
+
+    subgraph BACEN_SIM ["Bacen Simulator"]
+        direction TB
+        SIM_RCV["Receive\n(MQGET from IF queues)"]
+        SIM_SND["Send\n(MQPUT to Bacen queues)"]
+        subgraph BC_CRYPTO ["Bacen Crypto"]
+            BC_PRV["bacen_sim.key\n(sign + decrypt)"]
+            BC_PUB["finvest_sim.cer\n(encrypt + verify)"]
+        end
+    end
+
+    IF_REQ --&gt;|"sign(finvest_sim.key)\nencrypt(bacen_sim.cer)"| QL_IF
+    QL_IF --&gt;|"MQGET"| SIM_RCV
+    SIM_RCV --&gt;|"decrypt(bacen_sim.key)\nverify(finvest_sim.cer)"| BC_CRYPTO
+
+    BC_CRYPTO --&gt;|"sign(bacen_sim.key)\nencrypt(finvest_sim.cer)"| SIM_SND
+    SIM_SND --&gt;|"MQPUT"| QL_BC
+    QL_BC --&gt;|"MQGET"| BC_REQ
+    BC_REQ --&gt;|"decrypt(finvest_sim.key)\nverify(bacen_sim.cer)"| FIN_CRYPTO
+
+    style FINVEST_SRV fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style MQ fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
+    style BACEN_SIM fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
+    style FIN_CRYPTO fill:#fff8e1,stroke:#f57f17
+    style BC_CRYPTO fill:#fff8e1,stroke:#f57f17
+    style QL_IF fill:#ede7f6,stroke:#4527a0
+    style QL_BC fill:#ede7f6,stroke:#4527a0
+</div><h3 id="simulation-certificates">Simulation Certificates </h3>
+<table>
+<thead>
+<tr>
+<th>Certificate</th>
+<th>Key Size</th>
+<th>Used By</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>finvest_sim.key</code></td>
+<td>RSA-2048</td>
+<td>Finvest server</td>
+<td>Sign outbound / Decrypt inbound</td>
+</tr>
+<tr>
+<td><code>finvest_sim.cer</code></td>
+<td>RSA-2048</td>
+<td>Bacen simulator</td>
+<td>Encrypt to Finvest / Verify Finvest signatures</td>
+</tr>
+<tr>
+<td><code>bacen_sim.key</code></td>
+<td>RSA-2048</td>
+<td>Bacen simulator</td>
+<td>Sign outbound / Decrypt inbound</td>
+</tr>
+<tr>
+<td><code>bacen_sim.cer</code></td>
+<td>RSA-2048</td>
+<td>Finvest server</td>
+<td>Encrypt to Bacen / Verify Bacen signatures</td>
+</tr>
+</tbody>
+</table>
+<h3 id="simulator-menu">Simulator Menu </h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Action</th>
+<th>Queue</th>
+<th>Direction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Browse queue depths</td>
+<td>Show CURDEPTH of all queues</td>
+<td>All</td>
+<td>Read-only</td>
+</tr>
+<tr>
+<td>2. Receive from Finvest</td>
+<td>MQGET + decrypt + verify</td>
+<td><code>QL.36266751.01.*.IF</code></td>
+<td>Finvest -&gt; Bacen</td>
+</tr>
+<tr>
+<td>3. Send to Finvest</td>
+<td>Sign + encrypt + MQPUT</td>
+<td><code>QL.*.00038166.36266751.01</code></td>
+<td>Bacen -&gt; Finvest</td>
+</tr>
+<tr>
+<td>4. Browse messages</td>
+<td>Peek without removing</td>
+<td>Any queue</td>
+<td>Read-only</td>
+</tr>
+</tbody>
+</table>
+<h3 id="how-to-run">How to Run </h3>
+<pre data-role="codeBlock" data-info="bash" class="language-bash bash"><code><span class="token comment"># Terminal 1: Finvest server</span>
+<span class="token builtin class-name">cd</span> python
+py <span class="token parameter variable">-m</span> bcsrvsqlmq <span class="token parameter variable">-d</span>
+
+<span class="token comment"># Terminal 2: Bacen simulator</span>
+<span class="token builtin class-name">cd</span> python
+py scripts/bacen_simulator.py
+
+<span class="token comment"># Terminal 3 (optional): Insert test message in DB</span>
+<span class="token builtin class-name">cd</span> python
+py scripts/test_db_insert.py
+</code></pre><h3 id="end-to-end-test-flow">End-to-End Test Flow </h3>
+<ol>
+<li>Insert test message in DB (<code>test_db_insert.py</code>) -&gt; <code>spb_local_to_bacen</code> with <code>flag_proc='P'</code></li>
+<li>Finvest server picks it up -&gt; signs with <code>finvest_sim.key</code> -&gt; encrypts with <code>bacen_sim.cer</code> -&gt; MQPUT</li>
+<li>Bacen simulator receives -&gt; decrypts with <code>bacen_sim.key</code> -&gt; verifies with <code>finvest_sim.cer</code> -&gt; displays XML</li>
+<li>Bacen simulator sends response -&gt; signs with <code>bacen_sim.key</code> -&gt; encrypts with <code>finvest_sim.cer</code> -&gt; MQPUT</li>
+<li>Finvest server receives -&gt; decrypts with <code>finvest_sim.key</code> -&gt; verifies with <code>bacen_sim.cer</code> -&gt; INSERT to DB</li>
+</ol>
+<hr>
+<h2 id="queue-naming-convention">Queue Naming Convention </h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>QL.{type}.{dest}.{orig}.{seq}</code></td>
+<td>Local queues (MQGET inbound)</td>
+<td><code>QL.REQ.00038166.36266751.01</code></td>
+</tr>
+<tr>
+<td><code>QR.{type}.{orig}.{dest}.{seq}</code></td>
+<td>Remote queue defs (MQPUT outbound)</td>
+<td><code>QR.REQ.36266751.00038166.01</code></td>
+</tr>
+<tr>
+<td><code>QL.{ISPB}.{seq}.{stage}.IF</code></td>
+<td>IF staging queues (local)</td>
+<td><code>QL.36266751.01.ENTRADA.IF</code></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Types:</strong> REQ (Request), RSP (Response), REP (Report), SUP (Suporte)</p>
+<hr>
+<h2 id="4-message-types">4 Message Types </h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Outbound (IF-&gt;Bacen)</th>
+<th>Inbound (Bacen-&gt;IF)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>REQ</strong> (Request)</td>
+<td>CIFReq: DB-&gt;MQPUT new requests</td>
+<td>CBacenReq: MQGET-&gt;DB incoming requests</td>
+</tr>
+<tr>
+<td><strong>RSP</strong> (Response)</td>
+<td>CIFRsp: DB-&gt;MQPUT responses</td>
+<td>CBacenRsp: MQGET-&gt;DB incoming responses</td>
+</tr>
+<tr>
+<td><strong>REP</strong> (Report)</td>
+<td>CIFRep: DB-&gt;MQPUT delivery reports</td>
+<td>CBacenRep: MQGET-&gt;DB incoming reports</td>
+</tr>
+<tr>
+<td><strong>SUP</strong> (Suporte)</td>
+<td>CIFSup: DB-&gt;MQPUT support msgs</td>
+<td>CBacenSup: MQGET-&gt;DB incoming support</td>
+</tr>
+</tbody>
+</table>
+
+      </div>
+      
+      
+    
+    
+    <script type="module">
+// TODO: If ZenUML gets integrated into mermaid in the future,
+//      we can remove the following lines.
+
+
+var MERMAID_CONFIG = ({"startOnLoad":false});
+if (typeof MERMAID_CONFIG !== 'undefined') {
+  MERMAID_CONFIG.startOnLoad = false
+  MERMAID_CONFIG.cloneCssStyles = false
+  MERMAID_CONFIG.theme = "default"
+}
+
+mermaid.initialize(MERMAID_CONFIG || {})
+if (typeof(window['Reveal']) !== 'undefined') {
+  function mermaidRevealHelper(event) {
+    var currentSlide = event.currentSlide
+    var diagrams = currentSlide.querySelectorAll('.mermaid')
+    for (var i = 0; i < diagrams.length; i++) {
+      var diagram = diagrams[i]
+      if (!diagram.hasAttribute('data-processed')) {
+        mermaid.init(null, diagram, ()=> {
+          Reveal.slide(event.indexh, event.indexv)
+        })
+      }
+    }
+  }
+  Reveal.addEventListener('slidetransitionend', mermaidRevealHelper)
+  Reveal.addEventListener('ready', mermaidRevealHelper)
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+} else {
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid')
+  })
+}
+</script>
+    
+    
+    
+  
+    </body></html>

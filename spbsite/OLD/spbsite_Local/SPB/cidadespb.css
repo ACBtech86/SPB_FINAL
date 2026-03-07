@@ -1,0 +1,176 @@
+BODY
+{
+}
+TABLE.TAB001
+{
+    BACKGROUND-COLOR: white;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+TD
+{
+	BACKGROUND-COLOR: #E9E9E9;
+	COLOR: navy;
+	FONT-FAMILY: Verdana, Arial, 'Courier New';
+	FONT-SIZE: 8pt
+}
+TD.Branca
+{
+    BACKGROUND-COLOR: white;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+TD.COPYRIGHT
+{
+    BACKGROUND-COLOR: white;
+    COLOR: navy;
+    FONT-FAMILY: Arial, 'Courier New', Verdana;
+    FONT-SIZE: 8pt
+}
+TD.atencao
+{
+    BACKGROUND-COLOR: white;
+    COLOR: red;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+TD.HMenu
+{
+    BACKGROUND-COLOR: #6d7d8f;
+    COLOR: white;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+A.HMenu
+{
+    BACKGROUND-COLOR: #6d7d8f;
+    COLOR: white;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt;
+    TEXT-DECORATION: none
+}
+A.TopMenu
+{
+    BACKGROUND-COLOR: #e9e9e9;
+    COLOR: #838383;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt;
+    TEXT-DECORATION: none
+}
+TD.TopMenu
+{
+    BACKGROUND-COLOR: #e9e9e9;
+    COLOR: #838383;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+TABLE.Cliente
+{
+    BACKGROUND-COLOR: white;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+.Autenticacao
+{
+    COLOR: black;
+    FONT-FAMILY: 'Courier New';
+    FONT-SIZE: 8pt;
+    FONT-VARIANT: small-caps;
+    FONT-WEIGHT: bolder
+}
+TD.Cliente
+{
+    BACKGROUND-COLOR: white;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt;
+    MARGIN-BOTTOM: 0pt;
+    PADDING-BOTTOM: 2pt;
+    PADDING-TOP: 2pt
+}
+TD.SubTitulo
+{
+    BACKGROUND-COLOR: #8996a5;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt;
+    PADDING-BOTTOM: 0pt
+}
+TD.Titulo
+{
+    BACKGROUND-COLOR: #8996a5;
+    COLOR: white;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 12pt
+}
+TD.Rodape
+{
+    BACKGROUND-COLOR: #8996a5;
+    COLOR: navy;
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    FONT-SIZE: 8pt
+}
+TD.MenuSuperior
+{
+    BACKGROUND-COLOR: #e9e9e9;
+    FONT-FAMILY: Verdana, Arial, 'Courier New'
+}
+A.MenuSuperior
+{
+    FONT-FAMILY: Verdana, Arial, 'Courier New';
+    TEXT-DECORATION: underline
+}
+INPUT
+{
+    COLOR: navy;
+    FONT-FAMILY: 'Courier New', Arial, Verdana;
+    FONT-SIZE: 10pt
+}
+SELECT
+{
+    COLOR: navy;
+    FONT-FAMILY: 'Courier New', Arial;
+    FONT-SIZE: 10pt
+}
+TD.MenuInf
+{
+}
+A.MenuInf:active
+{
+    COLOR: navy;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt
+}
+A.MenuInf:link
+{
+    COLOR: navy;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt
+}
+A.MenuInf:visited
+{
+    COLOR: navy;
+    FONT-FAMILY: Arial;
+    FONT-SIZE: 8pt
+}
+.AutenticaCompr
+{
+    BACKGROUND-COLOR: white;
+    COLOR: black;
+    FONT-FAMILY: 'Courier New';
+    FONT-SIZE: 8pt
+}
+TD.COPYRIGHTFALE
+{
+    BACKGROUND-COLOR: #e9e9e9;
+    COLOR: navy;
+    FONT-FAMILY: Arial, 'Courier New', Verdana;
+    FONT-SIZE: 8pt
+}
+TEXTAREA
+{
+    COLOR: navy
+}

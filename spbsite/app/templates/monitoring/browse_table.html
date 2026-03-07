@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+    <span class="page-date">em {{ current_date }}</span>
+</div>
+
+<div class="page-layout">
+    <aside class="sidebar-stats">
+        <p>{{ "%03d"|format(stats.total_req) }} REQs</p>
+        <p>{{ "%03d"|format(stats.total_rsp) }} RSPs</p>
+        <p><strong>{{ "%03d"|format(stats.total) }} Msgs</strong></p>
+        <p class="sidebar-hint">Clique no cabecalho da coluna para classificar.</p>
+        {% if direction == 'inbound' %}
+        <p class="sidebar-hint">Clique nos botoes COD_MSG para apresentar a pagina da mensagem correspondente.</p>
+        {% endif %}
+    </aside>
+
+    <div class="table-container">
+        <table class="data-table sortable" id="browseTable">
+            <thead>
+                {% if direction == 'inbound' %}
+                <tr>
+                    <th data-sort="cod_msg">Cod_Msg</th>
+                    <th data-sort="db_datetime">Data_Hora_DB</th>
+                    <th data-sort="status_msg">Status</th>
+                    <th data-sort="flag_proc">Proc</th>
+                    <th data-sort="mq_qn_origem">Fila_de_Origem</th>
+                    <th data-sort="mq_datetime">Data_Hora_MQ</th>
+                    <th data-sort="nu_ope">Num_Ope</th>
+                    <th>MSG</th>
+                </tr>
+                {% else %}
+                <tr>
+                    <th data-sort="db_datetime">DB_DATETIME</th>
+                    <th data-sort="status_msg">STATUS_MSG</th>
+                    <th data-sort="flag_proc">FLAG_PROC</th>
+                    <th data-sort="mq_qn_destino">MQ_QN_DESTINO</th>
+                    <th data-sort="nu_ope">NU_OPE</th>
+                    <th data-sort="cod_msg">COD_MSG</th>
+                    <th>MSG</th>
+                </tr>
+                {% endif %}
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="{% if row.status_msg == 'P' %}status-warning{% elif row.status_msg in ('R', 'E') %}status-error{% else %}status-normal{% endif %}">
+                    {% if direction == 'inbound' %}
+                    <td>
+                        {% if row.cod_msg and row.cod_msg not in ('REPORT', 'ERRO') %}
+                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row.id }}" class="btn-msg">{{ row.cod_msg }}</a>
+                        {% elif row.cod_msg == 'REPORT' or row.cod_msg == 'ERRO' %}
+                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row.id }}" class="btn-msg btn-report">{{ row.cod_msg }}</a>
+                        {% else %}
+                        {{ row.cod_msg or '' }}
+                        {% endif %}
+                    </td>
+                    <td>{{ row.db_datetime.strftime('%d/%m/%Y.%H:%M:%S') if row.db_datetime else '' }}</td>
+                    <td>{{ row.status_msg or '' }}</td>
+                    <td>{{ row.flag_proc or '' }}</td>
+                    <td>{{ row.mq_qn_origem or '' }}</td>
+                    <td>{{ row.mq_datetime.strftime('%d/%m/%Y.%H:%M:%S') if row.mq_datetime else '' }}</td>
+                    <td>{{ row.nu_ope or '' }}</td>
+                    <td class="msg-cell">{{ (row.msg or '')[:80] }}{{ '...' if row.msg and row.msg|length > 80 else '' }}</td>
+                    {% else %}
+                    <td>{{ row.db_datetime.strftime('%d/%m/%Y.%H:%M:%S') if row.db_datetime else '' }}</td>
+                    <td>{{ row.status_msg or '' }}</td>
+                    <td>{{ row.flag_proc or '' }}</td>
+                    <td>{{ row.mq_qn_destino or '' }}</td>
+                    <td>{{ row.nu_ope or '' }}</td>
+                    <td>{{ row.cod_msg or '' }}</td>
+                    <td class="msg-cell">{{ (row.msg or '')[:80] }}{{ '...' if row.msg and row.msg|length > 80 else '' }}</td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

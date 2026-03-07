@@ -1,0 +1,32 @@
+========================================
+Compilando BCSrvSqlMq...
+========================================
+'vswhere.exe' nÆo ‚ reconhecido como um comando interno
+ou externo, um programa oper vel ou um arquivo em lotes.
+
+Iniciando compilacao...
+[  5%] [32mBuilding CXX object CMakeFiles/BCSrvSqlMq.dir/ntservapp.cpp.obj[0m
+ntservapp.cpp
+C:\BCSrvSqlMq\ntservapp.cpp(28): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+[ 10%] [32mBuilding CXX object CMakeFiles/BCSrvSqlMq.dir/ntservice.cpp.obj[0m
+ntservice.cpp
+C:\BCSrvSqlMq\ntservice.cpp(20): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\BCSrvSqlMq\ntservice.cpp(22): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\BCSrvSqlMq\ntservice.cpp(278): warning C4267: 'argumento': conversÃ£o de 'size_t' para 'DWORD', possÃ­vel perda de dados
+C:\BCSrvSqlMq\ntservice.cpp(263): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\BCSrvSqlMq\ntservice.cpp(264): warning C4996: 'strcat': This function or variable may be unsafe. Consider using strcat_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+[ 15%] [32mBuilding CXX object CMakeFiles/BCSrvSqlMq.dir/MainSrv.cpp.obj[0m
+MainSrv.cpp
+C:\BCSrvSqlMq\cryptlib.h(14): warning C4005: 'NOCRYPT': redefiniÃ§Ã£o de macro
+C:\BCSrvSqlMq\cryptlib.h(14): note: 'NOCRYPT' declarado anteriormente na linha de comando
+C:\BCSrvSqlMq\cryptlib.h(18): fatal error C1189: #error:  "cryptlib.h and wincrypt.h can't both be used at the same time due to conflicting type names"
+NMAKE : fatal error U1077: 'C:\dev\vcpkg\downloads\tools\cmake-3.31.10-windows\cmake-3.31.10-windows-x86_64\bin\cmake.exe -E cmake_cl_compile_depends --dep-file=CMakeFiles\BCSrvSqlMq.dir\MainSrv.cpp.obj.d --working-dir=C:\BCSrvSqlMq\build --filter-prefix="Observação: incluindo arquivo: " -- C:\PROGRA~1\MICROS~4\18\COMMUN~1\VC\Tools\MSVC\1450~1.357\bin\Hostx64\x64\cl.exe @C:\Users\ANTONI~1\AppData\Local\Temp\nm295.tmp' : código de retorno '0x2'
+Stop.
+NMAKE : fatal error U1077: '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\HostX64\x64\nmake.exe" -s -f CMakeFiles\BCSrvSqlMq.dir\build.make /nologo -SL                 CMakeFiles\BCSrvSqlMq.dir\build' : código de retorno '0x2'
+Stop.
+NMAKE : fatal error U1077: '"C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.50.35717\bin\HostX64\x64\nmake.exe" -s -f CMakeFiles\Makefile2 /nologo -LS                 all' : código de retorno '0x2'
+Stop.
+
+========================================
+ERRO na compilacao!
+========================================

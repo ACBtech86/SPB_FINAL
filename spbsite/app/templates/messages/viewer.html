@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Visualizador XML{% endblock %}
+
+{% macro render_tree(node) %}
+<div class="xml-node" style="margin-left: {{ node.level * 20 }}px;">
+    <span class="xml-node-toggle">-</span>
+    <span class="xml-tag">&lt;{{ node.tag }}{% for k, v in node.attributes.items() %} {{ k }}="{{ v }}"{% endfor %}&gt;</span>
+    {% if node.text %}<span class="xml-text">{{ node.text }}</span>{% endif %}
+    {% if node.children %}
+    <div class="xml-children">
+        {% for child in node.children %}
+            {{ render_tree(child) }}
+        {% endfor %}
+    </div>
+    {% endif %}
+    <span class="xml-tag">&lt;/{{ node.tag }}&gt;</span>
+</div>
+{% endmacro %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Visualizador de Mensagem XML</h1>
+</div>
+
+{% if error is defined and error %}
+<div class="alert alert-error">{{ error }}</div>
+{% endif %}
+
+{% if tree %}
+<div class="xml-viewer">
+    <h3>Estrutura da Mensagem</h3>
+    <div class="xml-tree">
+        {{ render_tree(tree) }}
+    </div>
+</div>
+{% endif %}
+
+{% if xml_content is defined and xml_content %}
+<div class="xml-raw">
+    <h3>XML Original</h3>
+    <pre class="xml-code">{{ xml_content }}</pre>
+</div>
+{% elif not tree %}
+<div class="alert alert-warning">Nenhuma mensagem XML encontrada.</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Toggle XML tree nodes
+document.querySelectorAll('.xml-node-toggle').forEach(function(el) {
+    el.addEventListener('click', function() {
+        var children = this.parentElement.querySelector('.xml-children');
+        if (children) {
+            children.classList.toggle('collapsed');
+            this.textContent = children.classList.contains('collapsed') ? '+' : '-';
+        }
+    });
+});
+</script>
+{% endblock %}

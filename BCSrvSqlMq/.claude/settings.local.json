@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(export PATH:*)",
+      "Bash(cmake.exe:*)",
+      "Bash(sc qc BCSrvSqlMq)"
+    ]
+  }
+}

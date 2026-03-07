@@ -1,0 +1,374 @@
+{% extends "base.html" %}
+
+{% block title %}{{ form_def.msg_id if form_def else 'Mensagem' }}{% endblock %}
+
+{% block extra_head %}
+<style>
+    .page-header-finvest {
+        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
+        color: white;
+        padding: 20px 24px;
+        border-radius: 6px;
+        box-shadow: 0 4px 12px rgba(0, 74, 109, 0.2);
+        margin-bottom: 20px;
+    }
+    .page-header-finvest h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+    }
+    .page-header-finvest p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 0.95rem;
+        margin: 0;
+    }
+    .card-finvest {
+        border: none;
+        border-radius: 8px;
+        box-shadow: 0 6px 20px rgba(0, 74, 109, 0.15);
+        overflow: hidden;
+    }
+    .card-header-finvest {
+        background: linear-gradient(90deg, #f8f9fa 0%, #e9ecef 100%);
+        border-bottom: 2px solid #004a6d;
+        padding: 12px 20px;
+    }
+    .card-header-finvest h5 {
+        color: #004a6d;
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin: 0;
+    }
+    .alert-finvest-info {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border-left: 3px solid #008bd6;
+        border-radius: 4px;
+        box-shadow: 0 2px 6px rgba(0, 139, 214, 0.1);
+    }
+    .fieldset-finvest {
+        border: 2px solid #004a6d;
+        border-radius: 6px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        box-shadow: 0 2px 6px rgba(0, 74, 109, 0.08);
+    }
+    .fieldset-finvest legend {
+        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
+        color: white;
+        padding: 5px 14px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 6px rgba(0, 74, 109, 0.3);
+    }
+    .form-control-finvest {
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 6px 10px;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+    }
+    .form-control-finvest:focus {
+        border-color: #008bd6;
+        box-shadow: 0 0 0 0.2rem rgba(0, 139, 214, 0.15);
+    }
+    .input-group-text-finvest {
+        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+    }
+    .btn-finvest-primary {
+        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
+        border: none;
+        color: white;
+        padding: 8px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 4px;
+        box-shadow: 0 3px 8px rgba(0, 74, 109, 0.3);
+        transition: all 0.2s ease;
+    }
+    .btn-finvest-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 74, 109, 0.4);
+        background: linear-gradient(135deg, #006890 0%, #008bd6 100%);
+        color: white;
+    }
+    .btn-finvest-secondary {
+        background: #6c757d;
+        border: none;
+        color: white;
+        padding: 8px 24px;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+    .btn-finvest-secondary:hover {
+        background: #5a6268;
+        transform: translateY(-1px);
+        color: white;
+    }
+    .btn-back-finvest {
+        background: white;
+        border: 1px solid #004a6d;
+        color: #004a6d;
+        padding: 6px 16px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+    }
+    .btn-back-finvest:hover {
+        background: #004a6d;
+        color: white;
+        transform: translateY(-1px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Page Header -->
+    <div class="page-header-finvest">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h2>
+                    <i class="bi bi-file-earmark-text me-3"></i>{{ form_def.msg_id if form_def else 'Mensagem' }}
+                </h2>
+                <p>{{ form_def.msg_descr if form_def else '' }}</p>
+            </div>
+            <a href="/messages/select" class="btn btn-back-finvest">
+                <i class="bi bi-arrow-left me-2"></i>Voltar
+            </a>
+        </div>
+    </div>
+
+    <!-- Success Alert -->
+    {% if success is defined and success %}
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <h5 class="alert-heading"><i class="bi bi-check-circle-fill me-2"></i>Mensagem enviada com sucesso!</h5>
+        <hr>
+        <p class="mb-0"><strong>Número de Operação:</strong> {{ nu_ope }}</p>
+        <p class="mb-0"><strong>Tabela:</strong> {{ dest_table }}</p>
+        <p class="mb-0"><strong>Fila de Destino:</strong> {{ queue_name }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
+    <!-- Error Alert -->
+    {% if errors is defined and errors %}
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Erros de validação</h5>
+        <ul class="mb-0">
+            {% for err in errors %}
+            <li>{{ err }}</li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
+    <!-- Form -->
+    {% if form_def %}
+    <div class="card card-finvest">
+        <div class="card-header card-header-finvest">
+            <h5><i class="bi bi-pencil-square me-3"></i>Preencha os Dados da Mensagem</h5>
+        </div>
+        <div class="card-body p-4">
+            <form method="post" action="/messages/submit" id="spbMessageForm">
+                <!-- Message ID Field (Read-only) -->
+                <div class="alert alert-finvest-info d-flex align-items-center mb-3 p-2" role="alert">
+                    <i class="bi bi-info-circle-fill fs-5 me-3" style="color: #008bd6;"></i>
+                    <div class="flex-grow-1">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <strong style="color: #004a6d; font-size: 0.95rem;">Tipo de Mensagem:</strong>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control form-control-finvest d-inline-block bg-white" id="formName" name="formName"
+                                       value="{{ form_def.msg_id }}" readonly required style="max-width: 200px; font-weight: 600; color: #004a6d; padding: 4px 8px; font-size: 0.9rem;">
+                                <small class="text-muted ms-2" style="font-size: 0.85rem;">Código SPB</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% for field in form_def.fields %}
+                    {% if field.is_group_start %}
+                    <fieldset class="fieldset-finvest p-3 mb-3" style="margin-left: {{ field.level * 12 }}px">
+                        <legend class="float-none w-auto">
+                            <i class="bi bi-folder2-open me-1"></i>{{ field.cponome }}
+                        </legend>
+                    {% else %}
+                        <div class="mb-2" style="margin-left: {{ field.level * 12 }}px">
+                            <div class="row align-items-start">
+                                <label for="{{ field.cpotag }}" class="col-sm-4 col-md-3 col-form-label fw-semibold" style="color: #004a6d; font-size: 0.9rem; padding-top: 6px; padding-bottom: 2px;">
+                                    {% if field.cpoform == 'data' %}
+                                        <i class="bi bi-calendar3 me-1" style="color: #008bd6; font-size: 0.85rem;"></i>
+                                    {% elif field.cpoform == 'data hora' %}
+                                        <i class="bi bi-calendar-event me-1" style="color: #008bd6; font-size: 0.85rem;"></i>
+                                    {% elif field.cpoform == 'hora' %}
+                                        <i class="bi bi-clock me-1" style="color: #008bd6; font-size: 0.85rem;"></i>
+                                    {% else %}
+                                        <i class="bi bi-pencil me-1" style="color: #6c757d; font-size: 0.85rem;"></i>
+                                    {% endif %}
+                                    {{ field.cponome }}
+                                    {% if field.cpoobrig == 'S' %}<span class="text-danger ms-1" style="font-size: 1rem;">*</span>{% endif %}
+                                    {% if field.cpotam %}
+                                    <br><small class="text-muted" style="font-weight: 400; font-size: 0.75rem;">Máx: {{ field.cpotam }}</small>
+                                    {% endif %}
+                                </label>
+                                <div class="col-sm-8 col-md-9">
+                                    {% if field.cpoform == 'data' %}
+                                    <div class="input-group" style="max-width: 220px;">
+                                        <span class="input-group-text input-group-text-finvest"><i class="bi bi-calendar3"></i></span>
+                                        <input type="date" class="form-control form-control-finvest date-field" id="{{ field.cpotag }}" name="{{ field.cpotag }}"
+                                               data-original-value="{{ form_data[field.cpotag] if form_data is defined and field.cpotag in form_data else '' }}"
+                                               {% if field.cpoobrig == 'S' %}required{% endif %}>
+                                    </div>
+                                    {% elif field.cpoform == 'data hora' %}
+                                    <div class="input-group" style="max-width: 320px;">
+                                        <span class="input-group-text input-group-text-finvest"><i class="bi bi-calendar-event"></i></span>
+                                        <input type="datetime-local" class="form-control form-control-finvest datetime-field" id="{{ field.cpotag }}" name="{{ field.cpotag }}"
+                                               data-original-value="{{ form_data[field.cpotag] if form_data is defined and field.cpotag in form_data else '' }}"
+                                               step="1"
+                                               {% if field.cpoobrig == 'S' %}required{% endif %}>
+                                    </div>
+                                    {% elif field.cpoform == 'hora' %}
+                                    <div class="input-group" style="max-width: 200px;">
+                                        <span class="input-group-text input-group-text-finvest"><i class="bi bi-clock"></i></span>
+                                        <input type="time" class="form-control form-control-finvest time-field" id="{{ field.cpotag }}" name="{{ field.cpotag }}"
+                                               data-original-value="{{ form_data[field.cpotag] if form_data is defined and field.cpotag in form_data else '' }}"
+                                               step="1"
+                                               {% if field.cpoobrig == 'S' %}required{% endif %}>
+                                    </div>
+                                    {% else %}
+                                    {% set field_width = (field.cpotam|int * 10 + 100) if field.cpotam else 300 %}
+                                    {% set max_width = 800 if field_width > 800 else field_width %}
+                                    {% set min_width = 150 if max_width < 150 else max_width %}
+                                    <input type="text" class="form-control form-control-finvest" id="{{ field.cpotag }}" name="{{ field.cpotag }}"
+                                           {% if field.cpotam %}maxlength="{{ field.cpotam }}" style="max-width: {{ min_width }}px;"{% endif %}
+                                           value="{{ form_data[field.cpotag] if form_data is defined and field.cpotag in form_data else '' }}"
+                                           {% if field.cpoobrig == 'S' %}required{% endif %}>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Form Actions -->
+                <div class="d-flex justify-content-between align-items-center gap-2 mt-3 pt-3" style="border-top: 2px solid #dee2e6;">
+                    <div style="color: #6c757d; font-size: 0.85rem;">
+                        <i class="bi bi-asterisk text-danger me-1" style="font-size: 0.7rem;"></i>
+                        <strong>Campos obrigatórios</strong>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a href="/messages/select" class="btn btn-finvest-secondary">
+                            <i class="bi bi-x-circle me-1"></i>Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-finvest-primary">
+                            <i class="bi bi-send-fill me-1"></i>Enviar Mensagem
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Convert Brazilian format (dd/mm/aaaa) to HTML5 format (YYYY-MM-DD)
+    function brDateToHtml5(brDate) {
+        if (!brDate || brDate.length !== 10) return '';
+        const [day, month, year] = brDate.split('/');
+        return `${year}-${month}-${day}`;
+    }
+
+    // Convert HTML5 format (YYYY-MM-DD) to Brazilian format (dd/mm/aaaa)
+    function html5ToBrDate(html5Date) {
+        if (!html5Date) return '';
+        const [year, month, day] = html5Date.split('-');
+        return `${day}/${month}/${year}`;
+    }
+
+    // Convert Brazilian datetime (dd/mm/aaaa HH:MM:SS) to HTML5 (YYYY-MM-DDTHH:MM:SS)
+    function brDateTimeToHtml5(brDateTime) {
+        if (!brDateTime) return '';
+        const [datePart, timePart] = brDateTime.split(' ');
+        if (!datePart) return '';
+        const [day, month, year] = datePart.split('/');
+        return `${year}-${month}-${day}T${timePart || '00:00:00'}`;
+    }
+
+    // Convert HTML5 datetime to Brazilian format
+    function html5ToBrDateTime(html5DateTime) {
+        if (!html5DateTime) return '';
+        const [datePart, timePart] = html5DateTime.split('T');
+        const [year, month, day] = datePart.split('-');
+        return `${day}/${month}/${year} ${timePart || '00:00:00'}`;
+    }
+
+    // Initialize date fields with Brazilian format values
+    document.querySelectorAll('.date-field').forEach(field => {
+        const brValue = field.getAttribute('data-original-value');
+        if (brValue) {
+            field.value = brDateToHtml5(brValue);
+        }
+    });
+
+    // Initialize datetime fields with Brazilian format values
+    document.querySelectorAll('.datetime-field').forEach(field => {
+        const brValue = field.getAttribute('data-original-value');
+        if (brValue) {
+            field.value = brDateTimeToHtml5(brValue);
+        }
+    });
+
+    // Initialize time fields (already in compatible format HH:MM:SS)
+    document.querySelectorAll('.time-field').forEach(field => {
+        const timeValue = field.getAttribute('data-original-value');
+        if (timeValue) {
+            field.value = timeValue;
+        }
+    });
+
+    // Convert back to Brazilian format on form submit
+    const form = document.getElementById('spbMessageForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            // Convert date fields back to Brazilian format
+            document.querySelectorAll('.date-field').forEach(field => {
+                if (field.value) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = field.name;
+                    hiddenInput.value = html5ToBrDate(field.value);
+                    form.appendChild(hiddenInput);
+                    field.removeAttribute('name'); // Prevent sending HTML5 format
+                }
+            });
+
+            // Convert datetime fields back to Brazilian format
+            document.querySelectorAll('.datetime-field').forEach(field => {
+                if (field.value) {
+                    const hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = field.name;
+                    hiddenInput.value = html5ToBrDateTime(field.value);
+                    form.appendChild(hiddenInput);
+                    field.removeAttribute('name'); // Prevent sending HTML5 format
+                }
+            });
+
+            // Time fields are already in compatible format (HH:MM:SS)
+        });
+    }
+});
+</script>
+{% endblock %}

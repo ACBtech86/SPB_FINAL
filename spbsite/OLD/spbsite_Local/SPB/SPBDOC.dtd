@@ -1,0 +1,1127 @@
+<!ELEMENT SPBDOC (BCMSG,SISMSG,USERMSG?)>
+<!ELEMENT BCMSG (Grupo_EmissorMsg,Grupo_DestinatarioMsg,NUOp)>
+<!ELEMENT Grupo_EmissorMsg (TipoId_Emissor,Id_Emissor)>
+<!ELEMENT Grupo_DestinatarioMsg (TipoId_Destinatario,Id_Destinatario)>
+
+<!ELEMENT SISMSG 
+(STRConsHorarioSTR |
+STRConsHorarioSTRRespCons |
+STRAvisAltHorarioSTR |
+STRReqLiqTransfNumerario |
+STRReqLiqTransfNumerarioRespReq |
+STRReqLiqTransfNumerarioRespTerc |
+STRReqTransfReserva |
+STRReqTransfReservaRespReq |
+STRReqTransfReservaRespTerc |
+STRReqTransfNaoCorrentistas |
+STRReqTransfNaoCorrentistasRespReq |
+STRReqTransfNaoCorrentistasRespTerc |
+STRReqTransfContaCliIF |
+STRReqTransfContaCliIFRespReq |
+STRReqTransfContaCliIFRespTerc |
+STRReqTransfIFContaCli |
+STRReqTransfIFContaCliRespReq |
+STRReqTransfIFContaCliRespTerc |
+STRReqTransfContaDifTitularidade |
+STRReqTransfContaDifTitularidadeRespReq |
+STRReqTransfContaDifTitularidadeRespTerc |
+STRReqTransfContaMesmaTitularidade |
+STRReqTransfContaMesmaTitularidadeRespReq |
+STRReqTransfContaMesmaTitularidadeRespTerc |
+STRReqTransfDevolTransfIndevida |
+STRReqTransfDevolTransfIndevidaRespReq |
+STRReqDevolTransfIndevidaRespTerc |
+STRReqCancelLancPendente |
+STRReqCancelLancPendenteRespReq |
+STRConsLanc |
+STRConsLancRespCons |
+STRConsSaldoReservaBancaria |
+STRConsSaldoReservaBancariaRespCons |
+STRConsExtrato |
+STRConsExtratoRespCons |
+STRAvisFechamento |
+STRAvisSaldoFechamento |
+STRAvisAbertura |
+RCOConsPeriodoDepositoCompulsorio |
+RCOConsPeriodoDepositoCompulsorioRespCons |
+RCOInfDemonstrativo |
+RCOInfDemonstrativoRespInf |
+RCOConsDemonstrativo |
+RCOConsDemonstrativoRespCons |
+RCOConsMulta |
+RCOConsMultaRespCons |
+RCOConsExtratoMov |
+RCOConsExtratoMovRespCons |
+RCOConsCumpCompulsorio |
+RCOConsCumpCompulsorioRespCons |
+RCOConsCusto |
+RCOConsCustoRespCons |
+RCOConsCompulsorio |
+RCOConsCompulsorioRespCons |
+RCOConsAltOutrasReservasCaixaDemonstrativo |
+RCOConsAltOutrasReservasCaixaDemonstrativoRespCons |
+RCOReqTransfRecursosdeCompulsorios |
+RCOReqTransfRecursosdeCompulsoriosRespReq |
+RCOReqTransfRecursosdeCompulsoriosRespTerc |
+RCOReqTransfRecursosparaCompulsorios |
+RCOReqTransfRecursosparaCompulsoriosRespReq |
+RCOReqTransfRecursosparaCompulsoriosRespTerc |
+RDCConsTituloRedescontavel |
+RDCConsTituloRedescontavelRespCons |
+RDCReqRedescontoIntradia |
+RDCReqRedescontoIntradiaRespReq |
+RDCReqRedescontoOvernight |
+RDCReqRedescontoOvernightRespReq |
+RDCRedRedescontoVincAquisicao |
+RDCRedRedescontoVincAquisicaoRespReq |
+RDCReqConvRedescontoIntradiaOvernight |
+RDCReqConvRedescontoIntradiaOvernightRespReq |
+RDCConsRedesconto |
+RDCConsRedescontoRespCons |
+RDCReqPagtoRedesconto |
+RDCReqPagtoRedescontoRespReq |
+RDCReqPagtoRedescontoVincVenda |
+RDCReqPagtoRedescontoVincVendaRespReq |
+RDCAvisTitulosRedescontaveisDisp |
+SLBInfLancDevidoIF |
+SLBReqPagtoLancBACEN |
+SLBReqPagtoLancBACENRespReq |
+SLBInfCancelLancBACEN |
+SLBReqCancelLancPendente |
+SLBReqCancelLancPendenteRespReq |
+SLBInfLancCredEfetivado |
+SLBConsLanc |
+SLBConsLancRespReq |
+SLBReqPagamentoBacenRespReq |
+STNReqTransfReservaTesouro |
+STNReqTransfReservaTesouroRespReq |
+STNReqTransfRepArrecadacao |
+STNReqTransfRepArrecadacaoRespReq |
+STNInfValorRecMaiorCompensado |
+STNInfValorRecMaiorCompensadoRespReq |
+STNAvisCredLancamentoTesouro |
+STNAvisAlteracaoTabCodId |
+CIRInfEstatisticaSemanalMov |
+CIRInfEstatisticaSemanalMovRespInf |
+CIRConsEstatisticaMov |
+CIRConsEstatisticaMovRespCons |
+CIRReqSaqueNumerario |
+CIRReqSaqueNumerarioRespReq |
+CIRReqCancelSaqueNumerario |
+CIRReqCancelSaqueNumerarioRespReq |
+CIRReqDepositoNumerario |
+CIRReqDepositoNumerarioRespReq |
+CIRReqCancelDepositoNumerario |
+CIRReqCancelDepositoNumerarioRespReq |
+CIRConsMovNumerario |
+CIRConsMovNumerarioRespCons |
+CIRConsLancPendContaTransitoria |
+CIRConsLancPendContaTransitoriaRespCons |
+CIRInfCredNumerarioMaior |
+CIRAvisAjusteNumerarioDepositadoMenor |
+CIRReqTransfAjusteNumerarioMenor |
+CIRReqTransfAjusteNumerarioMenorRespReq |
+CIRConsRelCustEst |
+CIRConsRelCustEstRespCons |
+CIRAvisNumerarioDepositadoLegExam |
+CIRAvisSaqueNumerario |
+CIRAvisCancelSaqueNumerario |
+CIRInfConfSaqueNumerario |
+CIRInfConfSaqueNumerarioRespInf |
+CIRInfEfetivSaqueNumerario |
+CIRInfEfetivSaqueNumerarioRespInf |
+CIRAvisDepositoNumerario |
+CIRAvisCancelDepositoNumerario |
+CIRInfEfetivDepositoNumerario |
+CIRInfEfetivDepositoNumerarioRespInf |
+CIRReqDepositoProprio |
+CIRReqDepositoProprioRespReq |
+CIRReqCancelSaqueNumerarioCust |
+CIRReqCancelSaqueNumerarioCustRespReq |
+CIRAvisCreditoTarifa |
+CIRReqReforcoCustodiaNum |
+CIRReqReforcoCustodiaNumRespReq |
+CIRInfCancelReforcoCustodiaNum |
+CIRInfCancelReforcoCustodiaNumRespInf |
+CIRReqAlivioCustodiaNum |
+CIRReqAlivioCustodiaNumRespReq |
+CIRInfCancelAlivioCustodiaNum |
+CIRInfCancelAlivioCustodiaNumRespInf |
+CIRInfTrocaNum |
+CIRInfTrocaNumRespInf |
+CIRInfRemessaExpedNum |
+CIRInfRemessaExpedNumRespInf |
+CIRInfRemessaRecebNum |
+CIRInfRemessaRecebNumRespInf |
+CIRReqCustCredNumerarioMaior |
+CIRReqCustCredNumerarioMaiorRespReq |
+CIRInfCustAjusteNumerarioDepositadoMenor |
+CIRInfCustAjusteNumerarioDepositadoMenorRespInf |
+CIRConsCustEstAgencia |
+CIRConsCustEstAgenciaRespCons |
+CIRConsMovNumerarioCust |
+CIRConsMovNumerarioCustRespCons |
+CIRConsDenominacoes |
+CIRConsDenominacoesRespCons |
+SELReqDesvinculacaoTitulos |
+SELReqDesvinculacaoTitulosRespReq |
+SELReqLiquidacaoLeilao |
+SELReqLiquidacaoLeilaoRespReq |
+SELReqVinculacaoTitulos |
+SELReqVinculacaoTitulosRespReq |
+SELReqResgateDI |
+SELReqResgateDIRespReq |
+SELReqOperacaoDI |
+SELReqOperacaoDIRespReq |
+SELReqOperacaoDefinitiva |
+SELReqOperacaoDefinitivaRespReq |
+SELReqOperacaoCompromissada |
+SELReqOperacaoCompromissadaRespReq |
+SELReqRetornoOperacaoCompromissada |
+SELReqRetornoOperacaoCompromissadaRespReq |
+SELReqTransfSemMovimentacaoFinanceira |
+SELReqTransfSemMovimentacaoFinanceiraRespReq |
+SELReqRepasseImpostos |
+SELReqRepasseImpostosRespReq |
+SELReqDesmembramentoCupomJuros |
+SELReqDesmembramentoCupomJurosRespReq |
+SELReqRemembramentoCupomJuros |
+SELReqRemembramentoCupomJurosRespReq |
+SELConsOperacao |
+SELConsOperacaoRespCons |
+SELConsPosicaoCustodiaTitulos |
+SELConsPosicaoCustodiaTitulosRespCons |
+SELReqLimiteFinanceiroNaoLiquidanteoperar |
+SELReqLimiteFinanceiroNaoLiquidanteoperarRespReq |
+SELReqLimiteFinanceiroNaoLiquidanteoperarRespTerc |
+SELConsLimiteFinanceiroNaoLiquidanteOperar |
+SELConsLimiteFinanceiroNaoLiquidanteOperarRespCons |
+SELInfSensibilizacaoReservaBancaria |
+SELReqEstorno |
+SELReqEstornoRespReq |
+SELReqOrdemUnicaRetornoOperacoesCompromissadas |
+SELReqOrdemUnicaRetornoOperacoesCompromissadasRespReq |
+SELConsHorarioLimite_IntervaloAceitePendencias |
+SELConsHorarioLimite_IntervaloAceitePendenciasRespCons |
+SELAvisAlteracaoHorariosLimite_IntervaloAceitePendencias |
+SELAvisHorarioInicioRetornoDI |
+SELAvisAlteracaoPrecoLastroTitulos |
+SELAvisOperacoesProcessadasRotinaAbertura |
+SELReqOperacaoTermo |
+SELReqOperacaoTermoRespReq |
+LDLInfResultadoLiquidoNegociacao |
+LDLInfResultadoLiquidoNegociacaoBacen |
+LDLInfResultadoLiquidoNegociacaoDivergente |
+LDLReqTransfResultadoLiquidoNegociacao |
+LDLReqTransfResultadoLiquidoNegociacaoRespReq |
+LDLReqTransfResultadoLiquidoNegociacaoRespTerc |
+LDLReqTransfResultadoLiquidoNegociacaoLDL |
+LDLReqTransfResultadoLiquidoNegociacaoLDLRespReq |
+LDLReqTransfResultadoLiquidoNegociacaoLDLRespTerc |
+LDLReqTransfDevolCredIF |
+LDLReqTransfDevolCreditoIFRespReq |
+LDLReqTransfDevolCreditoRespTerc |
+LDLInfLiqEventosEmissoes |
+LDLReqTransfLiqEventoEmissao |
+LDLReqTransfLiqEventoEmissaoRespReq |
+LDLReqTransfLiqEventoEmissaoRespTerc |
+LDLReqTransfLiqEventoEmissaoLDL |
+LDLReqTransfLiqEventoEmissaoLDLRespReq |
+LDLReqTransfLiqEventoEmissaoLDLRespTerc |
+LDLInfPedTransfRecursoContaLDLContaLiq |
+LDLReqTransfContaLDLContaLiq |
+LDLReqTransfContaLDLContaLiqRespReq |
+LDLReqTransfContaLDLContaLiqRespTerc |
+LDLReqTransfContaLiqContaLDL |
+LDLReqTransfContaLiqContaLDLRespReq |
+LDLReqTransfContaLiqContaLDLRespTerc |
+LDLInfDepositoGarantia |
+LDLReqTransfDepositoGarantia |
+LDLReqTransfDepositoGarantiaRespReq |
+LDLReqTransfDepositoGarantiaRespTerc |
+LDLReqTransfDevolRendResgGarantia |
+LDLReqTransfDevolRendResgGarantiaRespReq |
+LDLReqTransfDevolRendResgGarantiaRespTerc |
+LDLConsLancLDL |
+LDLConsLancLDLRespCons |
+LDLConsSaldoContaLiq |
+LDLConsSaldoContaLiqRespCons |
+LDLAvisTransfSaldoRemContaLiq |
+LDLAvisIFTransfSaldoRemContaLiq |
+LDLReqTransfReservaResultadoLiq |
+LDLReqTransfResultadoLiqRespReq |
+LDLReqTransfResultadoLiqRespTerc |
+LDLInfDepositoOperacional |
+LDLReqTransfDepositoOperacional |
+LDLReqTransfDepositoOperacionalRespReq |
+LDLReqTransfDepositoOperacionalRespTerc |
+LDLConsHorarioCamara |
+LDLConsHorarioCamaraRespCons |
+LDLAvisAltHorarioCamara |
+LDLReqTransfDevolCredLDL |
+LDLReqTransfDevolCredLDLRespReq |
+LDLReqTransfDevolCredLDLRespTerc |
+GENReqECO |
+GENReqECORespReq |
+GENReqLOG |
+GENReqLOGRespReq |
+GENReqUltMsg |
+GENReqUltMsgRespReq |
+CMPInfValorParaCOMPE |
+CMPReqTransfpredepositoCOMPE |
+CMPReqTransfPredepositoCOMPERespReq |
+CMPAvisCredReferenteCOMPE |
+CMPInfIFNaoParticipaCOMPE |
+CMPInfValorComplemento |
+CMPInfLiquidoBC |
+CMPInfIFResultadoCOMPE |
+CMPConsSaldopredeposito |
+CMPConsSaldopredepositoRespCons |
+CMPReqReprocessamentoCOMPE )>
+
+<!ELEMENT STRConsHorarioSTR (CodMsg,NumCtrlIF,CNPJIF,DtRef,TipoHrio?)>
+<!ELEMENT STRConsHorarioSTRRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_STR0001R1_GradeHrio,DtRef,DtHSTR)>
+<!ELEMENT Repet_STR0001R1_GradeHrio (Grupo_STR0001R1_GradeHrio+)>
+<!ELEMENT Grupo_STR0001R1_GradeHrio (CodGrade,HrioAb,HrioFch,TipoHrio)>
+
+<!ELEMENT STRAvisAltHorarioSTR (CodMsg,Repet_STR0002_GradeHrio,DtHSTR,DtRef,TipoHrio)>
+<!ELEMENT Repet_STR0002_GradeHrio (Grupo_STR0002_GradeHrio+)>
+<!ELEMENT Grupo_STR0002_GradeHrio (CodGrade,HrioAb,HrioFch)>
+
+<!ELEMENT STRReqLiqTransfNumerario (CodMsg,NumCtrlIF,CNPJIFDeb,AgDeb,CNPJIFCred,AgCred,VlrLanc,NivelPref_opc_,DtMovto)>
+<!ELEMENT STRReqLiqTransfNumerarioRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqLiqTransfNumerarioRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,AgDeb,CNPJIFCred,AgCred,VlrLanc,DtMovto)>
+
+<!ELEMENT STRReqTransfReserva (CodMsg,NumCtrlIF,CNPJIFDeb,CNPJIFCred,Finldd,VlrLanc,Historico,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfReservaRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfReservaRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,CNPJIFCred,VlrLanc,Finldd,Historico,DtMovto)>
+
+<!ELEMENT STRReqTransfNaoCorrentistas (CodMsg,NumCtrlIF,CNPJIFDeb,AgDeb,TipoPessoaRemet,CNPJ_CPFRemet,NomRemet,CNPJIFCred,AgCred,TipoPessoaDestinatario,CNPJ_CPFDestinatario?,NomDestinatario,VlrLanc,Finldd,Historico?,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfNaoCorrentistasRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfNaoCorrentistasRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,AgDeb,TipoPessoaRemet,CNPJ_CPFRemet,NomRemet,CNPJIFCred,AgCred,TipoPessoaDestinatario?,CNPJ_CPFDestinatario?,NomDestinatario,VlrLanc,Finldd,Historico?,DtMovto)>
+
+<!ELEMENT STRReqTransfContaCliIF (CodMsg,NumCtrlIF,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb1,NomCliDeb1,CNPJ_CPFCliDeb2?,NomCliDeb2?,CNPJIFCred,AgCred?,TipoCtCred?,TipoPessoaDestinatario?,CNPJ_CPFDestinatario?,NomDestinatario?,VlrLanc,Historico?,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfContaCliIFRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfContaCliIFRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb1,NomCliDeb1,CNPJ_CPFCliDeb2?,NomCliDeb2?,CNPJIFCred,AgCred?,CtCred?,TipoPessoaDestinatario?,CNPJ_CPFDestinatario?,NomDestinatario?,VlrLanc,Historico?,DtMovto)>
+
+<!ELEMENT STRReqTransfIFContaCli (CodMsg,NumCtrlIF,CNPJIFDeb,TipoPessoaRemet?,CNPJ_CPFRemet?,NomRemet?,CNPJIFCred,AgCred,TipoCtCred*,TipoPessoaCred,CNPJ_CPFCliCred1,NomCliCred1,CNPJ_CPFCliCred2?,NomCliCred2?,VlrLanc,Historico?,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfIFContaCliRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfIFContaCliRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,TipoPessoaRemet?,CNPJ_CPFRemet?,NomRemet?,CNPJIFCred,AgCred,TipoCtCred*,TipoPessoaCred,CNPJ_CPFCliCred1,NomCliCred1,CNPJ_CPFCliCred2?,NomCliCred2?,Historico?,VlrLanc,DtMovto)>
+
+<!ELEMENT STRReqTransfContaDifTitularidade (CodMsg,NumCtrlIF,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb,NomCliDeb,CNPJIFCred,AgCred,TipoCtCred*,TipoPessoaCred?,CNPJ_CPFCliCred?,NomCliCred,VlrLanc,Finldd,Historico?,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfContaDifTitularidadeRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfContaDifTitularidadeRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb,NomCliDeb,CNPJIFCred,AgCred,TipoCtCred*,TipoPessoaCred?,CNPJ_CPFCliCred?,NomCliCred,VlrLanc,Finldd,Historico?,DtMovto)>
+
+<!ELEMENT STRReqTransfContaMesmaTitularidade (CodMsg,NumCtrlIF,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb1,NomCliDeb1,CNPJ_CPFCliDeb2?,NomCliDeb2?,AgCred,CNPJIFCred,TipoCtCred*,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfContaMesmaTitularidadeRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqTransfContaMesmaTitularidadeRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,AgDeb,TipoCtDeb*,TipoPessoaDeb,CNPJ_CPFCliDeb1,NomCliDeb1,CNPJ_CPFCliDeb2?,NomCliDeb2?,CNPJIFCred,AgCred,TipoCtCred*,VlrLanc,DtMovto)>
+
+<!ELEMENT STRReqTransfDevolTransfIndevida (CodMsg,NumCtrlIF,CNPJIFDeb,CNPJIFCred,VlrLanc,NumCtrlSTROr,Historico?,NivelPref?,DtMovto)>
+<!ELEMENT STRReqTransfDevolTransfIndevidaRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT STRReqDevolTransfIndevidaRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIFDeb,CNPJIFCred,VlrLanc,NumCtrlSTROr,Historico?,DtMovto)>
+
+<!ELEMENT STRReqCancelLancPendente (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTROr,DtMovto)>
+<!ELEMENT STRReqCancelLancPendenteRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,DtHBC,DtMovto)>
+
+<!ELEMENT STRConsLanc (CodMsg,NumCtrlIF,CNPJIF,TipoDebCred?,SitLanc?,HFim,DtMovto)>
+<!ELEMENT STRConsLancRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_STR0012R1_Lanc,DtHSTR,DtMovto)>
+<!ELEMENT Repet_STR0012R1_Lanc (Grupo_STR0012R1_Lanc+)>
+<!ELEMENT Grupo_STR0012R1_Lanc (CodMsgOr,DtHSit,TipoDebCred,CNPJIFDeb,CNPJIFCred,NumCtrlSTROr,SitLanc,VlrLanc,NivelPref)>
+
+<!ELEMENT STRConsSaldoReservaBancaria (CodMsg,NumCtrlIF,CNPJIF,DtMovto)>
+<!ELEMENT STRConsSaldoReservaBancariaRespCons (CodMsg,NumCtrlIF,CNPJIF,SldRBIF,DtHSTR,DtMovto)>
+
+<!ELEMENT STRConsExtrato (CodMsg,NumCtrlIF,CNPJIF,HIni?,DtMovto)>
+<!ELEMENT STRConsExtratoRespCons (CodMsg,NumCtrlIF,CNPJIF,HIni,SldIni,Repet_STR0014R1_Lanc,SldFim,DtHBC,DtMovto)>
+<!ELEMENT Repet_STR0014R1_Lanc (Grupo_STR0014R1_Lanc+)>
+<!ELEMENT Grupo_STR0014R1_Lanc (CodMsgOr,NumCtrlSTROr,DtHSit,TipoDebCred,VlrLanc)>
+
+<!ELEMENT STRAvisFechamento (CodMsg,HrioFch,CodGrade,DtHSTR,DtMovto)>
+<!ELEMENT STRAvisSaldoFechamento (CodMsg,CNPJIF,SldRBIF,DtHSTR,DtMovto)>
+
+<!ELEMENT STRAvisAbertura (CodMsg,HrioAb,CodGrade,DtHSTR,DtMovto)>
+
+<!ELEMENT RCOConsPeriodoDepositoCompulsorio (CodMsg,NumCtrlIF,GrupoIFRCO?,CodRCO,CNPJIF,DtRef,DtMovto)>
+<!ELEMENT RCOConsPeriodoDepositoCompulsorioRespCons (CodMsg,NumCtrlIF,CNPJIF,CodRCO,GrupoIFRCO?,DtIniPerCalc,DtFimPerCalc,Repet_RCO0001R1_PerCalc,DtFimInf,DtFimAlt,DtIniPerMovtc,DtFimPerMovtc,Repet_RCO0001R1_PerMovtc,DtMovto)>
+<!ELEMENT Repet_RCO0001R1_PerCalc (Grupo_RCO0001R1_PerCalc+)>
+<!ELEMENT Grupo_RCO0001R1_PerCalc (DUPerCalc)>
+<!ELEMENT Repet_RCO0001R1_PerMovtc (Grupo_RCO0001R1_PerMovtc+)>
+<!ELEMENT Grupo_RCO0001R1_PerMovtc (DUPerMovtc)>
+
+<!ELEMENT RCOInfDemonstrativo (CodMsg,NumCtrlIF,CNPJIF,DtFimPerCalc,DtIniPerCalc,CodRCO,Repet_RCO0002_Dmstr,DtMovto)>
+<!ELEMENT Repet_RCO0002_Dmstr (Grupo_RCO0002_Dmstr+)>
+<!ELEMENT Grupo_RCO0002_Dmstr (DtRefDmstr,IndIncl_Alt,Repet_RCO0002_ItemIncid)>
+<!ELEMENT Repet_RCO0002_ItemIncid (Grupo_RCO0002_ItemIncid+)>
+<!ELEMENT Grupo_RCO0002_ItemIncid (CodItemBaseIncid,VlrItemDmstr)>
+<!ELEMENT RCOInfDemonstrativoRespInf (CodMsg,NumCtrlIF,CNPJIF,IndMulta?,VlrExig,DtMovto)>
+
+<!ELEMENT RCOConsDemonstrativo (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtRef,DtMovto)>
+<!ELEMENT RCOConsDemonstrativoRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_RCO0003R1_Data,VlrExig,DtMovto)>
+<!ELEMENT Repet_RCO0003R1_Data (Grupo_RCO0003R1_Dt+)>
+<!ELEMENT Grupo_RCO0003R1_Dt (DtRefDmstr,Repet_RCO0003R1_Item)>
+<!ELEMENT Repet_RCO0003R1_Item (Grupo_RCO0003R1_Item+)>
+<!ELEMENT Grupo_RCO0003R1_Item (VlrItemDmstr,CodItemBaseIncid)>
+
+<!ELEMENT RCOConsMulta (CodMsg,NumCtrlIF,CNPJIF,CodRCO?,DtRef,DtMovto)>
+<!ELEMENT RCOConsMultaRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_RCO0004R1_Multa?,DtMovto)>
+<!ELEMENT Repet_RCO0004R1_Multa (Grupo_RCO0004R1_Multa+)>
+<!ELEMENT Grupo_RCO0004R1_Multa (CodRCO,VlrMulta,VlrAtlzMulta?,VlrDevMulta?,VlrAtlzMultaDev?,DtVenc,DtPag?)>
+
+<!ELEMENT RCOConsExtratoMov (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIni,DtFim,DtMovto)>
+<!ELEMENT RCOConsExtratoMovRespCons (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIni,DtFim,SldAnt,SldAtual,Repet_RCO0005R1_Lanc,DtMovto)>
+<!ELEMENT Repet_RCO0005R1_Lanc (Grupo_RCO0005R1_Lanc+)>
+<!ELEMENT Grupo_RCO0005R1_Lanc (DtHMovtc,VlrLanc,TipoDebCred,DescLanc)>
+
+<!ELEMENT RCOConsCumpCompulsorio (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtRef,DtMovto)>
+<!ELEMENT RCOConsCumpCompulsorioRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_RCO0006R1_Cump,DtIniPerCalc,DtFimPerCalc,DtIniPerMovtc,DtFimPerMovtc,VlrDeducORes?,VlrMedCaixa,VlrExigTit?,VlrExigEsp?,VlrDefPer?,VlrExcPer?,VlrCstPer?,DtMovto)>
+<!ELEMENT Repet_RCO0006R1_Cump (Grupo_RCO0006R1_Cump+)>
+<!ELEMENT Grupo_RCO0006R1_Cump (DtMovtc,VlrDefDiario?,VlrCstDiario?,VlrExcDiario?,VlrSldRecolhidoEsp,VlrSldRecolhidoTit,VlrRemun?)>
+
+<!ELEMENT RCOConsCusto (CodMsg,NumCtrlIF,CNPJIF,CodRCO?,DtRef,DtMovto)>
+<!ELEMENT RCOConsCustoRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_RCO0007R1_Cst,DtMovto?)>
+<!ELEMENT Repet_RCO0007R1_Cst (Grupo_RCO0007R1_Cst+)>
+<!ELEMENT Grupo_RCO0007R1_Cst (CodRCO,VlrCstDef?,VlrAtlzCst?,VlrDevCst?,DiasAtrCst?,DtVenc?,DtPag?,DtDef?)>
+
+<!ELEMENT RCOConsCompulsorio (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIniRef,DtMovto)>
+<!ELEMENT RCOConsCompulsorioRespCons (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIni,DtFim,Repet_RCO0008R1_ForExig,NomRCO,PercCumpExig,VlrDeducRCO,Alq1RCO,Alq2RCO?,VlrIsenRCO,PercMaxAprovPerAtual,DescPeriodRCO,ForORes?,Repet_RCO0008R1_Item,Repet_RCO0008R1_Parm,VlrSldRecolhidoMarg?,VlrCosifInfMarg?,DescIndAtlzSldMarg?,DtMovto)>
+<!ELEMENT Repet_RCO0008R1_ForExig (Grupo_RCO0008R1_ForExig+)>
+<!ELEMENT Grupo_RCO0008R1_ForExig (ForExig,DescForExig)>
+<!ELEMENT Repet_RCO0008R1_Item (Grupo_RCO0008R1_Item+)>
+<!ELEMENT Grupo_RCO0008R1_Item (CodItemBaseIncid,DescItemBaseIncid,ForIsenItemRCO?,IndAcrescDeducInf?,SiglaMod?,AlqItemRCO?,PercDireciona?,Repet_RCO0008R1_COSIF?)>
+<!ELEMENT Repet_RCO0008R1_COSIF (Grupo_RCO0008R1_COSIF+)>
+<!ELEMENT Grupo_RCO0008R1_COSIF (CtCOSIF?,IndAcrescDeduc?)>
+<!ELEMENT Repet_RCO0008R1_Parm (Grupo_RCO0008R1_Parm+)>
+<!ELEMENT Grupo_RCO0008R1_Parm (DescCtRecolh,DescCtRemun?,DescIndRemunSld?,PercMaxCumpCt,PercMinCumpCt,ForRemunRCO?)>
+
+<!ELEMENT RCOConsAltOutrasReservasCaixaDemonstrativo (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIni,DtFim,DtMovto)>
+<!ELEMENT RCOConsAltOutrasReservasCaixaDemonstrativoRespCons (CodMsg,NumCtrlIF,CNPJIF,CodRCO,DtIni,DtFim,DtOp,VlrAnt,VlrMedCaixa,DtMovto)>
+
+<!ELEMENT RCOReqTransfRecursosdeCompulsorios (CodMsg,NumCtrlIF,CNPJIFDeb,CodRCO,CNPJIFCred,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT RCOReqTransfRecursosdeCompulsoriosRespReq (CodMsg,NumCtrlIF,NumCtrlRCO,NumCtrlSTR,CNPJIFDeb,CNPJIFCred,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT RCOReqTransfRecursosdeCompulsoriosRespTerc (CodMsg,NumCtrlSTR,CNPJIFDeb,CNPJIFCred,VlrLanc,DtHBC,DtMovto)>
+
+<!ELEMENT RCOReqTransfRecursosparaCompulsorios (CodMsg,NumCtrlIF,CNPJIFDeb,CodRCO,CNPJIFCred,VlrLanc,NivelPref,DtMovto)>
+<!ELEMENT RCOReqTransfRecursosparaCompulsoriosRespReq (CodMsg,NumCtrlIF,NumCtrlRCO,NumCtrlSTR,CNPJIFDeb,CNPJIFCred,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT RCOReqTransfRecursosparaCompulsoriosRespTerc (CodMsg,NumCtrlSTR,NumCtrlRCO,CNPJIFDeb,CodRCO,CNPJIFCred,VlrLanc,DtHBC,DtMovto)>
+
+<!ELEMENT RDCConsTituloRedescontavel (CodMsg,NumCtrlIF,CNPJIF,DtRef,IdTitSEL,DtVenc,DtMovto)>
+<!ELEMENT RDCConsTituloRedescontavelRespCons (CodMsg,NumCtrlIF,CNPJIF,IdTitSEL,DtVenc,Repet_RDC0001R1_PU,DtHBC)>
+<!ELEMENT Repet_RDC0001R1_PU (Grupo_RDC0001R1_PU+)>
+<!ELEMENT Grupo_RDC0001R1_PU (DtHCot,PU)>
+
+<!ELEMENT RDCReqRedescontoIntradia (CodMsg,NumCtrlIF,CNPJIF,IdTitSEL,DtVenc,NumOpSEL,CtCed,PU,QtdTit,VlrFinanc,DtMovto)>
+<!ELEMENT RDCReqRedescontoIntradiaRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumOpSELRet,NumCtrlSTR?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCReqRedescontoOvernight (CodMsg,NumCtrlIF,CNPJIF,IdTitSEL,DtVenc,NumOpSEL,CtCed,PU,QtdTit,VlrFinanc,DtMovto)>
+<!ELEMENT RDCReqRedescontoOvernightRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumOpSELRet,NumCtrlSTR?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCRedRedescontoVincAquisicao (CodMsg,NumCtrlIF,CNPJIF,IdTitSEL,DtVenc,CtCed,NumOpSEL,ChVSEL,PU,QtdTit,VlrFinanc,DtMovto)>
+<!ELEMENT RDCRedRedescontoVincAquisicaoRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumCtrlSTR?,NumOpSELRet?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCReqConvRedescontoIntradiaOvernight (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDCOr,NumOpSEL,NivelPref,DtMovto)>
+<!ELEMENT RDCReqConvRedescontoIntradiaOvernightRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumOpSELRet?,NumCtrlSTRPag?,NumCtrlSTRRecontr?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCConsRedesconto (CodMsg,NumCtrlIF,CNPJIF,DtIni,DtFim?,DtMovto)>
+<!ELEMENT RDCConsRedescontoRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_RDC0006R1_OpRDC,DtMovto)>
+<!ELEMENT Repet_RDC0006R1_OpRDC (Grupo_RDC0006R1_OpRDC+)>
+<!ELEMENT Grupo_RDC0006R1_OpRDC (NumCtrlRDC,IdTitSEL,PUContr,QtdTitIda,VlrIda,PURet,QtdTitSld,VlrRet,TipoRDC,DtLiquid,SitLanc,DtHSit)>
+
+<!ELEMENT RDCReqPagtoRedesconto (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDCOr,PU,QtdTit,TipoPag,VlrFinanc,NivelPref,DtMovto)>
+<!ELEMENT RDCReqPagtoRedescontoRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumCtrlSTR?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCReqPagtoRedescontoVincVenda (CodMsg,NumCtrlIF,CNPJIF,ChVSEL,NumCtrlRDC,PU,QtdTit,VlrFinanc,DtMovto)>
+<!ELEMENT RDCReqPagtoRedescontoVincVendaRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlRDC,NumCtrlSTR?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT RDCAvisTitulosRedescontaveisDisp (CodMsg,DtHBC?)>
+
+<!ELEMENT SLBInfLancDevidoIF (CodMsg,CNPJIF,CNPJConv?,NumCtrlSLB,SistOrigem,DtVenc,Historico,VlrLanc,DtMovto)>
+
+<!ELEMENT SLBReqPagtoLancBACEN (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSLB,NivelPref?,DtMovto)>
+<!ELEMENT SLBReqPagtoLancBACENRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSLB,NumCtrlSTR?,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT SLBInfCancelLancBACEN (CodMsg,CNPJIF,NumCtrlSLB,DtMovto)>
+
+<!ELEMENT SLBReqCancelLancPendente (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSLB,DtMovto)>
+<!ELEMENT SLBReqCancelLancPendenteRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSLB,NumCtrlSTR,DtHBC,DtMovto)>
+
+<!ELEMENT SLBInfLancCredEfetivado (CodMsg,NumCtrlSTR,CNPJIFCred,CNPJConv?,AgCred?,TipoCtCred?,TipoPessoaCred?,CNPJ_CPFCliCred?,SistOrigem,VlrLanc,NumCtrlSLB,Historico,DtHBC,DtMovto)>
+
+<!ELEMENT SLBConsLanc (CodMsg,NumCtrlIF,CNPJIF,TipoDebCred?,DtRef?,NumCtrlSLB?)>
+<!ELEMENT SLBConsLancRespReq (CodMsg,NumCtrlIF,CNPJIF,Repet_SLB0006R1_Lanc,DtHBC,DtMovto)>
+<!ELEMENT Repet_SLB0006R1_Lanc (Grupo_SLB0006R1_Lanc+)>
+<!ELEMENT Grupo_SLB0006R1_Lanc (NumCtrlSLB,SistOrigem,NumCtrlSTR?,CNPJConv?,TipoDebCred,VlrLanc,Historico?,DtVenc,DtPag?,SitLanc,DtHSit)>
+
+<!ELEMENT SLBReqPagamentoBacenRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSLB,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT STNReqTransfReservaTesouro (CodMsg,CNPJIF,NumCtrlIF,CodIdSTN,Historico?,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT STNReqTransfReservaTesouroRespReq (CodMsg,CNPJIF,NumCtrlIF,NumCtrlSTN,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT STNReqTransfRepArrecadacao (CodMsg,CNPJIF,NumCtrlIF,DtRecolh,DtRep,VlrRep,VlrLanc,VlrRemun?,VlrEncargo?,DtMovto,NivelPref?,Historico)>
+<!ELEMENT STNReqTransfRepArrecadacaoRespReq (CodMsg,CNPJIF,NumCtrlIF,NumCtrlSTR,NumCtrlSTN,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT STNInfValorRecMaiorCompensado (CodMsg,NumCtrlIF,CNPJIF,NumCtrlOr,VlrComp,DtMovto)>
+<!ELEMENT STNInfValorRecMaiorCompensadoRespReq (CodMsg,NumCtrlIF,NumCtrlSTN,SitLanc,DtHBC)>
+
+<!ELEMENT STNAvisCredLancamentoTesouro (CodMsg,CNPJIF,NumCtrlSTR,NumCtrlSTN,CNPJIFCred,DtHSTR,VlrLanc,FinlddSTN)>
+<!ELEMENT STNAvisAlteracaoTabCodId (CodMsg,DtHBC)>
+
+<!ELEMENT CIRInfEstatisticaSemanalMov (CodMsg,NumCtrlIF,CNPJIF,Repet_CIR0001_DpdnciaBC,DtMovto)>
+<!ELEMENT Repet_CIR0001_DpdnciaBC (Grupo_CIR0001_DpdnciaBC+)>
+<!ELEMENT Grupo_CIR0001_DpdnciaBC (CodDpdnciaBC,Repet_CIR0001_Prv)>
+<!ELEMENT Repet_CIR0001_Prv (Grupo_CIR0001_Prv+)>
+<!ELEMENT Grupo_CIR0001_Prv (DtPrv,VlrSaque,VlrDep)>
+<!ELEMENT CIRInfEstatisticaSemanalMovRespInf (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,DtMovto)>
+
+<!ELEMENT CIRConsEstatisticaMov (CodMsg,NumCtrlIF,CNPJIF,CodDpdnciaBC,DtIni,DtFim)>
+<!ELEMENT CIRConsEstatisticaMovRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_CIR0002R1_DpdnciaBC,DtMovto)>
+<!ELEMENT Repet_CIR0002R1_DpdnciaBC (Grupo_CIR0002R1_DpdnciaBC+)>
+<!ELEMENT Grupo_CIR0002R1_DpdnciaBC (CodDpdnciaBC,Repet_CIR0002R1_Prv)>
+<!ELEMENT Repet_CIR0002R1_Prv (Grupo_CIR0002R1_Prv+)>
+<!ELEMENT Grupo_CIR0002R1_Prv (DtPrv,VlrSaque,VlrDep)>
+
+<!ELEMENT CIRReqSaqueNumerario (CodMsg,NumCtrlIF,CNPJIF,AgIF,CodDpdnciaBC?,CNPJCstdte?,TipoVlr,Catg,Esp,DtSaque,Repet_CIR0003_Saque,DtMovto,AgCstdte?,VlrTarifa?,VlrLanc,VlrSaque)>
+<!ELEMENT Repet_CIR0003_Saque (Grupo_CIR0003_Saque+)>
+<!ELEMENT Grupo_CIR0003_Saque (VlrDen,QtdDen)>
+<!ELEMENT CIRReqSaqueNumerarioRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,NumCtrlSTR?,SitLancCIR,DtHSit,DtMovto,TipoVlr?,Catg?,Esp?,Repet_CIR0003R1_Saque?,VlrLanc?)>
+<!ELEMENT Repet_CIR0003R1_Saque (Grupo_CIR0003R1_Saque+)>
+<!ELEMENT Grupo_CIR0003R1_Saque (VlrDen?,QtdDen?)>
+
+<!ELEMENT CIRReqCancelSaqueNumerario (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRReqCancelSaqueNumerarioRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRReqDepositoNumerario (CodMsg,NumCtrlIF,CNPJIF,AgIF,CodDpdnciaBC?,CNPJCstdte?,AgCstdte?,TipoVlr,Catg,Esp,DtDep,Repet_CIR0005_Dep,DtMovto,VlrTarifa?,VlrDep)>
+<!ELEMENT Repet_CIR0005_Dep (Grupo_CIR0005_Dep+)>
+<!ELEMENT Grupo_CIR0005_Dep (VlrDen,QtdDen)>
+<!ELEMENT CIRReqDepositoNumerarioRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,NumCtrlSTRDep?,SitLancCIR,DtHSit,DtMovto,NumCtrlSTRTarifa?,VlrDep?,VlrTarifa?)>
+
+<!ELEMENT CIRReqCancelDepositoNumerario (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRReqCancelDepositoNumerarioRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,DtHBC,DtMovto)>
+
+<!ELEMENT CIRConsMovNumerario (CodMsg,NumCtrlIF,CNPJIF,AgIF?,NumCtrlCIR?,DtRef,DtMovto)>
+<!ELEMENT CIRConsMovNumerarioRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_CIR0008R1_Movtc,DtMovto,DtHCIR)>
+<!ELEMENT Repet_CIR0008R1_Movtc (Grupo_CIR0008R1_Movtc+)>
+<!ELEMENT Grupo_CIR0008R1_Movtc (CodDpdnciaBC?,CNPJCstdte?,AgCstdte?,Catg,NumCtrlSTR,NumCtrlCIR,TipoMovtc,VlrMovtc)>
+
+<!ELEMENT CIRConsLancPendContaTransitoria (CodMsg,NumCtrlIF,CNPJIF,DtMovto)>
+<!ELEMENT CIRConsLancPendContaTransitoriaRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_CIR0009R1_LancPend,DtHCIR,DtMovto)>
+<!ELEMENT Repet_CIR0009R1_LancPend (Grupo_CIR0009R1_LancPend+)>
+<!ELEMENT Grupo_CIR0009R1_LancPend (AgIF,NumCtrlCIR,VlrPrincipal,VlrTarifa)>
+
+<!ELEMENT CIRInfCredNumerarioMaior (CodMsg,CNPJIF,NumCtrlCIR,NumCtrlSTR,VlrLanc,DtHSTR,CodDpdnciaBC?,CNPJCstdte?,AgCstdte?,AgIF,Historico,DtMovto)>
+
+<!ELEMENT CIRAvisAjusteNumerarioDepositadoMenor (CodMsg,CNPJIF,NumCtrlCIR,VlrLanc,DtHCIR,CodDpdnciaBC?,CNPJCstdte?,AgCstdte?,AgIF,Historico,DtMovto)>
+
+<!ELEMENT CIRReqTransfAjusteNumerarioMenor (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,VlrLanc,DtMovto)>
+<!ELEMENT CIRReqTransfAjusteNumerarioMenorRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCIR,NumCtrlSTR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRConsRelCustEst (CodMsg,NumCtrlIF,CNPJIF,CNPJCstdte,Estado)>
+<!ELEMENT CIRConsRelCustEstRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_CIR0013R1_Cstdte,DtHBC,DtMovto)>
+<!ELEMENT Repet_CIR0013R1_Cstdte (Grupo_CIR0013R1_Cstdte+)>
+<!ELEMENT Grupo_CIR0013R1_Cstdte (AgCstdte,NomAg,EndAg,TelAg,CidAg,CEPAg)>
+
+<!ELEMENT CIRAvisNumerarioDepositadoLegExam (CodMsg,CNPJIF,NumCtrlCIR,NumCtrlSTR,NumRemessaOr,AgIF,VlrLanc,DtHBC,DtMovto)>
+
+<!ELEMENT CIRAvisSaqueNumerario (CodMsg,NumCtrlCIR,CNPJIF,AgIF,SitLancCIR,DtHSit,CNPJCstdte,TipoVlr,Catg,Esp,DtSaque,Repet_CIR1001_SaqueCstdte,AgCstdte,VlrTarifa?,VlrSaque,DtMovto)>
+<!ELEMENT Repet_CIR1001_SaqueCstdte (Grupo_CIR1001_SaqueCstdte+)>
+<!ELEMENT Grupo_CIR1001_SaqueCstdte (VlrDen,QtdDen)>
+
+<!ELEMENT CIRAvisCancelSaqueNumerario (CodMsg,NumCtrlCIR,CNPJCstdte,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRInfConfSaqueNumerario (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRInfConfSaqueNumerarioRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,DtHBC,DtMovto)>
+
+<!ELEMENT CIRInfEfetivSaqueNumerario (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,TipoVlr,Catg,Esp,Repet_CIR1004_SaqueCstdte,DtMovto)>
+<!ELEMENT Repet_CIR1004_SaqueCstdte (Grupo_CIR1004_SaqueCstdte+)>
+<!ELEMENT Grupo_CIR1004_SaqueCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRInfEfetivSaqueNumerarioRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRAvisDepositoNumerario (CodMsg,NumCtrlCIR,CNPJIF,AgIF,CNPJCstdte,TipoVlr,Catg,Esp,DtDep,Repet_CIR1005_DepCstdte,AgCstdte,VlrTarifa?,VlrDep,DtHBC,DtMovto)>
+<!ELEMENT Repet_CIR1005_DepCstdte (Grupo_CIR1005_DepCstdte+)>
+<!ELEMENT Grupo_CIR1005_DepCstdte (QtdDen,VlrDen)>
+
+<!ELEMENT CIRAvisCancelDepositoNumerario (CodMsg,NumCtrlCIR,CNPJCstdte,DtHBC,DtMovto)>
+
+<!ELEMENT CIRInfEfetivDepositoNumerario (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRInfEfetivDepositoNumerarioRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtHBC,DtMovto)>
+
+<!ELEMENT CIRReqDepositoProprio (CodMsg,NumCtrlCstdte,CNPJCstdte,AgCstdte,TipoVlr,Catg,Esp,Repet_CIR1008_DepCstdte,DtMovto)>
+<!ELEMENT Repet_CIR1008_DepCstdte (Grupo_CIR1008_DepCstdte+)>
+<!ELEMENT Grupo_CIR1008_DepCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRReqDepositoProprioRespReq (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,NumCtrlSTR,DtHBC,DtMovto)>
+
+<!ELEMENT CIRReqCancelSaqueNumerarioCust (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRReqCancelSaqueNumerarioCustRespReq (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtHBC,DtMovto)>
+
+<!ELEMENT CIRAvisCreditoTarifa (CodMsg,CNPJCstdte,NumCtrlCIR,NumCtrlSTR,VlrTarifa,DtMovto)>
+
+<!ELEMENT CIRReqReforcoCustodiaNum (CodMsg,NumCtrlCstdte,CNPJCstdte,CodDpdnciaBC,AgCstdte,TipoVlr,Catg,Esp,DtReforco,Repet_CIR1011_ReforcoCstdte,DtMovto)>
+<!ELEMENT Repet_CIR1011_ReforcoCstdte (Grupo_CIR1011_ReforcoCstdte+)>
+<!ELEMENT Grupo_CIR1011_ReforcoCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRReqReforcoCustodiaNumRespReq (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRInfCancelReforcoCustodiaNum (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRInfCancelReforcoCustodiaNumRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRReqAlivioCustodiaNum (CodMsg,NumCtrlCstdte,CNPJCstdte,CodDpdnciaBC,AgCstdte,TipoVlr,Catg,Esp,DtAlivio,Repet_CIR1013_AlivioCstdte,DtMovto)>
+<!ELEMENT Repet_CIR1013_AlivioCstdte (Grupo_CIR1013_AlivioCstdte+)>
+<!ELEMENT Grupo_CIR1013_AlivioCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRReqAlivioCustodiaNumRespReq (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRInfCancelAlivioCustodiaNum (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRInfCancelAlivioCustodiaNumRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,SitLancCIR,DtHSit,DtMovto)>
+
+<!ELEMENT CIRInfTrocaNum (CodMsg,NumCtrlCstdte,CNPJCstdte,AgCstdte,DtTroca,Repet_CIR1015_TipoNumrio,DtMovto)>
+<!ELEMENT Repet_CIR1015_TipoNumrio (Grupo_CIR1015_TipoNumrio+)>
+<!ELEMENT Grupo_CIR1015_TipoNumrio (TipoVlr,Catg,Esp,Repet_CIR1015_TrocaCstdte)>
+<!ELEMENT Repet_CIR1015_TrocaCstdte (Grupo_CIR1015_TrocaCstdte+)>
+<!ELEMENT Grupo_CIR1015_TrocaCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRInfTrocaNumRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+
+<!ELEMENT CIRInfRemessaExpedNum (CodMsg,NumCtrlCstdte,CNPJCstdte,AgCstdteRemet,AgCstdteDest,DtRemessa,Repet_CIR1016_TipoNumrio,DtMovto)>
+<!ELEMENT Repet_CIR1016_TipoNumrio (Grupo_CIR1016_TipoNumrio+)>
+<!ELEMENT Grupo_CIR1016_TipoNumrio (TipoVlr,Catg,Esp,Repet_CIR1016_RemessaCstdte)>
+<!ELEMENT Repet_CIR1016_RemessaCstdte (Grupo_CIR1016_RemessaCstdte+)>
+<!ELEMENT Grupo_CIR1016_RemessaCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRInfRemessaExpedNumRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+
+<!ELEMENT CIRInfRemessaRecebNum (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+<!ELEMENT CIRInfRemessaRecebNumRespInf (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,DtMovto)>
+
+<!ELEMENT CIRReqCustCredNumerarioMaior (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte,CNPJIF,AgIF?,TipoVlr,Catg,Esp,Repet_CIR1018_NumrioCredCstdte,DtRef,DtMovto)>
+<!ELEMENT Repet_CIR1018_NumrioCredCstdte (Grupo_CIR1018_NumrioCredCstdte+)>
+<!ELEMENT Grupo_CIR1018_NumrioCredCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRReqCustCredNumerarioMaiorRespReq (CodMsg,NumCtrlCstdte,NumCtrlCIR,NumCtrlSTR?,DtMovto)>
+
+<!ELEMENT CIRInfCustAjusteNumerarioDepositadoMenor (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte,CNPJIF,AgIF?,TipoVlr,Catg,Esp,Repet_CIR1019_NumrioAjusteCstdte,DtRef,DtMovto)>
+<!ELEMENT Repet_CIR1019_NumrioAjusteCstdte (Grupo_CIR1019_NumrioAjusteCstdte+)>
+<!ELEMENT Grupo_CIR1019_NumrioAjusteCstdte (VlrDen,QtdDen)>
+<!ELEMENT CIRInfCustAjusteNumerarioDepositadoMenorRespInf (CodMsg,NumCtrlCstdte,NumCtrlCIR,DtMovto)>
+
+<!ELEMENT CIRConsCustEstAgencia (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte,DtMovto?)>
+<!ELEMENT CIRConsCustEstAgenciaRespCons (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte,Repet_CIR1020R1_TipoNumrio,DtHCIR,DtMovto)>
+<!ELEMENT Repet_CIR1020R1_TipoNumrio (Grupo_CIR1020R1_TipoNumrio+)>
+<!ELEMENT Grupo_CIR1020R1_TipoNumrio (TipoVlr,Catg,Esp,Repet_CIR1020R1_EstoqueCstdte)>
+<!ELEMENT Repet_CIR1020R1_EstoqueCstdte (Grupo_CIR1020R1_EstoqueCstdte+)>
+<!ELEMENT Grupo_CIR1020R1_EstoqueCstdte (VlrDen,QtdDen)>
+
+<!ELEMENT CIRConsMovNumerarioCust (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte?,DtMovto?,NumCtrlCIR?)>
+<!ELEMENT CIRConsMovNumerarioCustRespCons (CodMsg,CNPJCstdte,NumCtrlCstdte,AgCstdte?,Repet_CIR1021R1_MovtcCstdte,DtHCIR,DtMovto)>
+<!ELEMENT Repet_CIR1021R1_MovtcCstdte (Grupo_CIR1021R1_MovtcCstdte+)>
+<!ELEMENT Grupo_CIR1021R1_MovtcCstdte (NumCtrlCIR,NumCtrlSTR?,TipoMovtc,CNPJIF?,AgIF?,VlrPrincipal,VlrTarifa?,CodDpdnciaBC?,AgCstdteOp?,TipoVlr,Catg,Esp,Repet_CIR1021R1_NumrioCstdte)>
+<!ELEMENT Repet_CIR1021R1_NumrioCstdte (Grupo_CIR1021R1_NumrioCstdte+)>
+<!ELEMENT Grupo_CIR1021R1_NumrioCstdte (VlrDen,QtdDen)>
+
+<!ELEMENT CIRConsDenominacoes (CodMsg,NumCtrlCstdte,CNPJCstdte,DtMovto)>
+<!ELEMENT CIRConsDenominacoesRespCons (CodMsg,NumCtrlCstdte,CNPJCstdte,NumCtrlCIR,Repet_CIR1022R1_TipoNumrioCstdte,DtMovto)>
+<!ELEMENT Repet_CIR1022R1_TipoNumrioCstdte (Grupo_CIR1022R1_TipoNumrioCstdte+)>
+<!ELEMENT Grupo_CIR1022R1_TipoNumrioCstdte (TipoVlr,Catg,Esp,Repet_CIR1022R1_NumrioCstdte)>
+<!ELEMENT Repet_CIR1022R1_NumrioCstdte (Grupo_CIR1022R1_NumrioCstdte+)>
+<!ELEMENT Grupo_CIR1022R1_NumrioCstdte (VlrDen,QtdDen)>
+
+<!ELEMENT SELReqDesvinculacaoTitulos (CodMsg,NumOpSEL,DtOp,CtCed,CtCes,TipoDebCred,IdTitSEL,DtVenc,PU,QtdTit,VlrFinanc,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqDesvinculacaoTitulosRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqLiquidacaoLeilao (CodMsg,TipoLei,NumOpSEL,DtOpRet?,CtCed?,CtCes?,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,QtdTit,PU,PURet?,VlrFinanc,VlrFinancRet?,NivelPref?,ChVSEL?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqLiquidacaoLeilaoRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqVinculacaoTitulos (CodMsg,NumOpSEL,DtOp,CtCed,CtCes,TipoDebCred,IdTitSEL,DtVenc,PU,QtdTit,VlrFinanc,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqVinculacaoTitulosRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqResgateDI (CodMsg,TipoDI,NumOpSEL,NumOpSELOr,DtOpRet,IFDpsitante,IFDpsitaria,TipoDebCred,IFLqdantDpsitante?,IFLqdantDpsitaria?,TaxaDI,VlrFinanc,VlrFinancRet,NivelPref?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqResgateDIRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqOperacaoDI (CodMsg,TipoDI,NumOpSEL,DtOpRet,IFDpsitante,IFDpsitaria,TipoDebCred,IFLqdantDpsitante?,IFLqdantDpsitaria?,TaxaDI,VlrFinanc,VlrFinancRet,NivelPref?,ChVSEL?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqOperacaoDIRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR,NumOpSELRet,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqOperacaoDefinitiva (CodMsg,NumOpSEL,DtOp,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,PU,QtdTit,VlrFinanc,NivelPref?,ChVSEL?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqOperacaoDefinitivaRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR?,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqOperacaoCompromissada (CodMsg,TipoCompr,NumOpSEL,DtOp,DtOpRet,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,PU,PURet?,QtdTit,VlrFinanc,VlrFinancRet?,NivelPref?,ChVSEL?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqOperacaoCompromissadaRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR?,NumOpSELRet,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqRetornoOperacaoCompromissada (CodMsg,TipoRetCompr,NumOpSEL,NumOpSELRet?,DtOp,DtOpRet?,DtOpOr?,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,PU,QtdTit,VlrFinanc,NivelPref?,ChVSEL?,CNPJIF,NumCtrlIF,DtMovto)>
+<!ELEMENT SELReqRetornoOperacaoCompromissadaRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR?,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqTransfSemMovimentacaoFinanceira (CodMsg,NumOpSEL,CtCed,CtCes,TipoDebCred,IdTitSEL,DtVenc,QtdTit,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqTransfSemMovimentacaoFinanceiraRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqRepasseImpostos (CodMsg,TipoRepImp,NumOpSEL,NumOpSELOr,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,PU,QtdTit,VlrFinanc,NivelPref?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqRepasseImpostosRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqDesmembramentoCupomJuros (CodMsg,NumOpSEL,CtCed,TipoDebCred,IdTitSEL,DtVenc,QtdTit,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqDesmembramentoCupomJurosRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqRemembramentoCupomJuros (CodMsg,NumOpSEL,CtCes,TipoDebCred,IdTitSEL,DtVenc,QtdTit,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqRemembramentoCupomJurosRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELConsOperacao (CodMsg,NumOpSEL,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELConsOperacaoRespCons (CodMsg,CodMsgOr,NumOpSEL,CtCed?,CtCes?,IFLqdantCed?,IFLqdantCes?,IdTitSEL?,DtVenc?,QtdTit?,PU?,PURet?,VlrFinanc?,VlrFinancRet?,DtOpOr?,DtOpRet?,DtLiquid?,NumOpSELOr?,NumOpSELRet?,IFDpsitante?,IFDpsitaria?,IFLqdantDpsitante?,IFLqdantDpsitaria?,TipoDI?,TaxaDI?,SitOpSEL,NumCtrlSTR?,ChVSEL?,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELConsPosicaoCustodiaTitulos (CodMsg,CtCstdia,IdTitSEL,DtVenc,DtRef,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELConsPosicaoCustodiaTitulosRespCons (CodMsg,QtdTit,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqLimiteFinanceiroNaoLiquidanteoperar (CodMsg,TipoLim,IFLqdant,IFNLqdant,NumOpSEL,TipoDebCred,VlrFinanc,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqLimiteFinanceiroNaoLiquidanteoperarRespReq (CodMsg,NumOpSEL,SitOpSEL,VlrFinanc,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqLimiteFinanceiroNaoLiquidanteoperarRespTerc (CodMsg,TipoLim,IFLqdant,IFNLqdant,VlrFinanc,DtHSit,DtMovto)>
+
+<!ELEMENT SELConsLimiteFinanceiroNaoLiquidanteOperar (CodMsg,IFLqdant?,IFNLqdant?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELConsLimiteFinanceiroNaoLiquidanteOperarRespCons (CodMsg,Repet_SEL1096R1_LimFinanc,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT Repet_SEL1096R1_LimFinanc (Grupo_SEL1096R1_LimFinanc+)>
+<!ELEMENT Grupo_SEL1096R1_LimFinanc (IFLqdant,IFNLqdant,VlrLimFinancDefault,SldVlrLimFinanc)>
+
+<!ELEMENT SELInfSensibilizacaoReservaBancaria (CodMsg,IFNLqdant,TipoDebCred,VlrFinanc,NumCtrlSTR,DtHBC,DtMovto)>
+
+<!ELEMENT SELReqEstorno (CodMsg,NumOpSEL,NumOpSELOr,DtOpOr,TipoDebCred,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqEstornoRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELReqOrdemUnicaRetornoOperacoesCompromissadas (CodMsg,CtCed?,CtCes?,TipoDebCred,CNPJIF,NumCtrlIF,DtMovto)>
+<!ELEMENT SELReqOrdemUnicaRetornoOperacoesCompromissadasRespReq (CodMsg,NumOpSEL,SitOpSEL,NumCtrlSTR?,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELConsHorarioLimite_IntervaloAceitePendencias (CodMsg,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELConsHorarioLimite_IntervaloAceitePendenciasRespCons (CodMsg,HrioLim,IntvAcPendLanc,IntvAcPendOp,IntvAcPendTit,DtHBC,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT SELAvisAlteracaoHorariosLimite_IntervaloAceitePendencias (CodMsg,HrioLim,IntvAcPendLanc,IntvAcPendOp,IntvAcPendTit,DtHBC,DtMovto)>
+
+<!ELEMENT SELAvisHorarioInicioRetornoDI (CodMsg,HrioIniRetDI,DtHBC,DtMovto)>
+
+<!ELEMENT SELAvisAlteracaoPrecoLastroTitulos (CodMsg,Repet_SEL1610_PULastro,DtHBC,DtMovto)>
+<!ELEMENT Repet_SEL1610_PULastro (Grupo_SEL1610_PULastro+)>
+<!ELEMENT Grupo_SEL1610_PULastro (IdTitSEL,DtVenc,PU)>
+
+<!ELEMENT SELAvisOperacoesProcessadasRotinaAbertura (CodMsg,TipoOpRotAb,NumOpSEL,NumOpSELOr?,DtOpRet?,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,PU,PURet?,QtdTit,VlrFinanc,VlrFinancRet?,SitOpSEL,NumCtrlSTR?,DtHBC,DtMovto)>
+
+<!ELEMENT SELReqOperacaoTermo (CodMsg,NumOpSEL,TipoLiquid,DtLiquid,CtCed,CtCes,TipoDebCred,IFLqdantCed?,IFLqdantCes?,IdTitSEL,DtVenc,QtdTit,PU?,PercVlrPar?,VlrFinanc,NivelPref?,DtMovto,CNPJIF,NumCtrlIF)>
+<!ELEMENT SELReqOperacaoTermoRespReq (CodMsg,NumOpSEL,SitOpSEL,DtHSit,DtMovto,CNPJIF,NumCtrlIF)>
+
+<!ELEMENT LDLInfResultadoLiquidoNegociacao (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,IdMerc,DtMovto,DtLiquid,VlrLanc,TipoDebCred,Repet_LDL0001_ResultLiqd,NivelPref?)>
+<!ELEMENT Repet_LDL0001_ResultLiqd (Grupo_LDL0001_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0001_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+
+<!ELEMENT LDLInfResultadoLiquidoNegociacaoBacen (CodMsg,NumCtrlLDL,CNPJLDL,IdMerc,DtMovto,DtLiquid,Repet_LDL0002_ResultLiqd)>
+<!ELEMENT Repet_LDL0002_ResultLiqd (Grupo_LDL0002_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0002_ResultLiqd (CNPJIF,VlrLanc,TipoDebCred)>
+
+<!ELEMENT LDLInfResultadoLiquidoNegociacaoDivergente (CodMsg,NumCtrlIF,CNPJIF,NumCtrlLDL,CNPJLDL,IdMerc,DtMovto,DtLiquid,VlrLanc,TipoConfDivg,TipoDebCred,Repet_LDL0003_ResultLiqd)>
+<!ELEMENT Repet_LDL0003_ResultLiqd (Grupo_LDL0003_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0003_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacao (CodMsg,NumCtrlIF,NumCtrlLDLOr,CNPJIF,CNPJLDL,IdMerc,VlrLanc,Repet_LDL0004_ResultLiqd,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0004_ResultLiqd (Grupo_LDL0004_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0004_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacaoRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacaoRespTerc (CodMsg,NumCtrlLDLOr,NumCtrlSTR,DtHSTR,CNPJIF,CNPJLDL,IdMerc,VlrLanc,Repet_LDL0004R2_ResultLiqd,DtMovto)>
+<!ELEMENT Repet_LDL0004R2_ResultLiqd (Grupo_LDL0004R2_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0004R2_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacaoLDL (CodMsg,NumCtrlLDL,NumCtrlLDLOr,CNPJLDL,CNPJIFCred,IdMerc,VlrLanc,Repet_LDL0005_ResultLiqd,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0005_ResultLiqd (Grupo_LDL0005_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0005_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacaoLDLRespReq (CodMsg,NumCtrlLDL,CNPJLDL,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfResultadoLiquidoNegociacaoLDLRespTerc (CodMsg,NumCtrlSTR,DtHSTR,NumCtrlLDLOr,CNPJLDL,CNPJIFCred,IdMerc,VlrLanc,Repet_LDL0005R2_ResultLiqd,DtMovto)>
+<!ELEMENT Repet_LDL0005R2_ResultLiqd (Grupo_LDL0005R2_ResultLiqd+)>
+<!ELEMENT Grupo_LDL0005R2_ResultLiqd (CNPJSubLiqdd,VlrCredSubLiqdd,VlrDebSubLiqdd)>
+
+<!ELEMENT LDLReqTransfDevolCredIF (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,NumCtrlSTROr,IdMerc?,VlrLanc,AgCred?,CtCred?,Repet_LDL0006_DevCred?,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0006_DevCred (Grupo_LDL0006_DevCred+)>
+<!ELEMENT Grupo_LDL0006_DevCred (TipoDev?,TipoPag?,NumCtrlPag?,TipoDebCredSubLiqdd?,CNPJSubLiqdd?,VlrCredSubLiqdd?,VlrDebSubLiqdd?,VlrSubLiqdd?,Historico?)>
+<!ELEMENT LDLReqTransfDevolCreditoIFRespReq (CodMsg,NumCtrlLDL,CNPJLDL,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfDevolCreditoRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJLDL,CNPJIFCred,VlrLanc,NumCtrlSTROr,Repet_LDL0006R2_DevCred,DtMovto)>
+<!ELEMENT Repet_LDL0006R2_DevCred (Grupo_LDL0006R2_DevCred+)>
+<!ELEMENT Grupo_LDL0006R2_DevCred (CNPJSubLiqdd,VlrSubLiqdd,Historico)>
+
+<!ELEMENT LDLInfLiqEventosEmissoes (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,IdMerc,DtLiquid,TipoDebCred,VlrLanc,Repet_LDL0007_EvtEms,DtMovto)>
+<!ELEMENT Repet_LDL0007_EvtEms (Grupo_LDL0007_EvtEms+)>
+<!ELEMENT Grupo_LDL0007_EvtEms (CNPJSubLiqdd,VlrSubLiqdd,TipoDebCredSubLiqdd,TipoPag,NumCtrlPag?)>
+<!ELEMENT LDLReqTransfLiqEventoEmissao (CodMsg,NumCtrlIF,NumCtrlLDLOr,CNPJIF,CNPJLDL,IdMerc,VlrLanc,Repet_LDL0008_EvtEms,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0008_EvtEms (Grupo_LDL0008_EvtEms+)>
+<!ELEMENT Grupo_LDL0008_EvtEms (CNPJSubLiqdd,VlrSubLiqdd,TipoDebCredSubLiqdd,TipoPag,NumCtrlPag?)>
+<!ELEMENT LDLReqTransfLiqEventoEmissaoRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfLiqEventoEmissaoRespTerc (CodMsg,NumCtrlSTR,NumCtrlLDLOr,DtHSTR,CNPJIF,CNPJLDL,IdMerc,VlrLanc,Repet_LDL0008R2_EvtEms,DtMovto)>
+<!ELEMENT Repet_LDL0008R2_EvtEms (Grupo_LDL0008R2_EvtEms+)>
+<!ELEMENT Grupo_LDL0008R2_EvtEms (CNPJSubLiqdd,VlrSubLiqdd,TipoDebCred,TipoPag,NumCtrlPag?)>
+
+<!ELEMENT LDLReqTransfLiqEventoEmissaoLDL (CodMsg,NumCtrlLDL,NumCtrlLDLOr,CNPJLDL,CNPJIF,IdMerc,VlrLanc,Repet_LDL0009_EvtEms,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0009_EvtEms (Grupo_LDL0009_EvtEms+)>
+<!ELEMENT Grupo_LDL0009_EvtEms (CNPJSubLiqdd,VlrSubLiqdd,TipoDebCredSubLiqdd,TipoPag,NumCtrlPag?)>
+<!ELEMENT LDLReqTransfLiqEventoEmissaoLDLRespReq (CodMsg,NumCtrlLDL,CNPJLDL,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfLiqEventoEmissaoLDLRespTerc (CodMsg,NumCtrlSTR,DtHSTR,NumCtrlLDLOr,CNPJLDL,CNPJIFCred,IdMerc,VlrLanc,Repet_LDL0009R2_EvtEms,DtMovto)>
+<!ELEMENT Repet_LDL0009R2_EvtEms (Grupo_LDL0009R2_EvtEms+)>
+<!ELEMENT Grupo_LDL0009R2_EvtEms (CNPJSubLiqdd,VlrSubLiqdd,TipoDebCred,TipoDebCredSubLiqdd,TipoPag,NumCtrlPag?)>
+
+<!ELEMENT LDLInfPedTransfRecursoContaLDLContaLiq (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,AgDeb,CtDeb,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLReqTransfContaLDLContaLiq (CodMsg,NumCtrlIF,NumCtrlLDLOr,CNPJIF,AgDeb,CtDeb,CNPJLDL,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT LDLReqTransfContaLDLContaLiqRespReq (CodMsg,NumCtrlIF,CNPJIFDeb,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfContaLDLContaLiqRespTerc (CodMsg,NumCtrlSTR,DtHSTR,NumCtrlLDLOr,CNPJIF,AgDeb,CtDeb,CNPJLDL,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLReqTransfContaLiqContaLDL (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,AgCred,CtCred,VlrLanc,DtMovto)>
+<!ELEMENT LDLReqTransfContaLiqContaLDLRespReq (CodMsg,NumCtrlLDL,CNPJLDL,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfContaLiqContaLDLRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJLDL,CNPJIF,AgCred,CtCred,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLInfDepositoGarantia (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,IdMerc,DtDep,VlrLanc,Repet_LDL0013_DepGarantia,DtMovto)>
+<!ELEMENT Repet_LDL0013_DepGarantia (Grupo_LDL0013_DepGarantia+)>
+<!ELEMENT Grupo_LDL0013_DepGarantia (CNPJSubLiqdd,VlrSubLiqdd)>
+
+<!ELEMENT LDLReqTransfDepositoGarantia (CodMsg,NumCtrlIF,NumCtrlLDLOr,CNPJIF,CNPJLDL,VlrLanc,IdMerc,Repet_LDL0014_DepGarantia,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0014_DepGarantia (Grupo_LDL0014_DepGarantia+)>
+<!ELEMENT Grupo_LDL0014_DepGarantia (CNPJSubLiqdd,VlrSubLiqdd)>
+<!ELEMENT LDLReqTransfDepositoGarantiaRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfDepositoGarantiaRespTerc (CodMsg,NumCtrlSTR,DtHSTR,NumCtrlLDLOr,CNPJIF,CNPJLDL,VlrLanc,IdMerc,Repet_LDL0014R2_DepGarantia,DtMovto)>
+<!ELEMENT Repet_LDL0014R2_DepGarantia (Grupo_LDL0014R2_DepGarantia+)>
+<!ELEMENT Grupo_LDL0014R2_DepGarantia (CNPJSubLiqdd,VlrSubLiqdd)>
+
+<!ELEMENT LDLReqTransfDevolRendResgGarantia (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,IdMerc,VlrLanc,Repet_LDL0015_DevGarantia,DtMovto)>
+<!ELEMENT Repet_LDL0015_DevGarantia (Grupo_LDL0015_DevGarantia+)>
+<!ELEMENT Grupo_LDL0015_DevGarantia (CNPJSubLiqdd,VlrSubLiqdd,TipoDev,Historico?)>
+<!ELEMENT LDLReqTransfDevolRendResgGarantiaRespReq (CodMsg,NumCtrlLDL,CNPJLDL,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfDevolRendResgGarantiaRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJLDL,CNPJIF,IdMerc,VlrLanc,Repet_LDL0015R2_DevGarantia,DtMovto)>
+<!ELEMENT Repet_LDL0015R2_DevGarantia (Grupo_LDL0015R2_DevGarantia+)>
+<!ELEMENT Grupo_LDL0015R2_DevGarantia (CNPJSubLiqdd,VlrSubLiqdd,TipoDev,Historico?)>
+
+<!ELEMENT LDLConsLancLDL (CodMsg,NumCtrlLDL,CNPJLDL,TipoDebCred?,SitLanc?,HIni?,HFim?,DtMovto)>
+<!ELEMENT LDLConsLancLDLRespCons (CodMsg,NumCtrlLDL,CNPJLDL,Repet_LDL0016R1_Lanc,DtHSTR,DtMovto)>
+<!ELEMENT Repet_LDL0016R1_Lanc (Grupo_LDL0016R1_Lanc+)>
+<!ELEMENT Grupo_LDL0016R1_Lanc (CodMsgOr,CNPJIFDeb,CNPJIFCred,NumCtrlSTROr,TipoDebCred,VlrLanc,SitLanc,DtHSit)>
+
+<!ELEMENT LDLConsSaldoContaLiq (CodMsg,NumCtrlLDL,CNPJLDL,DtMovto)>
+<!ELEMENT LDLConsSaldoContaLiqRespCons (CodMsg,NumCtrlLDL,CNPJLDL,SldCtLiq,DtHSTR,DtMovto)>
+
+<!ELEMENT LDLAvisTransfSaldoRemContaLiq (CodMsg,NumCtrlSTR,CNPJLDL,CNPJIFCred,AgCred,CtCred,VlrLanc,DtHSTR,DtMovto)>
+
+<!ELEMENT LDLAvisIFTransfSaldoRemContaLiq (CodMsg,NumCtrlSTR,CNPJLDL,CNPJIFCred,CtCred,VlrLanc,DtHSTR,DtMovto)>
+
+<!ELEMENT LDLReqTransfReservaResultadoLiq (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIFCred,CodPerOperac,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT LDLReqTransfResultadoLiqRespReq (CodMsg,NumCtrlLDL,CNPJLDL,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfResultadoLiqRespTerc (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIFCred,CodPerOperac,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLInfDepositoOperacional (CodMsg,NumCtrlLDL,CNPJLDL,CNPJIF,DtDep,HrioLimDep,TipoDep,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLReqTransfDepositoOperacional (CodMsg,NumCtrlIF,CNPJIF,CNPJLDL,TipoDep,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT LDLReqTransfDepositoOperacionalRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfDepositoOperacionalRespTerc (CodMsg,NumCtrlSTR,DtHSTR,CNPJIF,CNPJLDL,TipoDep,VlrLanc,DtMovto)>
+
+<!ELEMENT LDLConsHorarioCamara (CodMsg,NumCtrlIF,CNPJIF,DtRef,TipoHrio?)>
+<!ELEMENT LDLConsHorarioCamaraRespCons (CodMsg,NumCtrlIF,CNPJIF,Repet_LDL0023R1_HrioCamr,DtRef,DtHSTR)>
+<!ELEMENT Repet_LDL0023R1_HrioCamr (Grupo_LDL0023R1_HrioCamr+)>
+<!ELEMENT Grupo_LDL0023R1_HrioCamr (CodGrade,HrioAb,HrioFch,TipoHrio)>
+
+<!ELEMENT LDLAvisAltHorarioCamara (CodMsg,NumCtrlIF,CNPJIF,Repet_LDL0024_HrioCamr,DtRef,DtHBC)>
+<!ELEMENT Repet_LDL0024_HrioCamr (Grupo_LDL0024_HrioCamr+)>
+<!ELEMENT Grupo_LDL0024_HrioCamr (CodGradeLDL,HrioAb,HrioFch,TipoHrio)>
+
+<!ELEMENT LDLReqTransfDevolCredLDL (CodMsg,NumCtrlIF,CNPJIF,CNPJLDL,NumCtrlSTROr,IdMerc?,VlrLanc,AgDeb?,CtDeb?,Repet_LDL0025_DevCred?,NivelPref?,DtMovto)>
+<!ELEMENT Repet_LDL0025_DevCred (Grupo_LDL0025_DevCred+)>
+<!ELEMENT Grupo_LDL0025_DevCred (TipoDev?,TipoPag?,NumCtrlPag?,TipoDebCredSubLiqdd?,CNPJSubLiqdd?,VlrCredSubLiqdd?,VlrDebSubLiqdd?,VlrSubLiqdd?,Historico?)>
+<!ELEMENT LDLReqTransfDevolCredLDLRespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+<!ELEMENT LDLReqTransfDevolCredLDLRespTerc (CodMsg,NumCtrlSTR,DtHBC,CNPJIF,CNPJLDL,NumCtrlSTROr,IdMerc?,VlrLanc,AgDeb?,CtDeb?,Repet_LDL0025R2_DevCred?,DtMovto)>
+<!ELEMENT Repet_LDL0025R2_DevCred (Grupo_LDL0025R2_DevCred+)>
+<!ELEMENT Grupo_LDL0025R2_DevCred (TipoDev?,TipoPag?,NumCtrlPag?,TipoDebCredSubLiqdd?,CNPJSubLiqdd?,VlrCredSubLiqdd?,VlrDebSubLiqdd?,VlrSubLiqdd?,Historico?)>
+
+<!ELEMENT GENReqECO (CodMsg,MsgECO)>
+<!ELEMENT GENReqECORespReq (CodMsg,MsgECO)>
+
+<!ELEMENT GENReqLOG (CodMsg,NUOp)>
+<!ELEMENT GENReqLOGRespReq (CodMsg,Repet_GEN0002R1_Msg)>
+<!ELEMENT Repet_GEN0002R1_Msg (Msg+)>
+
+<!ELEMENT GENReqUltMsg (CodMsg)>
+<!ELEMENT GENReqUltMsgRespReq (CodMsg,NumUltOp,DtHUltMsg,DtHBC)>
+
+<!ELEMENT CMPInfValorParaCOMPE (CodMsg,CNPJIF,NumCtrlCMP,VlrFinanc,DtHBC,DtMovto)>
+
+<!ELEMENT CMPReqTransfpredepositoCOMPE (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCMPOr,VlrLanc,NivelPref?,DtMovto)>
+<!ELEMENT CMPReqTransfPredepositoCOMPERespReq (CodMsg,NumCtrlIF,CNPJIF,NumCtrlCMP,NumCtrlSTR,SitLanc,DtHSit,DtMovto)>
+
+<!ELEMENT CMPAvisCredReferenteCOMPE (CodMsg,CNPJIF,NumCtrlCMP,NumCtrlSTR,VlrLanc,FinlddCMP,DtHBC,DtMovto)>
+
+<!ELEMENT CMPInfIFNaoParticipaCOMPE (CodMsg,Repet_CMP0004_NPart,DtHBC,DtMovto)>
+<!ELEMENT Repet_CMP0004_NPart (Grupo_CMP0004_NPart+)>
+<!ELEMENT Grupo_CMP0004_NPart (CNPJIF)>
+
+<!ELEMENT CMPInfValorComplemento (CodMsg,CNPJIF,NumCtrlCMP,VlrFinanc,DtHBC,DtMovto)>
+
+<!ELEMENT CMPInfLiquidoBC (CodMsg,NumCtrlSCCOP,Repet_CMP0006_ResultLiqd,DtHBC,DtMovto)>
+<!ELEMENT Repet_CMP0006_ResultLiqd (Grupo_CMP0006_ResultLiqd+)>
+<!ELEMENT Grupo_CMP0006_ResultLiqd (CNPJIF,VlrFinanc)>
+
+<!ELEMENT CMPInfIFResultadoCOMPE (CodMsg,CNPJIF,NumCtrlCMP,TipoDebCred,VlrFinanc,DtHBC,DtMovto)>
+
+<!ELEMENT CMPConsSaldopredeposito (CodMsg,NumCtrlIF,CNPJIF,DtMovto)>
+<!ELEMENT CMPConsSaldopredepositoRespCons (CodMsg,NumCtrlIF,CNPJIF,SldCMPIF,DtHBC,DtMovto)>
+
+<!ELEMENT CMPReqReprocessamentoCOMPE (CodMsg,Repet_CMP0009_NPart,DtHBC,DtMovto)>
+<!ELEMENT Repet_CMP0009_NPart (Grupo_CMP0009_NPart+)>
+<!ELEMENT Grupo_CMP0009_NPart (CNPJIF)>
+
+<!ELEMENT AgCred                     (#PCDATA)>
+<!ELEMENT AgCstdte                   (#PCDATA)>
+<!ELEMENT AgCstdteDest               (#PCDATA)>
+<!ELEMENT AgCstdteOp                 (#PCDATA)>
+<!ELEMENT AgCstdteRemet              (#PCDATA)>
+<!ELEMENT AgDeb                      (#PCDATA)>
+<!ELEMENT AgIF                       (#PCDATA)>
+<!ELEMENT Alq1RCO                    (#PCDATA)>
+<!ELEMENT Alq2RCO                    (#PCDATA)>
+<!ELEMENT AlqItemRCO                 (#PCDATA)>
+<!ELEMENT Catg                       (#PCDATA)>
+<!ELEMENT CEPAg                      (#PCDATA)>
+<!ELEMENT ChVSEL                     (#PCDATA)>
+<!ELEMENT CidAg                      (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliCred            (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliCred1           (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliCred2           (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliDeb             (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliDeb1            (#PCDATA)>
+<!ELEMENT CNPJ_CPFCliDeb2            (#PCDATA)>
+<!ELEMENT CNPJ_CPFDestinatario       (#PCDATA)>
+<!ELEMENT CNPJ_CPFRemet              (#PCDATA)>
+<!ELEMENT CNPJConv                   (#PCDATA)>
+<!ELEMENT CNPJCstdte                 (#PCDATA)>
+<!ELEMENT CNPJIF                     (#PCDATA)>
+<!ELEMENT CNPJIFCred                 (#PCDATA)>
+<!ELEMENT CNPJIFDeb                  (#PCDATA)>
+<!ELEMENT CNPJLDL                    (#PCDATA)>
+<!ELEMENT CNPJSubLiqdd               (#PCDATA)>
+<!ELEMENT CodDpdnciaBC               (#PCDATA)>
+<!ELEMENT CodGrade                   (#PCDATA)>
+<!ELEMENT CodGradeLDL                (#PCDATA)>
+<!ELEMENT CodIdSTN                   (#PCDATA)>
+<!ELEMENT CodItemBaseIncid           (#PCDATA)>
+<!ELEMENT CodMsg                     (#PCDATA)>
+<!ELEMENT CodMsgOr                   (#PCDATA)>
+<!ELEMENT CodPerOperac               (#PCDATA)>
+<!ELEMENT CodRCO                     (#PCDATA)>
+<!ELEMENT CtCed                      (#PCDATA)>
+<!ELEMENT CtCes                      (#PCDATA)>
+<!ELEMENT CtCOSIF                    (#PCDATA)>
+<!ELEMENT CtCred                     (#PCDATA)>
+<!ELEMENT CtCstdia                   (#PCDATA)>
+<!ELEMENT CtDeb                      (#PCDATA)>
+<!ELEMENT DescCtRecolh               (#PCDATA)>
+<!ELEMENT DescCtRemun                (#PCDATA)>
+<!ELEMENT DescForExig                (#PCDATA)>
+<!ELEMENT DescIndAtlzSldMarg         (#PCDATA)>
+<!ELEMENT DescIndRemunSld            (#PCDATA)>
+<!ELEMENT DescItemBaseIncid          (#PCDATA)>
+<!ELEMENT DescLanc                   (#PCDATA)>
+<!ELEMENT DescPeriodRCO              (#PCDATA)>
+<!ELEMENT DiasAtrCst                 (#PCDATA)>
+<!ELEMENT DtAlivio                   (#PCDATA)>
+<!ELEMENT DtDef                      (#PCDATA)>
+<!ELEMENT DtDep                      (#PCDATA)>
+<!ELEMENT DtFim                      (#PCDATA)>
+<!ELEMENT DtFimAlt                   (#PCDATA)>
+<!ELEMENT DtFimInf                   (#PCDATA)>
+<!ELEMENT DtFimPerCalc               (#PCDATA)>
+<!ELEMENT DtFimPerMovtc              (#PCDATA)>
+<!ELEMENT DtHBC                      (#PCDATA)>
+<!ELEMENT DtHCIR                     (#PCDATA)>
+<!ELEMENT DtHCot                     (#PCDATA)>
+<!ELEMENT DtHMovtc                   (#PCDATA)>
+<!ELEMENT DtHSit                     (#PCDATA)>
+<!ELEMENT DtHSTR                     (#PCDATA)>
+<!ELEMENT DtHUltMsg                  (#PCDATA)>
+<!ELEMENT DtIni                      (#PCDATA)>
+<!ELEMENT DtIniPerCalc               (#PCDATA)>
+<!ELEMENT DtIniPerMovtc              (#PCDATA)>
+<!ELEMENT DtIniRef                   (#PCDATA)>
+<!ELEMENT DtLiquid                   (#PCDATA)>
+<!ELEMENT DtMovtc                    (#PCDATA)>
+<!ELEMENT DtMovto                    (#PCDATA)>
+<!ELEMENT DtOp                       (#PCDATA)>
+<!ELEMENT DtOpOr                     (#PCDATA)>
+<!ELEMENT DtOpRet                    (#PCDATA)>
+<!ELEMENT DtPag                      (#PCDATA)>
+<!ELEMENT DtPrv                      (#PCDATA)>
+<!ELEMENT DtRecolh                   (#PCDATA)>
+<!ELEMENT DtRef                      (#PCDATA)>
+<!ELEMENT DtRefDmstr                 (#PCDATA)>
+<!ELEMENT DtReforco                  (#PCDATA)>
+<!ELEMENT DtRemessa                  (#PCDATA)>
+<!ELEMENT DtRep                      (#PCDATA)>
+<!ELEMENT DtSaque                    (#PCDATA)>
+<!ELEMENT DtTroca                    (#PCDATA)>
+<!ELEMENT DtVenc                     (#PCDATA)>
+<!ELEMENT DUPerCalc                  (#PCDATA)>
+<!ELEMENT DUPerMovtc                 (#PCDATA)>
+<!ELEMENT EndAg                      (#PCDATA)>
+<!ELEMENT Esp                        (#PCDATA)>
+<!ELEMENT Estado                     (#PCDATA)>
+<!ELEMENT Finldd                     (#PCDATA)>
+<!ELEMENT FinlddCMP                  (#PCDATA)>
+<!ELEMENT FinlddSTN                  (#PCDATA)>
+<!ELEMENT ForExig                    (#PCDATA)>
+<!ELEMENT ForIsenItemRCO             (#PCDATA)>
+<!ELEMENT ForORes                    (#PCDATA)>
+<!ELEMENT ForRemunRCO                (#PCDATA)>
+<!ELEMENT GrupoIFRCO                 (#PCDATA)>
+<!ELEMENT HFim                       (#PCDATA)>
+<!ELEMENT HIni                       (#PCDATA)>
+<!ELEMENT Historico                  (#PCDATA)>
+<!ELEMENT HrioAb                     (#PCDATA)>
+<!ELEMENT HrioFch                    (#PCDATA)>
+<!ELEMENT HrioIniRetDI               (#PCDATA)>
+<!ELEMENT HrioLim                    (#PCDATA)>
+<!ELEMENT HrioLimDep                 (#PCDATA)>
+<!ELEMENT Id_Destinatario            (#PCDATA)>
+<!ELEMENT Id_Emissor                 (#PCDATA)>
+<!ELEMENT IdMerc                     (#PCDATA)>
+<!ELEMENT IdTitSEL                   (#PCDATA)>
+<!ELEMENT IFDpsitante                (#PCDATA)>
+<!ELEMENT IFDpsitaria                (#PCDATA)>
+<!ELEMENT IFLqdant                   (#PCDATA)>
+<!ELEMENT IFLqdantCed                (#PCDATA)>
+<!ELEMENT IFLqdantCes                (#PCDATA)>
+<!ELEMENT IFLqdantDpsitante          (#PCDATA)>
+<!ELEMENT IFLqdantDpsitaria          (#PCDATA)>
+<!ELEMENT IFNLqdant                  (#PCDATA)>
+<!ELEMENT IndAcrescDeduc             (#PCDATA)>
+<!ELEMENT IndAcrescDeducInf          (#PCDATA)>
+<!ELEMENT IndIncl_Alt                (#PCDATA)>
+<!ELEMENT IndMulta                   (#PCDATA)>
+<!ELEMENT IntvAcPendLanc             (#PCDATA)>
+<!ELEMENT IntvAcPendOp               (#PCDATA)>
+<!ELEMENT IntvAcPendTit              (#PCDATA)>
+<!ELEMENT Msg                        (#PCDATA)>
+<!ELEMENT MsgECO                     (#PCDATA)>
+<!ELEMENT NivelPref                  (#PCDATA)>
+<!ELEMENT NomAg                      (#PCDATA)>
+<!ELEMENT NomCliCred                 (#PCDATA)>
+<!ELEMENT NomCliCred1                (#PCDATA)>
+<!ELEMENT NomCliCred2                (#PCDATA)>
+<!ELEMENT NomCliDeb                  (#PCDATA)>
+<!ELEMENT NomCliDeb1                 (#PCDATA)>
+<!ELEMENT NomCliDeb2                 (#PCDATA)>
+<!ELEMENT NomDestinatario            (#PCDATA)>
+<!ELEMENT NomRCO                     (#PCDATA)>
+<!ELEMENT NomRemet                   (#PCDATA)>
+<!ELEMENT NumCtrlCIR                 (#PCDATA)>
+<!ELEMENT NumCtrlCMP                 (#PCDATA)>
+<!ELEMENT NumCtrlCMPOr               (#PCDATA)>
+<!ELEMENT NumCtrlCstdte              (#PCDATA)>
+<!ELEMENT NumCtrlIF                  (#PCDATA)>
+<!ELEMENT NumCtrlLDL                 (#PCDATA)>
+<!ELEMENT NumCtrlLDLOr               (#PCDATA)>
+<!ELEMENT NumCtrlOr                  (#PCDATA)>
+<!ELEMENT NumCtrlPag                 (#PCDATA)>
+<!ELEMENT NumCtrlRCO                 (#PCDATA)>
+<!ELEMENT NumCtrlRDC                 (#PCDATA)>
+<!ELEMENT NumCtrlRDCOr               (#PCDATA)>
+<!ELEMENT NumCtrlSCCOP               (#PCDATA)>
+<!ELEMENT NumCtrlSLB                 (#PCDATA)>
+<!ELEMENT NumCtrlSTN                 (#PCDATA)>
+<!ELEMENT NumCtrlSTR                 (#PCDATA)>
+<!ELEMENT NumCtrlSTRDep              (#PCDATA)>
+<!ELEMENT NumCtrlSTROr               (#PCDATA)>
+<!ELEMENT NumCtrlSTRPag              (#PCDATA)>
+<!ELEMENT NumCtrlSTRRecontr          (#PCDATA)>
+<!ELEMENT NumCtrlSTRTarifa           (#PCDATA)>
+<!ELEMENT NumOpSEL                   (#PCDATA)>
+<!ELEMENT NumOpSELOr                 (#PCDATA)>
+<!ELEMENT NumOpSELRet                (#PCDATA)>
+<!ELEMENT NumRemessaOr               (#PCDATA)>
+<!ELEMENT NumUltOp                   (#PCDATA)>
+<!ELEMENT NUOp                       (#PCDATA)>
+<!ELEMENT PercCumpExig               (#PCDATA)>
+<!ELEMENT PercDireciona              (#PCDATA)>
+<!ELEMENT PercMaxAprovPerAtual       (#PCDATA)>
+<!ELEMENT PercMaxCumpCt              (#PCDATA)>
+<!ELEMENT PercMinCumpCt              (#PCDATA)>
+<!ELEMENT PercVlrPar                 (#PCDATA)>
+<!ELEMENT PU                         (#PCDATA)>
+<!ELEMENT PUContr                    (#PCDATA)>
+<!ELEMENT PUConvsRecontr             (#PCDATA)>
+<!ELEMENT PURet                      (#PCDATA)>
+<!ELEMENT QtdDen                     (#PCDATA)>
+<!ELEMENT QtdTit                     (#PCDATA)>
+<!ELEMENT QtdTitConvsRecontr         (#PCDATA)>
+<!ELEMENT QtdTitIda                  (#PCDATA)>
+<!ELEMENT QtdTitSld                  (#PCDATA)>
+<!ELEMENT SiglaMod                   (#PCDATA)>
+<!ELEMENT SistOrigem                 (#PCDATA)>
+<!ELEMENT SitLanc                    (#PCDATA)>
+<!ELEMENT SitLancCIR                 (#PCDATA)>
+<!ELEMENT SitOpSEL                   (#PCDATA)>
+<!ELEMENT SldAnt                     (#PCDATA)>
+<!ELEMENT SldAtual                   (#PCDATA)>
+<!ELEMENT SldCMPIF                   (#PCDATA)>
+<!ELEMENT SldCtLiq                   (#PCDATA)>
+<!ELEMENT SldFim                     (#PCDATA)>
+<!ELEMENT SldIni                     (#PCDATA)>
+<!ELEMENT SldRBIF                    (#PCDATA)>
+<!ELEMENT SldVlrLimFinanc            (#PCDATA)>
+<!ELEMENT TaxaDI                     (#PCDATA)>
+<!ELEMENT TelAg                      (#PCDATA)>
+<!ELEMENT TipoCompr                  (#PCDATA)>
+<!ELEMENT TipoConfDivg               (#PCDATA)>
+<!ELEMENT TipoCtCred                 (#PCDATA)>
+<!ELEMENT TipoCtDeb                  (#PCDATA)>
+<!ELEMENT TipoDebCred                (#PCDATA)>
+<!ELEMENT TipoDebCredSubLiqdd        (#PCDATA)>
+<!ELEMENT TipoDep                    (#PCDATA)>
+<!ELEMENT TipoDev                    (#PCDATA)>
+<!ELEMENT TipoDI                     (#PCDATA)>
+<!ELEMENT TipoHrio                   (#PCDATA)>
+<!ELEMENT TipoId_Destinatario        (#PCDATA)>
+<!ELEMENT TipoId_Emissor             (#PCDATA)>
+<!ELEMENT TipoLei                    (#PCDATA)>
+<!ELEMENT TipoLim                    (#PCDATA)>
+<!ELEMENT TipoLiquid                 (#PCDATA)>
+<!ELEMENT TipoMovtc                  (#PCDATA)>
+<!ELEMENT TipoOpRotAb                (#PCDATA)>
+<!ELEMENT TipoPag                    (#PCDATA)>
+<!ELEMENT TipoPessoaCred             (#PCDATA)>
+<!ELEMENT TipoPessoaDeb              (#PCDATA)>
+<!ELEMENT TipoPessoaDestinatario     (#PCDATA)>
+<!ELEMENT TipoPessoaRemet            (#PCDATA)>
+<!ELEMENT TipoRDC                    (#PCDATA)>
+<!ELEMENT TipoRepImp                 (#PCDATA)>
+<!ELEMENT TipoRetCompr               (#PCDATA)>
+<!ELEMENT TipoVlr                    (#PCDATA)>
+<!ELEMENT USERMSG                    (#PCDATA)>
+<!ELEMENT VlrAnt                     (#PCDATA)>
+<!ELEMENT VlrAtlzCst                 (#PCDATA)>
+<!ELEMENT VlrAtlzMulta               (#PCDATA)>
+<!ELEMENT VlrAtlzMultaDev            (#PCDATA)>
+<!ELEMENT VlrComp                    (#PCDATA)>
+<!ELEMENT VlrCosifInfMarg            (#PCDATA)>
+<!ELEMENT VlrCredSubLiqdd            (#PCDATA)>
+<!ELEMENT VlrCstDef                  (#PCDATA)>
+<!ELEMENT VlrCstDiario               (#PCDATA)>
+<!ELEMENT VlrCstPer                  (#PCDATA)>
+<!ELEMENT VlrDebSubLiqdd             (#PCDATA)>
+<!ELEMENT VlrDeducORes               (#PCDATA)>
+<!ELEMENT VlrDeducRCO                (#PCDATA)>
+<!ELEMENT VlrDefDiario               (#PCDATA)>
+<!ELEMENT VlrDefPer                  (#PCDATA)>
+<!ELEMENT VlrDen                     (#PCDATA)>
+<!ELEMENT VlrDep                     (#PCDATA)>
+<!ELEMENT VlrDevCst                  (#PCDATA)>
+<!ELEMENT VlrDevMulta                (#PCDATA)>
+<!ELEMENT VlrEncargo                 (#PCDATA)>
+<!ELEMENT VlrExcDiario               (#PCDATA)>
+<!ELEMENT VlrExcPer                  (#PCDATA)>
+<!ELEMENT VlrExig                    (#PCDATA)>
+<!ELEMENT VlrExigEsp                 (#PCDATA)>
+<!ELEMENT VlrExigTit                 (#PCDATA)>
+<!ELEMENT VlrFinanc                  (#PCDATA)>
+<!ELEMENT VlrFinancConvsRecontr      (#PCDATA)>
+<!ELEMENT VlrFinancRet               (#PCDATA)>
+<!ELEMENT VlrIda                     (#PCDATA)>
+<!ELEMENT VlrIsenRCO                 (#PCDATA)>
+<!ELEMENT VlrItemDmstr               (#PCDATA)>
+<!ELEMENT VlrLanc                    (#PCDATA)>
+<!ELEMENT VlrLimFinancDefault        (#PCDATA)>
+<!ELEMENT VlrMedCaixa                (#PCDATA)>
+<!ELEMENT VlrMovtc                   (#PCDATA)>
+<!ELEMENT VlrMulta                   (#PCDATA)>
+<!ELEMENT VlrPrincipal               (#PCDATA)>
+<!ELEMENT VlrRemun                   (#PCDATA)>
+<!ELEMENT VlrRep                     (#PCDATA)>
+<!ELEMENT VlrRet                     (#PCDATA)>
+<!ELEMENT VlrSaque                   (#PCDATA)>
+<!ELEMENT VlrSldRecolhidoEsp         (#PCDATA)>
+<!ELEMENT VlrSldRecolhidoMarg        (#PCDATA)>
+<!ELEMENT VlrSldRecolhidoTit         (#PCDATA)>
+<!ELEMENT VlrSubLiqdd                (#PCDATA)>
+<!ELEMENT VlrTarifa                  (#PCDATA)>

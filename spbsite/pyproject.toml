@@ -1,0 +1,9 @@
+[project]
+name = "spbsite"
+version = "1.0.0"
+description = "SPB (Sistema de Pagamentos Brasileiro) monitoring and message-routing interface"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

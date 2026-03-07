@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{{ title }}</h1>
+    <span class="page-date">em {{ current_date }}</span>
+</div>
+
+<div class="page-layout">
+    <aside class="sidebar-stats">
+        <p>{{ "%03d"|format(stats.status_s) }} GerS</p>
+        <p>{{ "%03d"|format(stats.status_n) }} GerN</p>
+        <p><strong>{{ "%03d"|format(stats.total) }} Regs</strong></p>
+        <p class="sidebar-hint">Clique no cabecalho da coluna para classificar.</p>
+    </aside>
+
+    <div class="table-container">
+        <table class="data-table sortable" id="controlTable">
+            <thead>
+                <tr>
+                    <th data-sort="ispb">Cod_ISPB</th>
+                    <th data-sort="nome_ispb">Nome_ISPB</th>
+                    <th data-sort="msg_seq">Sequencia</th>
+                    <th data-sort="status_geral">Status</th>
+                    <th data-sort="dthr_eco">Data_Hora_ECO</th>
+                    <th data-sort="ultmsg">N.Ope_Ultima_Mensagem</th>
+                    <th data-sort="dthr_ultmsg">Data_Hora_Ult.Msg</th>
+                    <th data-sort="certificadora">Certificadora</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr class="{% if row.status_geral == 'N' %}status-normal{% elif row.status_geral == 'I' %}status-warning{% else %}status-error{% endif %}">
+                    <td>{{ row.ispb }}</td>
+                    <td>{{ row.nome_ispb or '' }}</td>
+                    <td>{{ row.msg_seq or '' }}</td>
+                    <td>{{ row.status_geral or '' }}</td>
+                    <td>{{ row.dthr_eco.strftime('%d/%m/%Y.%H:%M:%S') if row.dthr_eco else '' }}</td>
+                    <td>{{ row.ultmsg or '' }}</td>
+                    <td>{{ row.dthr_ultmsg.strftime('%d/%m/%Y.%H:%M:%S') if row.dthr_ultmsg else '' }}</td>
+                    <td>{{ row.certificadora or '' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

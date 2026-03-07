@@ -1,0 +1,18 @@
+Microsoft Visual Studio Solution File, Format Version 1.00
+Project("{BDD4A1A1-7A1F-11D0-AC13-00A0C91E29D5}") = "srv-gersut:8089/", "spbsite.vip", "{410A0560-F248-4EE3-804E-947CED43ED1E}"
+	ProjectSection(SourceCodeControl) = preProject
+		SccAuxPath = 
+		WebServer = http://srv-gersut:8089
+		WebName = /
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(LocalDeployment) = postSolution
+		StartupProject = {410A0560-F248-4EE3-804E-947CED43ED1E}
+	EndGlobalSection
+	GlobalSection(BuildOrder) = postSolution
+		0 = {410A0560-F248-4EE3-804E-947CED43ED1E}
+	EndGlobalSection
+	GlobalSection(DeploymentRoot) = postSolution
+	EndGlobalSection
+EndGlobal

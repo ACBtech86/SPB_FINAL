@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Piloto STR{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Piloto STR</h1>
+</div>
+
+<div class="queue-container">
+    <div class="queue-messages" style="max-height: 350px; overflow-y: auto;">
+        <form method="post" action="" name="piloto" id="pilotoForm">
+            <table class="data-table" id="queueTable">
+                <thead>
+                    <tr>
+                        <th width="30"></th>
+                        <th>Mensagem</th>
+                        <th class="text-right">Valor</th>
+                        <th>Situacao</th>
+                        <th>Origem</th>
+                        <th>Contra-Parte</th>
+                        <th>Data</th>
+                        <th>Pr.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for msg in messages %}
+                    <tr>
+                        <td>
+                            <input type="checkbox"
+                                   id="msg{{ msg.seq }}"
+                                   data-seq="{{ msg.seq }}"
+                                   data-valor="{{ msg.valor }}"
+                                   onchange="processaSelecao(this)">
+                        </td>
+                        <td>
+                            <a href="/queue/message/{{ msg.seq }}" title="{{ msg.descr }}" class="msg-link">{{ msg.mensagem }}</a>
+                        </td>
+                        <td class="text-right">{{ format_currency(msg.valor) }}</td>
+                        <td>{{ msg.status or '' }}</td>
+                        <td>{{ msg.tipo or '' }}</td>
+                        <td>{{ msg.contraparte or '' }}</td>
+                        <td>{{ msg.data.strftime('%d/%m/%Y %H:%M') if msg.data else '' }}</td>
+                        <td>{{ msg.prdade or '' }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </form>
+    </div>
+
+    <div class="queue-panel">
+        <div class="queue-selection">
+            <form method="post" action="/queue/process" name="calc" id="calcForm">
+                <table class="summary-table">
+                    <tr>
+                        <td></td>
+                        <td>Quantidade:</td>
+                        <td>Valor:</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Fila</strong></td>
+                        <td><input type="text" name="qtdnsel" id="qtdnsel" size="6" value="{{ num_fila }}" readonly></td>
+                        <td><input type="text" name="valnsel" id="valnsel" size="14" value="{{ format_currency(total_valor) }}" readonly></td>
+                    </tr>
+                    <tr>
+                        <td>Selecionadas</td>
+                        <td><input type="text" name="qtdsel" id="qtdsel" size="6" value="0" readonly></td>
+                        <td><input type="text" name="valsel" id="valsel" size="14" value="0,00" readonly></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" class="text-right">
+                            <button type="submit" class="btn btn-primary">Enviar</button>
+                        </td>
+                    </tr>
+                </table>
+                <input type="hidden" value="" name="processados" id="processados">
+            </form>
+        </div>
+
+        <div class="queue-balance">
+            <table class="summary-table">
+                <tr>
+                    <td>Saldo</td>
+                    <td class="text-center"><strong>STR</strong></td>
+                </tr>
+                <tr>
+                    <td>Selic</td>
+                    <td class="text-center"><input type="text" value="{{ format_currency(balance.tot_str) }}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Compe</td>
+                    <td class="text-center"><input type="text" value="{{ format_currency(balance.tot_compe) }}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Pg.</td>
+                    <td class="text-center"><input type="text" value="{{ format_currency(balance.tot_cip) }}" readonly></td>
+                </tr>
+                <tr>
+                    <td>Geral</td>
+                    <td class="text-center"><input type="text" value="{{ format_currency(balance.total) }}" readonly></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Queue selection logic (replaces pr_calc3.asp JavaScript)
+var selectedSeqs = [];
+var selectedTotal = 0;
+var selectedCount = 0;
+
+function processaSelecao(checkbox) {
+    var seq = checkbox.dataset.seq;
+    var valor = parseFloat(checkbox.dataset.valor) || 0;
+
+    if (checkbox.checked) {
+        selectedSeqs.push(seq);
+        selectedCount++;
+        selectedTotal += valor;
+
+        document.getElementById('qtdnsel').value = parseInt(document.getElementById('qtdnsel').value) - 1;
+        document.getElementById('qtdsel').value = selectedCount;
+    } else {
+        var idx = selectedSeqs.indexOf(seq);
+        if (idx > -1) selectedSeqs.splice(idx, 1);
+        selectedCount--;
+        selectedTotal -= valor;
+
+        document.getElementById('qtdnsel').value = parseInt(document.getElementById('qtdnsel').value) + 1;
+        document.getElementById('qtdsel').value = selectedCount;
+    }
+
+    document.getElementById('valsel').value = formatBRL(selectedTotal);
+    document.getElementById('valnsel').value = formatBRL({{ total_valor|float }} - selectedTotal);
+    document.getElementById('processados').value = selectedSeqs.join('|');
+}
+
+function formatBRL(value) {
+    return value.toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
+</script>
+{% endblock %}

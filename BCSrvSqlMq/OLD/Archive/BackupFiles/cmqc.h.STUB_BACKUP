@@ -1,0 +1,242 @@
+// cmqc.h - IBM MQ Header Stub (Temporário)
+// Fase 6: Header stub para permitir compilação sem IBM MQ instalado
+// IMPORTANTE: Este é apenas um stub! O IBM MQ real precisa ser instalado para produção.
+
+#ifndef CMQC_H
+#define CMQC_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+// Tipos básicos do MQ
+typedef long MQLONG;
+typedef char MQCHAR;
+typedef unsigned long MQHCONN;
+typedef unsigned long MQHOBJ;
+typedef unsigned char MQBYTE;
+
+// Completion codes
+#define MQCC_OK 0
+#define MQCC_WARNING 1
+#define MQCC_FAILED 2
+
+// Reason codes
+#define MQRC_NONE 0
+#define MQRC_ALREADY_CONNECTED 2002
+#define MQRC_CONNECTION_BROKEN 2009
+#define MQRC_MSG_TOO_BIG_FOR_Q 2030
+#define MQRC_NO_MSG_AVAILABLE 2033
+#define MQRC_Q_FULL 2053
+#define MQRC_TRUNCATED_MSG_FAILED 2120
+
+// Message Type constants
+#define MQMT_REQUEST 1
+#define MQMT_REPLY 2
+#define MQMT_REPORT 4
+#define MQMT_DATAGRAM 8
+
+// Feedback constants
+#define MQFB_NONE 0
+#define MQFB_QUIT 256
+#define MQFB_EXPIRATION 258
+#define MQFB_COA 259
+#define MQFB_COD 260
+
+// Expiry constants
+#define MQEI_UNLIMITED (-1)
+
+// Report options
+#define MQRO_COA 256
+#define MQRO_COD 2048
+#define MQRO_EXCEPTION 16777216
+
+// Object options
+#define MQOO_INPUT_EXCLUSIVE 0x00000004
+#define MQOO_OUTPUT 0x00000010
+#define MQOO_BROWSE 0x00000008
+#define MQOO_FAIL_IF_QUIESCING 0x00002000
+
+// GMO options
+#define MQGMO_WAIT 0x00000001
+#define MQGMO_SYNCPOINT 0x00000002
+#define MQGMO_VERSION_2 2
+
+// PMO options
+#define MQPMO_SYNCPOINT 0x00000002
+
+// Match options
+#define MQMO_NONE 0
+#define MQMI_NONE 0
+
+// Group/Segment constants
+#define MQCI_NONE 0
+
+// Encoding and character set
+#define MQENC_NATIVE 0x00000222
+#define MQCCSI_Q_MGR 0
+
+// Persistence
+#define MQPER_PERSISTENT 1
+#define MQPER_NOT_PERSISTENT 0
+
+// Priority
+#define MQPRI_PRIORITY_AS_Q_DEF (-1)
+
+// Message format
+#define MQFMT_STRING "MQSTR   "
+#define MQFMT_NONE "        "
+
+// Object types
+#define MQOT_Q 1
+
+// Structure IDs
+#define MQMD_STRUC_ID "MD  "
+#define MQMD_VERSION_1 1
+#define MQMD_VERSION_2 2
+
+#define MQOD_STRUC_ID "OD  "
+#define MQOD_VERSION_1 1
+
+#define MQGMO_STRUC_ID "GMO "
+#define MQGMO_VERSION_1 1
+
+#define MQPMO_STRUC_ID "PMO "
+#define MQPMO_VERSION_1 1
+
+#define MQBO_STRUC_ID "BO  "
+#define MQBO_VERSION_1 1
+
+// Length constants
+#define MQ_Q_MGR_NAME_LENGTH 48
+#define MQ_Q_NAME_LENGTH 48
+#define MQ_CHANNEL_NAME_LENGTH 20
+#define MQ_MSG_ID_LENGTH 24
+#define MQ_CORREL_ID_LENGTH 24
+#define MQ_FORMAT_LENGTH 8
+
+// Estruturas básicas
+typedef struct tagMQCHARV {
+    void* VSPtr;
+    MQLONG VSLength;
+    MQLONG VSBufSize;
+} MQCHARV;
+
+// Message Descriptor
+typedef struct tagMQMD {
+    MQCHAR StrucId[4];
+    MQLONG Version;
+    MQLONG Report;
+    MQLONG MsgType;
+    MQLONG Expiry;
+    MQLONG Feedback;
+    MQLONG Encoding;
+    MQLONG CodedCharSetId;
+    MQCHAR Format[MQ_FORMAT_LENGTH];
+    MQLONG Priority;
+    MQLONG Persistence;
+    MQBYTE MsgId[MQ_MSG_ID_LENGTH];
+    MQBYTE CorrelId[MQ_CORREL_ID_LENGTH];
+    MQLONG BackoutCount;
+    MQCHAR ReplyToQ[MQ_Q_NAME_LENGTH];
+    MQCHAR ReplyToQMgr[MQ_Q_MGR_NAME_LENGTH];
+    MQCHAR UserIdentifier[12];
+    MQCHAR AccountingToken[32];
+    MQCHAR ApplIdentityData[32];
+    MQLONG PutApplType;
+    MQCHAR PutApplName[28];
+    MQCHAR PutDate[8];
+    MQCHAR PutTime[8];
+    MQCHAR ApplOriginData[4];
+    // MQMD Version 2 fields
+    MQBYTE GroupId[MQ_MSG_ID_LENGTH];
+    MQLONG MsgSeqNumber;
+    MQLONG Offset;
+    MQLONG MsgFlags;
+    MQLONG OriginalLength;
+} MQMD;
+
+// Object Descriptor
+typedef struct tagMQOD {
+    MQCHAR StrucId[4];
+    MQLONG Version;
+    MQLONG ObjectType;
+    MQCHAR ObjectName[MQ_Q_NAME_LENGTH];
+    MQCHAR ObjectQMgrName[MQ_Q_MGR_NAME_LENGTH];
+    MQCHAR DynamicQName[MQ_Q_NAME_LENGTH];
+    MQCHAR AlternateUserId[12];
+} MQOD;
+
+// Get Message Options
+typedef struct tagMQGMO {
+    MQCHAR StrucId[4];
+    MQLONG Version;
+    MQLONG Options;
+    MQLONG WaitInterval;
+    MQLONG Signal1;
+    MQLONG Signal2;
+    MQCHAR ResolvedQName[MQ_Q_NAME_LENGTH];
+    MQLONG MatchOptions;
+    MQCHAR GroupStatus;
+    MQCHAR SegmentStatus;
+    MQCHAR Segmentation;
+    MQCHAR Reserved1;
+    MQBYTE MsgToken[16];
+    MQLONG ReturnedLength;
+} MQGMO;
+
+// Put Message Options
+typedef struct tagMQPMO {
+    MQCHAR StrucId[4];
+    MQLONG Version;
+    MQLONG Options;
+    MQLONG Timeout;
+    MQHOBJ Context;
+    MQLONG KnownDestCount;
+    MQLONG UnknownDestCount;
+    MQLONG InvalidDestCount;
+    MQCHAR ResolvedQName[MQ_Q_NAME_LENGTH];
+    MQCHAR ResolvedQMgrName[MQ_Q_MGR_NAME_LENGTH];
+} MQPMO;
+
+// Begin Options
+typedef struct tagMQBO {
+    MQCHAR StrucId[4];
+    MQLONG Version;
+    MQLONG Options;
+} MQBO;
+
+// Default structure initializers (C++ compatible, no double-braces)
+// MQOD: StrucId,Version,ObjectType,ObjectName,ObjectQMgrName,DynamicQName,AlternateUserId
+#define MQOD_DEFAULT {'O','D',' ',' '},1,0,{0},{0},{0},{0}
+// MQMD: StrucId,Version,Report,MsgType,Expiry,Feedback,Encoding,CodedCharSetId,Format,
+//       Priority,Persistence,MsgId,CorrelId,BackoutCount,ReplyToQ,ReplyToQMgr,
+//       UserIdentifier,AccountingToken,ApplIdentityData,PutApplType,PutApplName,
+//       PutDate,PutTime,ApplOriginData,GroupId,MsgSeqNumber,Offset,MsgFlags,OriginalLength
+#define MQMD_DEFAULT {'M','D',' ',' '},1,0,0,0,0,0,0,{0},0,0,{0},{0},0,{0},{0},{0},{0},{0},0,{0},{0},{0},{0},{0},0,0,0,-1
+// MQGMO: StrucId,Version,Options,WaitInterval,Signal1,Signal2,ResolvedQName,
+//        MatchOptions,GroupStatus,SegmentStatus,Segmentation,Reserved1,MsgToken,ReturnedLength
+#define MQGMO_DEFAULT {'G','M','O',' '},1,0,0,0,0,{0},0,0,0,0,0,{0},0
+// MQPMO: StrucId,Version,Options,Timeout,Context,KnownDestCount,UnknownDestCount,
+//        InvalidDestCount,ResolvedQName,ResolvedQMgrName
+#define MQPMO_DEFAULT {'P','M','O',' '},1,0,0,0,0,0,0,{0},{0}
+// MQBO: StrucId,Version,Options
+#define MQBO_DEFAULT {'B','O',' ',' '},1,0
+
+// Funções stub (declarações apenas - linkadas com mqm.lib em produção)
+void MQCONN(char* pQMgrName, MQHCONN* pHconn, MQLONG* pCompCode, MQLONG* pReason);
+void MQDISC(MQHCONN* pHconn, MQLONG* pCompCode, MQLONG* pReason);
+void MQOPEN(MQHCONN Hconn, void* pObjDesc, MQLONG Options, MQHOBJ* pHobj, MQLONG* pCompCode, MQLONG* pReason);
+void MQCLOSE(MQHCONN Hconn, MQHOBJ* pHobj, MQLONG Options, MQLONG* pCompCode, MQLONG* pReason);
+void MQGET(MQHCONN Hconn, MQHOBJ Hobj, void* pMsgDesc, void* pGetMsgOpts, MQLONG BufLength, void* pBuffer, MQLONG* pDataLength, MQLONG* pCompCode, MQLONG* pReason);
+void MQPUT(MQHCONN Hconn, MQHOBJ Hobj, void* pMsgDesc, void* pPutMsgOpts, MQLONG BufLength, void* pBuffer, MQLONG* pCompCode, MQLONG* pReason);
+void MQBACK(MQHCONN Hconn, MQLONG* pCompCode, MQLONG* pReason);
+void MQCMIT(MQHCONN Hconn, MQLONG* pCompCode, MQLONG* pReason);
+void MQBEGIN(MQHCONN Hconn, void* pBeginOptions, MQLONG* pCompCode, MQLONG* pReason);
+void MQINQ(MQHCONN Hconn, MQHOBJ Hobj, MQLONG SelectorCount, MQLONG* pSelectors, MQLONG IntAttrCount, MQLONG* pIntAttrs, MQLONG CharAttrLength, char* pCharAttrs, MQLONG* pCompCode, MQLONG* pReason);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif // CMQC_H

@@ -1,0 +1,98 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+spbsite.db
+spb_messages.db
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Test coverage
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Alembic
+alembic/versions/*.pyc
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Sensitive files
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+credentials.json
+secrets.yaml
+
+# IBM MQ
+*.qmgr
+
+# Documentation builds
+docs/_build/
+site/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# PDF files (optional - remove if you want to track PDFs)
+*.pdf
+
+# SPB Configuration files with sensitive data
+BCSrvSqlMq/*.ini
+!BCSrvSqlMq/*.ini.example

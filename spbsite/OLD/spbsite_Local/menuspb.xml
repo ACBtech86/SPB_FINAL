@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml:stylesheet type="text/xsl" href="menus.xsl"?>
+
+<TOPICLIST TYPE="Mensagens SPB">
+
+<TOPICS TYPE="Entrada de Dados">
+	<TOPIC><TITLE>Conectar</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Desconectar</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Eco</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Ultima Msg</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Log</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Erro</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Generica</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+</TOPICS>
+
+<TOPICS TYPE="Visualizar">
+	<TOPIC><TITLE>Mensagens Recebidas</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Mensagens Enviadas</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+	<TOPIC><TITLE>Mensagens Log</TITLE><URL>/msgmenu.asp</URL></TOPIC>
+</TOPICS>
+
+</TOPICLIST>

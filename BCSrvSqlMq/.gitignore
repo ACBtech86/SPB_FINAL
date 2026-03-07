@@ -1,0 +1,114 @@
+# BCSrvSqlMq - Git Ignore File
+# Created: 2026-03-01
+# Purpose: Exclude build artifacts, logs, and temporary files
+
+# ============================================
+# Build Directories
+# ============================================
+build/
+!build/Release/*.exe
+!build/Release/*.dll
+BCMsgSqlMq/build/
+test/build/
+test/
+*.dir/
+CMakeFiles/
+cmake_install.cmake
+CMakeCache.txt
+
+# ============================================
+# Compiled Binaries
+# ============================================
+*.exe
+*.dll
+*.lib
+*.exp
+*.obj
+*.pdb
+*.ilk
+*.idb
+*.aps
+
+# ============================================
+# Logs and Temporary Files
+# ============================================
+*.log
+*.tmp
+*.temp
+*.bak
+*.old
+*.swp
+*.swo
+*~
+
+# ============================================
+# Visual Studio
+# ============================================
+.vs/
+*.vcxproj.user
+*.vcxproj.filters
+*.sln.docstates
+*.suo
+*.user
+*.userosscache
+*.sln.ide
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# ============================================
+# Test Files
+# ============================================
+test_*.cpp
+test_*.h
+
+# ============================================
+# Certificates and Keys (SECURITY!)
+# IMPORTANT: Keep certificates OUT of version control
+# ============================================
+*.pfx
+*.key
+*.pem
+*.cer
+*.crt
+*.p12
+!certificates/README.txt
+Homologa/*.pfx
+
+# ============================================
+# IDE and Editor Files
+# ============================================
+.vscode/
+.idea/
+*.code-workspace
+
+# ============================================
+# Package Managers
+# ============================================
+vcpkg_installed/
+packages/
+
+# ============================================
+# Operating System
+# ============================================
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# ============================================
+# Keep Important Files
+# ============================================
+!.gitignore
+!README.md
+!DOCS/
+!tools/

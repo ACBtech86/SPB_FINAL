@@ -1,0 +1,72 @@
+arMenu1 = new Array(
+120,
+"","90",
+"#0066CC","",
+"#E9E9E9","#C0C0C0",
+"#0066CC","#0066CC",
+"RCO0002 Informe de Demonstrativo","ValidadteMsg.asp?selectl=""RCO0002"" ",0,                                                                                                                            
+"RCO0003 Consulta Demonstrativo", "ValidadteMsg.asp?selectl=""RCO0003"" ",0,                                                                                                                                 
+"RCO0004 Consulta Multas" ,"ValidadteMsg.asp?selectl=""RCO0004"" ",0,                                                                                                                                        
+"RCO0005 Consulta Extrato Movimentação","ValidadteMsg.asp?selectl=""RCO0005"" ",0,                                                                                                                           
+"RCO0006 Consulta Cumprimento Compulsório" ,"ValidadteMsg.asp?selectl=""RCO0006"" ",0,                                                                                                                       
+"RCO0007 Consulta Custos" ,"ValidadteMsg.asp?selectl=""RCO0007"" ",0,                                                                                                                                        
+"RCO0008 Consulta Compulsórios" ,"ValidadteMsg.asp?selectl=""RCO0008"" ",0,                                                                                                                                  
+"RCO0009 Consulta Alterações Outras Reservas e Caixa
+Demonstrativo","ValidadteMsg.asp?selectl=""RCO0009"" ",0)  
+arMenu2 = new Array(
+110,
+"","90",
+"#0066CC","",
+"#E9E9E9","#C0C0C0",
+"#0066CC","#0066CC",                                                                                           
+"STR0003 Requisição de Liquidação de Transferência de Numerário","ValidadteMsg.asp?selectl=""STR0003"" ",0,                                                                                                 
+"STR0007 Requisição de Transferência de Conta IF para Conta Cliente" ,"ValidadteMsg.asp?selectl=""STR0007"" ",0,                                                                                            
+"STR0008 Requisição de Transferência entre Contas de diferentes Titularidade", "ValidadteMsg.asp?selectl=""STR0008"" ",0,                                                                                   
+"STR0009 Requisição de Transferência entre Contas de mesma Titularidade","ValidadteMsg.asp?selectl=""STR0009"" ",0,                                                                                         
+"STR0010 Requisição de Transferência para Devolução de Transferência Indevida ", "ValidadteMsg.asp?selectl=""STR0010"" ",0,                                                                                 
+"STR0011 Requisição de Cancelamento de Lançamento Pendente" ,"ValidadteMsg.asp?selectl=""STR0011"" ",0,                                                                                                     
+"STR0012 Consulta Lançamentos", "ValidadteMsg.asp?selectl=""STR0012"" ",0,                                                                                                                                  
+"STR0013 Consulta Saldo Reserva Bancária", "ValidadteMsg.asp?selectl=""STR0013"" ",0,                                                                                                                       
+"STR0014 Consulta Extrato" ,"ValidadteMsg.asp?selectl=""STR0014"" ",0)
+ 
+arMenu3 = new Array(
+106,
+"","90",
+"#0066CC","",
+"#E9E9E9","#C0C0C0",
+"#0066CC","#0066CC",                                                                                                                                    
+"RDC0001 Consulta Títulos Redescontáveis " ,"ValidadteMsg.asp?selectl=""RDC0001"" ",0,                                                                                                                      
+"RDC0002 Requisição de Redesconto Intradia " ,"ValidadteMsg.asp?selectl=""RDC0002"" ",0,                                                                                                                    
+"RDC0003 Requisição de Redesconto Overnight " ,"ValidadteMsg.asp?selectl=""RDC0003"" ",0,                                                                                                                   
+"RDC0004 Requisição de Redesconto Vinculado a Aquisição " ,"ValidadteMsg.asp?selectl=""RDC0004"" ",0,                                                                                                       
+"RDC0005 Requisição de Conversão Redesconto Intradia em Overnight ou " ,"ValidadteMsg.asp?selectl=""RDC0005"" ",0,                                                                                          
+"RDC0006 Consulta Redescontos ","ValidadteMsg.asp?selectl=""RDC0006"" ",0,                                                                                                                                  
+"RDC0007 Requisição de Pagamento de Redesconto","ValidadteMsg.asp?selectl=""RDC0007"" ",0,                                                                                                                  
+"RDC0008 Requisição de Pagamento de Redesconto Vinculado a Venda ","ValidadteMsg.asp?selectl=""RDC0008"" ",0)
+ arMenu4 = new Array(
+100,
+"","90",
+"#0066CC","",
+"#E9E9E9","#C0C0C0",
+"#0066CC","#0066CC",                                                                                             
+"CIR0001 Informe de Estatística Semanal de Movimentação ","ValidadteMsg.asp?selectl=""CIR0001"" ",0,                                                                                                       
+"CIR0002 Consulta Estatística Movimentação" ,"ValidadteMsg.asp?selectl=""CIR0002"" ",0,                                                                                                                     
+"CIR0003 Requisição de Saque de Numerário " ,"ValidadteMsg.asp?selectl=""CIR0003"" ",0,                                                                                                                     
+"CIR0004 Requisição de Cancelamento de Saque de Numerário" ,"ValidadteMsg.asp?selectl=""CIR0004"" ",0,                                                                                                      
+"CIR0005 Requisição de Depósito de Numerário","ValidadteMsg.asp?selectl=""CIR0005"" ",0,                                                                                                                    
+"CIR0006 Requisição de Cancelamento de Depósito de Numerário" ,"ValidadteMsg.asp?selectl=""CIR0006"" ",0,                                                                                                   
+"CIR0008 Consulta Movimentações de Numerário","ValidadteMsg.asp?selectl=""CIR0008"" ",0,                                                                                                                    
+"CIR0009 Consulta Lançamentos Pendentes na Conta Transitória MECIR","ValidadteMsg.asp?selectl=""CIR0009"" ",0,                                                                                              
+"CIR0012 Requisição de Transferência para Ajuste de Numerário Depositado a menor","ValidadteMsg.asp?selectl=""CIR0012"" ",0,                                                                                
+"CIR0013 Consulta Relação Custodiante por Estado","ValidadteMsg.asp?selectl=""CIR0013"" ",0)
+ arMenu5 = new Array(
+110,
+"","90",
+"#0066CC","",
+"#E9E9E9","#C0C0C0",
+"#0066CC","#0066CC",                                                                                                             
+"SLB0002 Requisição de Pagamento de Lançamento BACEN" ,"ValidadteMsg.asp?selectl=""SLB0002"" ",0,                                                                                                           
+"SLB0004 Requisição de Cancelamento de Lançamento SLB Pendente" ,"ValidadteMsg.asp?selectl=""SLB0004"" ",0,                                                                                                 
+"SLB0006 Consulta Lançamentos SLB","ValidadteMsg.asp?selectl=""SLB0006"" ",0,                                                                                                                              
+"SLB0007 Requisição de Pagamento ao BACEN","ValidadteMsg.asp?selectl=""SLB0007"" ",0)
+                                                                                                                      

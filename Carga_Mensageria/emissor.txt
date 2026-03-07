@@ -1,0 +1,28 @@
+Expr1
+AC             
+AC ou TC       
+Câmara         
+Câmara BMC     
+Câmara CBL     
+Câmara CEN     
+Câmara CTP     
+Câmara LDL     
+Câmara PAG     
+Custodiante    
+GEN            
+IF             
+IF Liquidante  
+IF-A           
+IF-DEBITADA    
+INT            
+INT ou AC      
+MECIR          
+Participante   
+RCO            
+RDC            
+SELIC          
+SLB            
+STN            
+STR            
+TC             
+TESOURO        
