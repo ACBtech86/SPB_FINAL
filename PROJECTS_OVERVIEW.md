@@ -224,9 +224,6 @@ See [IBM_MQ_SETUP_GUIDE.md](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) for detailed instr
 - lxml>=4.9.0
 - pywin32>=306
 
-### Legacy C++ Code
-The `BCSrvSqlMq/OLD/` directory contains the original C++ implementation (migrated to Python).
-
 ---
 
 ## Project 4: Carga_Mensageria - Message Catalog ETL Tool
