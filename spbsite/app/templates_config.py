@@ -19,12 +19,30 @@ def composite_key_filter(row):
     Returns:
         str: Composite key in format "{datetime_iso}_{mq_msg_id_hex}"
     """
-    if hasattr(row, 'db_datetime') and hasattr(row, 'mq_msg_id'):
-        if row.db_datetime and row.mq_msg_id:
-            dt_str = row.db_datetime.isoformat()
-            msg_id_hex = row.mq_msg_id.hex()
-            return f"{dt_str}_{msg_id_hex}"
-    return ""
+    try:
+        if not hasattr(row, 'db_datetime'):
+            print(f"[WARNING] Row has no db_datetime attribute: {type(row)}")
+            return ""
+        if not hasattr(row, 'mq_msg_id'):
+            print(f"[WARNING] Row has no mq_msg_id attribute: {type(row)}")
+            return ""
+
+        if row.db_datetime is None:
+            print(f"[WARNING] Row db_datetime is None")
+            return ""
+        if row.mq_msg_id is None:
+            print(f"[WARNING] Row mq_msg_id is None")
+            return ""
+
+        dt_str = row.db_datetime.isoformat()
+        msg_id_hex = row.mq_msg_id.hex()
+        result = f"{dt_str}_{msg_id_hex}"
+        return result
+    except Exception as e:
+        print(f"[ERROR] composite_key_filter failed: {e}")
+        import traceback
+        traceback.print_exc()
+        return ""
 
 
 # Register custom filters
