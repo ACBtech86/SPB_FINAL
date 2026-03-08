@@ -498,7 +498,8 @@ pytest tests/ -v
 ### Setup & Configuration
 - [PYTHON312_SETUP.md](PYTHON312_SETUP.md) - Python 3.12 setup guide
 - [POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md) - PostgreSQL configuration
-- [IBM_MQ_SETUP.md](IBM_MQ_SETUP.md) - IBM MQ setup overview
+- [IBM_MQ_SETUP.md](IBM_MQ_SETUP.md) - IBM MQ setup for Windows
+- [IBM_MQ_SETUP_UBUNTU.md](IBM_MQ_SETUP_UBUNTU.md) - IBM MQ setup for Ubuntu Server
 - [VSCODE_GUIDE.md](VSCODE_GUIDE.md) - VSCode workspace configuration
 - [UBUNTU_DEPLOYMENT_GUIDE.md](UBUNTU_DEPLOYMENT_GUIDE.md) - Ubuntu Server deployment with VS Code Remote
 

@@ -18,7 +18,8 @@ Start here if you're new to the SPB system:
 
 - **[PYTHON312_SETUP.md](PYTHON312_SETUP.md)** - Python 3.12 environment setup
 - **[POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md)** - PostgreSQL database configuration
-- **[IBM_MQ_SETUP.md](IBM_MQ_SETUP.md)** - IBM MQ installation and setup
+- **[IBM_MQ_SETUP.md](IBM_MQ_SETUP.md)** - IBM MQ installation for Windows
+- **[IBM_MQ_SETUP_UBUNTU.md](IBM_MQ_SETUP_UBUNTU.md)** - IBM MQ installation for Ubuntu Server
 - **[VSCODE_GUIDE.md](VSCODE_GUIDE.md)** - VS Code workspace configuration
 - **[UBUNTU_DEPLOYMENT_GUIDE.md](UBUNTU_DEPLOYMENT_GUIDE.md)** - Ubuntu Server deployment with VS Code Remote
 
