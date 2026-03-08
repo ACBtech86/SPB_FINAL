@@ -6,12 +6,15 @@ Monorepo containing complete SPB (Sistema de Pagamentos Brasileiro) integration 
 
 ```
 Novo_SPB/
+├── Docs/                # 📚 Complete documentation
 ├── spb-shared/          # Shared database models package
 ├── spbsite/             # Web interface (FastAPI)
 ├── BCSrvSqlMq/          # Backend server (IBM MQ integration)
-├── MIGRATION_GUIDE.md
-└── BCSRVSQLMQ_INTEGRATION.md
+├── Carga_Mensageria/    # Message catalog ETL tool
+└── README.md            # This file
 ```
+
+**📖 Full Documentation:** See [Docs/](Docs/) folder or start with [PROJECTS_OVERVIEW.md](Docs/PROJECTS_OVERVIEW.md)
 
 ## 📦 Projects
 
@@ -103,7 +106,7 @@ python -m bcsrvsqlmq.main_srv
 
 ### Prerequisites
 
-- **Python 3.10 - 3.12** (3.13 not compatible with pymqi - see [PYTHON312_SETUP.md](PYTHON312_SETUP.md))
+- **Python 3.10 - 3.12** (3.13 not compatible with pymqi - see [PYTHON312_SETUP.md](Docs/PYTHON312_SETUP.md))
 - PostgreSQL 15+
 - IBM MQ Client 9.x (for BCSrvSqlMq)
 - Git
@@ -187,10 +190,18 @@ pytest tests/ -v
 
 ## 📚 Documentation
 
-- [Migration Guide](MIGRATION_GUIDE.md) - Database migration instructions
-- [BCSrvSqlMq Integration](BCSRVSQLMQ_INTEGRATION.md) - Backend integration guide
-- [spb-shared README](spb-shared/README.md) - Shared models documentation
-- [IBM MQ Setup](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) - MQ configuration guide
+**📁 Complete Documentation:** [Docs/](Docs/) folder
+
+**Quick Links:**
+- **[Projects Overview](Docs/PROJECTS_OVERVIEW.md)** - Complete system architecture and overview
+- **[Installation Guide](Docs/INSTALLATION_GUIDE.md)** - Full installation instructions
+- **[Quick Install](Docs/QUICK_INSTALL.md)** - Quick setup for development
+- **[Ubuntu Deployment](Docs/UBUNTU_DEPLOYMENT_GUIDE.md)** - Deploy on Ubuntu Server with VS Code Remote
+- **[Migration Guide](Docs/MIGRATION_GUIDE.md)** - Database migration instructions
+- **[BCSrvSqlMq Integration](Docs/BCSRVSQLMQ_INTEGRATION.md)** - Backend integration guide
+- **[IBM MQ Setup](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md)** - MQ configuration guide
+
+**See [Docs/README.md](Docs/README.md) for complete documentation index.**
 
 ## 🔐 Security
 

@@ -8,6 +8,7 @@ Complete Brazilian Payment System (SPB) integration system for **Finvest DTVM** 
 
 ```
 Novo_SPB/
+├── Docs/                # Documentation folder
 ├── spb-shared/          # Shared database models package
 ├── spbsite/             # Web interface (FastAPI)
 ├── BCSrvSqlMq/          # Backend server (IBM MQ integration)
@@ -16,10 +17,7 @@ Novo_SPB/
 ├── install_spb_system.ps1   # Windows installation script
 ├── install_spb_system.sh    # Linux installation script
 ├── bacen_simulator.py       # BACEN message simulator
-├── INSTALLATION_GUIDE.md
-├── MIGRATION_GUIDE.md
-├── BCSRVSQLMQ_INTEGRATION.md
-└── README.md
+└── README.md            # Main readme
 ```
 
 ---
@@ -489,8 +487,10 @@ pytest tests/ -v
 
 ## Documentation
 
+**All documentation files are located in the [Docs/](./) folder.**
+
 ### Getting Started
-- [README.md](README.md) - Main repository documentation
+- [README.md](../README.md) - Main repository documentation
 - [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) - Complete installation guide
 - [QUICK_INSTALL.md](QUICK_INSTALL.md) - Quick installation instructions
 - [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) - Database migration instructions
@@ -504,11 +504,11 @@ pytest tests/ -v
 
 ### Integration & Backend
 - [BCSRVSQLMQ_INTEGRATION.md](BCSRVSQLMQ_INTEGRATION.md) - Backend integration guide
-- [IBM_MQ_SETUP_GUIDE.md](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) - Detailed MQ configuration
-- [MESSAGE_FLOWS.md](BCSrvSqlMq/MESSAGE_FLOWS.md) - Message flow documentation
-- [MQ_QUICK_REFERENCE.md](BCSrvSqlMq/MQ_QUICK_REFERENCE.md) - MQ quick reference
-- [SESSION_HANDOFF.md](BCSrvSqlMq/SESSION_HANDOFF.md) - Session handoff notes
-- [SESSION_NOTES.md](BCSrvSqlMq/SESSION_NOTES.md) - Development session notes
+- [IBM_MQ_SETUP_GUIDE.md](../BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) - Detailed MQ configuration
+- [MESSAGE_FLOWS.md](../BCSrvSqlMq/MESSAGE_FLOWS.md) - Message flow documentation
+- [MQ_QUICK_REFERENCE.md](../BCSrvSqlMq/MQ_QUICK_REFERENCE.md) - MQ quick reference
+- [SESSION_HANDOFF.md](../BCSrvSqlMq/SESSION_HANDOFF.md) - Session handoff notes
+- [SESSION_NOTES.md](../BCSrvSqlMq/SESSION_NOTES.md) - Development session notes
 
 ### Testing & Validation
 - [E2E_TEST_PLAN.md](E2E_TEST_PLAN.md) - End-to-end test plan
@@ -521,7 +521,7 @@ pytest tests/ -v
 - [PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md) - Cleanup summary
 
 ### Reference
-- [HSM_Guide.pdf](HSM_Guide.pdf) - HSM documentation
+- [HSM_Guide.pdf](../HSM_Guide.pdf) - HSM documentation
 
 ---
 
