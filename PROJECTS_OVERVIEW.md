@@ -12,6 +12,11 @@ Novo_SPB/
 ├── spbsite/             # Web interface (FastAPI)
 ├── BCSrvSqlMq/          # Backend server (IBM MQ integration)
 ├── Carga_Mensageria/    # Message catalog ETL tool
+├── test_scripts/        # Integration test scripts
+├── install_spb_system.ps1   # Windows installation script
+├── install_spb_system.sh    # Linux installation script
+├── bacen_simulator.py       # BACEN message simulator
+├── INSTALLATION_GUIDE.md
 ├── MIGRATION_GUIDE.md
 ├── BCSRVSQLMQ_INTEGRATION.md
 └── README.md
@@ -27,7 +32,7 @@ Novo_SPB/
 
 ### Key Features
 - Single source of truth for database schema
-- Supports PostgreSQL (production) and SQLite (development)
+- PostgreSQL database support with async operations
 - Automatic migrations via Alembic
 - Type-safe async ORM models
 
@@ -59,7 +64,6 @@ pip install -e .
 ### Dependencies
 - sqlalchemy>=2.0.0
 - asyncpg>=0.29.0
-- aiosqlite>=0.19.0
 - alembic>=1.13.0
 - psycopg2-binary>=2.9.9
 
@@ -100,8 +104,7 @@ app/
 ├── static/          # CSS, JS, images
 ├── main.py          # FastAPI application
 ├── database.py      # Database configuration
-├── config.py        # App configuration
-└── seed.py          # Database seeding
+└── config.py        # App configuration
 ```
 
 ### Running
@@ -110,8 +113,8 @@ cd spbsite
 pip install -r requirements.txt
 pip install -e ../spb-shared
 
-# Seed database
-python -m app.seed
+# Initialize database (first time)
+alembic upgrade head
 
 # Run server
 uvicorn app.main:app --reload --port 8000
@@ -127,8 +130,8 @@ uvicorn app.main:app --reload --port 8000
 - jinja2
 - python-multipart
 - sqlalchemy[asyncio]
-- aiosqlite
 - asyncpg
+- psycopg2-binary
 - bcrypt
 
 ---
@@ -335,10 +338,10 @@ python main.py
          │ Operations                      │ Operations
          ▼                                 │
 ┌─────────────────────┐         ┌─────────────────────┐
-│  PostgreSQL/SQLite  │◀────────│   BCSrvSqlMq        │
-│  - spbsite DB       │         │  (MQ Service)       │
-│  - spb_messages DB  │         │  - Message Routing  │
-│  (Development)      │         │  - Persistence      │
+│    PostgreSQL       │◀────────│   BCSrvSqlMq        │
+│  - BCSPB (main DB)  │         │  (MQ Service)       │
+│  - BCSPBSTR (cat)   │         │  - Message Routing  │
+│                     │         │  - Persistence      │
 └─────────────────────┘         │  - Acknowledgments  │
                                 └─────────────────────┘
                                          │
@@ -381,7 +384,7 @@ python main.py
 
 ### Prerequisites
 - Python 3.10 or higher
-- PostgreSQL 15+ (production) or SQLite (development)
+- PostgreSQL 15+
 - IBM MQ Client 9.x (for BCSrvSqlMq)
 - Git
 
@@ -395,7 +398,7 @@ pip install -e .
 # 2. Setup SPBSite
 cd ../spbsite
 pip install -r requirements.txt
-python -m app.seed
+alembic upgrade head
 uvicorn app.main:app --reload --port 8000 &
 
 # 3. Setup BCSrvSqlMq
@@ -421,24 +424,10 @@ python main.py
 
 ## Database Configuration
 
-### Development (SQLite)
-
 **SPBSite** `.env`:
 ```bash
-DATABASE_URL=sqlite+aiosqlite:///./spbsite.db
-CATALOG_DATABASE_URL=sqlite+aiosqlite:///./spb_messages.db
-SECRET_KEY=your-secret-key-here
-ISPB_LOCAL=36266751
-ISPB_BACEN=00038166
-ISPB_SELIC=00038121
-```
-
-### Production (PostgreSQL)
-
-**SPBSite** `.env`:
-```bash
-DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/spbsite
-CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/spb_messages
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPB
+CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR
 SECRET_KEY=your-secret-key-here
 ISPB_LOCAL=36266751
 ISPB_BACEN=00038166
@@ -450,7 +439,7 @@ ISPB_SELIC=00038121
 [Database]
 Server=localhost
 Port=5432
-Database=spbsite
+Database=BCSPB
 User=postgres
 Password=password
 ```
@@ -500,14 +489,68 @@ pytest tests/ -v
 
 ## Documentation
 
+### Getting Started
 - [README.md](README.md) - Main repository documentation
+- [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) - Complete installation guide
+- [QUICK_INSTALL.md](QUICK_INSTALL.md) - Quick installation instructions
 - [MIGRATION_GUIDE.md](MIGRATION_GUIDE.md) - Database migration instructions
+
+### Setup & Configuration
+- [PYTHON312_SETUP.md](PYTHON312_SETUP.md) - Python 3.12 setup guide
+- [POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md) - PostgreSQL configuration
+- [IBM_MQ_SETUP.md](IBM_MQ_SETUP.md) - IBM MQ setup overview
+- [VSCODE_GUIDE.md](VSCODE_GUIDE.md) - VSCode workspace configuration
+
+### Integration & Backend
 - [BCSRVSQLMQ_INTEGRATION.md](BCSRVSQLMQ_INTEGRATION.md) - Backend integration guide
-- [IBM_MQ_SETUP_GUIDE.md](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) - MQ configuration guide
+- [IBM_MQ_SETUP_GUIDE.md](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md) - Detailed MQ configuration
 - [MESSAGE_FLOWS.md](BCSrvSqlMq/MESSAGE_FLOWS.md) - Message flow documentation
 - [MQ_QUICK_REFERENCE.md](BCSrvSqlMq/MQ_QUICK_REFERENCE.md) - MQ quick reference
+- [SESSION_HANDOFF.md](BCSrvSqlMq/SESSION_HANDOFF.md) - Session handoff notes
+- [SESSION_NOTES.md](BCSrvSqlMq/SESSION_NOTES.md) - Development session notes
+
+### Testing & Validation
+- [E2E_TEST_PLAN.md](E2E_TEST_PLAN.md) - End-to-end test plan
+- [END_TO_END_TEST_REPORT.md](END_TO_END_TEST_REPORT.md) - E2E test results
+- [FULL_INTEGRATION_TEST.md](FULL_INTEGRATION_TEST.md) - Full integration test documentation
+- [INTEGRATION_SUCCESS_REPORT.md](INTEGRATION_SUCCESS_REPORT.md) - Integration test report
+- [ARCHITECTURE_VERIFICATION.md](ARCHITECTURE_VERIFICATION.md) - Architecture validation
+
+### Project Management
+- [PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md) - Cleanup summary
+- [CLEANUP_PLAN.md](CLEANUP_PLAN.md) - Cleanup planning
+
+### Reference
 - [HSM_Guide.pdf](HSM_Guide.pdf) - HSM documentation
-- [CONVERSATION_SUMMARY_2026-03-07.md](CONVERSATION_SUMMARY_2026-03-07.md) - Recent changes
+
+---
+
+## Utility Scripts
+
+### Installation Scripts
+- **install_spb_system.ps1** - Automated Windows installation (PowerShell)
+- **install_spb_system.sh** - Automated Linux installation (Bash)
+
+### Database Utilities
+- **create_databases.py** - Database creation utility
+- **setup_catalog_schema.py** - Catalog schema setup
+- **migrate_catalog.py** - Catalog data migration
+
+### Testing Tools
+- **bacen_simulator.py** - BACEN message simulator for integration testing
+
+### Usage
+```bash
+# Windows installation
+powershell -ExecutionPolicy Bypass -File install_spb_system.ps1
+
+# Linux installation
+chmod +x install_spb_system.sh
+./install_spb_system.sh
+
+# BACEN simulator
+python bacen_simulator.py
+```
 
 ---
 
@@ -532,7 +575,7 @@ pytest tests/ -v
 |-----------|------------|
 | Backend Framework | FastAPI |
 | ORM | SQLAlchemy 2.0 (Async) |
-| Database | PostgreSQL / SQLite |
+| Database | PostgreSQL |
 | Message Queue | IBM MQ |
 | Template Engine | Jinja2 |
 | Frontend | Bootstrap 5 |
@@ -583,5 +626,5 @@ For issues or questions, contact the Finvest DTVM IT team.
 ---
 
 **Version:** 1.0.0
-**Last Updated:** March 7, 2026
+**Last Updated:** March 8, 2026
 **Repository:** Novo_SPB Monorepo
