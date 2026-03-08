@@ -29,7 +29,6 @@ from etapas import EtapaExecutor
 # ---------------------------------------------------------------------------
 # Default paths
 # ---------------------------------------------------------------------------
-DEFAULT_DB_PATH = os.path.join(SCRIPT_DIR, "BCSPBSTR.db")
 DEFAULT_ZIP_PATH = os.path.join(SCRIPT_DIR, "spb_schemas.zip")
 
 # ---------------------------------------------------------------------------
@@ -293,17 +292,11 @@ def get_type_info(type_name, all_types):
 
 def main():
     # Resolve paths
-    if len(sys.argv) > 2:
-        db_path = sys.argv[1]
-        zip_path = sys.argv[2]
-    elif len(sys.argv) > 1:
-        db_path = sys.argv[1]
-        zip_path = DEFAULT_ZIP_PATH
+    if len(sys.argv) > 1:
+        zip_path = sys.argv[1]
     else:
-        db_path = DEFAULT_DB_PATH
         zip_path = DEFAULT_ZIP_PATH
 
-    print(f"Database : {db_path}")
     print(f"ZIP file : {zip_path}")
 
     if not os.path.exists(zip_path):
@@ -378,8 +371,9 @@ def main():
     # ---------------------------------------------------------------
     # Phase 2: Populate database
     # ---------------------------------------------------------------
-    print(f"\nConnecting to: {db_path}")
-    db = DatabaseManager(db_path)
+    from config import DB_CONFIG
+    print(f"\nConnecting to PostgreSQL: {DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}")
+    db = DatabaseManager()
     db.connect()
 
     try:
@@ -390,7 +384,7 @@ def main():
             "PLAN_MENSAGEM", "PLAN_EVENTO", "PLAN_Mensagem_Dados",
             "PLAN_DADOS", "PLAN_TIPOLOGIA",
         ):
-            db.connection.execute(f"DELETE FROM [{tbl}]")
+            db.connection.execute(f'DELETE FROM "{tbl}"')
 
         # --- SPB_MENSAGEM ---
         print("Populating SPB_MENSAGEM...")
@@ -557,7 +551,7 @@ def main():
     print("\n" + "=" * 60)
     print("IMPORT SUMMARY")
     print("=" * 60)
-    db2 = DatabaseManager(db_path)
+    db2 = DatabaseManager()
     db2.connect()
     try:
         for tbl in (
@@ -565,7 +559,7 @@ def main():
             "PLAN_MENSAGEM", "PLAN_EVENTO", "PLAN_Mensagem_Dados",
             "PLAN_DADOS", "PLAN_TIPOLOGIA",
         ):
-            cnt = db2.execute_scalar(f"SELECT COUNT(*) FROM [{tbl}]")
+            cnt = db2.execute_scalar(f'SELECT COUNT(*) FROM "{tbl}"')
             print(f"  {tbl:<25} {cnt:>6} rows")
     finally:
         db2.close()

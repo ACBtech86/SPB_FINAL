@@ -3,30 +3,38 @@ Database connection manager for Carga Mensageria.
 Replaces Module1.bas global ADODB objects and the repetitive
 IsNull/Trim pattern from the VB6 code.
 
-Uses SQLite3 (built-in Python module) instead of SQL Server.
+Uses PostgreSQL via psycopg3.
 """
 
-import sqlite3
-
-
-def _dict_factory(cursor, row):
-    """Row factory that returns each row as a dict keyed by column name."""
-    return {col[0]: row[idx] for idx, col in enumerate(cursor.description)}
+import psycopg
+from psycopg.rows import dict_row
+from config import DB_CONFIG
 
 
 class DatabaseManager:
-    """Manages SQLite connections for the Carga Mensageria application."""
+    """Manages PostgreSQL connections for the Carga Mensageria application."""
 
-    def __init__(self, db_path: str):
-        self.db_path = db_path
+    def __init__(self, db_config: dict = None):
+        """
+        Initialize database manager.
+
+        Args:
+            db_config: Optional dict with PostgreSQL connection parameters.
+                      If None, uses config.DB_CONFIG.
+        """
+        self.db_config = db_config or DB_CONFIG
         self._conn = None
 
     def connect(self):
-        """Open connection to the SQLite database file."""
-        self._conn = sqlite3.connect(self.db_path)
-        self._conn.row_factory = _dict_factory
-        self._conn.execute("PRAGMA journal_mode=WAL")
-        self._conn.execute("PRAGMA foreign_keys=ON")
+        """Open connection to the PostgreSQL database."""
+        self._conn = psycopg.connect(
+            host=self.db_config["host"],
+            port=self.db_config["port"],
+            dbname=self.db_config["database"],
+            user=self.db_config["user"],
+            password=self.db_config["password"],
+            row_factory=dict_row,
+        )
         return self._conn
 
     def close(self):
@@ -47,21 +55,16 @@ class DatabaseManager:
 
     def execute_scalar(self, sql: str):
         """Execute a query and return the first column of the first row."""
-        # Use a plain row_factory for this single call
         cursor = self._conn.cursor()
-        old_factory = self._conn.row_factory
-        self._conn.row_factory = None
-        plain_cursor = self._conn.cursor()
-        plain_cursor.execute(sql)
-        row = plain_cursor.fetchone()
-        self._conn.row_factory = old_factory
-        return row[0] if row else None
+        cursor.execute(sql)
+        row = cursor.fetchone()
+        return row[list(row.keys())[0]] if row else None
 
     def execute_insert(self, table: str, data: dict):
         """Insert a single row into a table from a dict of column->value."""
-        columns = ", ".join(f"[{col}]" for col in data.keys())
-        placeholders = ", ".join(["?"] * len(data))
-        sql = f"INSERT INTO [{table}] ({columns}) VALUES ({placeholders})"
+        columns = ", ".join(f'"{col}"' for col in data.keys())
+        placeholders = ", ".join(["%s"] * len(data))
+        sql = f'INSERT INTO "{table}" ({columns}) VALUES ({placeholders})'
         cursor = self._conn.cursor()
         cursor.execute(sql, tuple(data.values()))
 

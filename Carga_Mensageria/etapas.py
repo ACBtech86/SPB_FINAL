@@ -207,8 +207,8 @@ class EtapaExecutor:
             sql = (
                 "SELECT PLAN_Grade.GRADE, SPB_DOMINIOS.TipoDado, "
                 "SPB_DOMINIOS.CodDominio, SPB_DOMINIOS.DescrDominio, "
-                "PLAN_Grade.[Horário Abertura] AS HINI, "
-                "PLAN_Grade.[Horário Fechamento] AS HFIM "
+                'PLAN_Grade."Horário Abertura" AS HINI, '
+                'PLAN_Grade."Horário Fechamento" AS HFIM '
                 "FROM PLAN_Grade LEFT OUTER JOIN SPB_DOMINIOS "
                 "ON PLAN_Grade.GRADE = SPB_DOMINIOS.CodDominio "
                 "ORDER BY PLAN_Grade.GRADE"
@@ -448,7 +448,7 @@ class EtapaExecutor:
                 "SELECT V1.*, D.Tag AS Tipo_Tag, D.Nome_Dado FROM "
                 "(SELECT M.CodMsg, M.Tag, M.Nome_Mensagem, M.EntidadeOrigem, "
                 "M.EntidadeDestino, MD.Mensagem, MD.Seq, MD.Tag AS Cpo_Tag, "
-                "MD.[Obrig#] "
+                'MD."Obrig#" '
                 "FROM PLAN_Mensagem_Dados MD "
                 "LEFT JOIN PLAN_Mensagem M ON MD.Mensagem = M.CodMsg) AS V1 "
                 "LEFT JOIN PLAN_DADOS D ON V1.Cpo_Tag = D.Tag "

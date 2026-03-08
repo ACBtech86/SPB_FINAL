@@ -2,23 +2,19 @@
 Carga Mensageria - Main Application (Tkinter GUI)
 Replaces Etapas_Carga.frm form layout and event wiring from VB6.
 
-Uses SQLite as the database backend.
+Uses PostgreSQL as the database backend.
 
 Usage:
     python main.py
 """
 
-import os
 import threading
 import tkinter as tk
-from tkinter import filedialog, messagebox
+from tkinter import messagebox
 
 from db_connection import DatabaseManager
 from etapas import EtapaExecutor
-
-DEFAULT_DB_PATH = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "BCSPBSTR.db"
-)
+from config import DB_CONFIG
 
 
 class CargaMensageriaApp:
@@ -26,7 +22,7 @@ class CargaMensageriaApp:
 
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("Etapas da Carga de Mensageria")
+        self.root.title("Etapas da Carga de Mensageria - PostgreSQL")
         self.root.geometry("560x480")
         self.root.resizable(False, False)
 
@@ -38,16 +34,13 @@ class CargaMensageriaApp:
     # ------------------------------------------------------------------
     def _build_gui(self):
         # --- Frame "Banco de Dados" (left side) ---
-        db_frame = tk.LabelFrame(self.root, text="Banco de Dados (SQLite)", padx=8, pady=8)
+        db_frame = tk.LabelFrame(self.root, text="Banco de Dados (PostgreSQL)", padx=8, pady=8)
         db_frame.place(x=10, y=10, width=535, height=60)
 
-        tk.Label(db_frame, text="Arquivo:").pack(side="left")
-        self.dbpath_var = tk.StringVar(value=DEFAULT_DB_PATH)
-        tk.Entry(db_frame, textvariable=self.dbpath_var, width=52).pack(
+        conn_str = f"{DB_CONFIG['user']}@{DB_CONFIG['host']}:{DB_CONFIG['port']}/{DB_CONFIG['database']}"
+        tk.Label(db_frame, text="Conexão:").pack(side="left")
+        tk.Label(db_frame, text=conn_str, fg="navy", font=("Courier", 9)).pack(
             side="left", padx=4
-        )
-        tk.Button(db_frame, text="...", width=3, command=self._browse_db).pack(
-            side="left"
         )
 
         # --- Frame "Parametros de Seleção" (below DB frame) ---
@@ -117,22 +110,10 @@ class CargaMensageriaApp:
         status_bar.place(x=0, y=458, relwidth=1, height=22)
 
     # ------------------------------------------------------------------
-    # Browse for SQLite database file
-    # ------------------------------------------------------------------
-    def _browse_db(self):
-        path = filedialog.askopenfilename(
-            title="Selecionar banco de dados SQLite",
-            filetypes=[("SQLite DB", "*.db *.sqlite *.sqlite3"), ("Todos", "*.*")],
-            initialdir=os.path.dirname(self.dbpath_var.get()),
-        )
-        if path:
-            self.dbpath_var.set(path)
-
-    # ------------------------------------------------------------------
     # Database helper
     # ------------------------------------------------------------------
     def _create_db_manager(self) -> DatabaseManager:
-        return DatabaseManager(db_path=self.dbpath_var.get().strip())
+        return DatabaseManager()
 
     # ------------------------------------------------------------------
     # Generic runner: executes an etapa in a background thread
