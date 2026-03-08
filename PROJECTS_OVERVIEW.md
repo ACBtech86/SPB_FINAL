@@ -500,6 +500,7 @@ pytest tests/ -v
 - [POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md) - PostgreSQL configuration
 - [IBM_MQ_SETUP.md](IBM_MQ_SETUP.md) - IBM MQ setup overview
 - [VSCODE_GUIDE.md](VSCODE_GUIDE.md) - VSCode workspace configuration
+- [UBUNTU_DEPLOYMENT_GUIDE.md](UBUNTU_DEPLOYMENT_GUIDE.md) - Ubuntu Server deployment with VS Code Remote
 
 ### Integration & Backend
 - [BCSRVSQLMQ_INTEGRATION.md](BCSRVSQLMQ_INTEGRATION.md) - Backend integration guide

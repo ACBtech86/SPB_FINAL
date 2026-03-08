@@ -18,7 +18,7 @@ IBMMQ_VERSION="${IBMMQ_VERSION:-9.3.0.0}"
 
 POSTGRESQL_PORT="5432"
 POSTGRESQL_USER="postgres"
-POSTGRESQL_PASSWORD="postgres"  # Change this!
+POSTGRESQL_PASSWORD="Rama1248"  # Change this!
 POSTGRESQL_DATABASES=("BCSPB" "BCSPBSTR" "BCSPB_TEST")
 
 IBM_MQ_QUEUE_MANAGER="QM.36266751.01"
@@ -33,7 +33,7 @@ IBM_MQ_QUEUES=(
     "QL.RES.SELIC.36266751.01"
 )
 
-GIT_REPOSITORY="https://github.com/yourusername/novo_spb.git"  # Update this!
+GIT_REPOSITORY="https://github.com/ACBtech86/SPB_FINAL.git"  # Update this!
 
 SKIP_IBMMQ=false
 SKIP_POSTGRESQL=false
