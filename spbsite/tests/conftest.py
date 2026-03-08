@@ -10,7 +10,7 @@ from httpx import ASGITransport, AsyncClient
 from passlib.hash import bcrypt
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.database import Base, get_db
+from app.database import Base, get_db, get_catalog_db
 from app.main import app
 from spb_shared.models import User
 from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField
@@ -24,24 +24,27 @@ from spb_shared.models import (
 )
 from spb_shared.models import Camaras, Fila
 
-# Use SQLite for testing (in-memory)
-TEST_DATABASE_URL = "sqlite+aiosqlite://"
-
-test_engine = create_async_engine(TEST_DATABASE_URL, echo=False)
-test_session = async_sessionmaker(test_engine, class_=AsyncSession, expire_on_commit=False)
+# Use PostgreSQL for testing (separate test database)
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:Rama1248@localhost:5432/BCSPB_TEST"
 
 
-@pytest_asyncio.fixture
+@pytest_asyncio.fixture(scope="function")
 async def db_session() -> AsyncGenerator[AsyncSession, None]:
     """Create tables and provide a test database session."""
-    async with test_engine.begin() as conn:
+    # Create engine per test to avoid event loop issues
+    engine = create_async_engine(TEST_DATABASE_URL, echo=False, pool_pre_ping=False, poolclass=None)
+    session_maker = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
+
+    async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
-    async with test_session() as session:
+    async with session_maker() as session:
         yield session
 
-    async with test_engine.begin() as conn:
+    async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.drop_all)
+
+    await engine.dispose()
 
 
 @pytest_asyncio.fixture
@@ -51,7 +54,11 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     async def override_get_db():
         yield db_session
 
+    async def override_get_catalog_db():
+        yield db_session
+
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_catalog_db] = override_get_catalog_db
 
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"
@@ -126,7 +133,7 @@ async def control_data(db_session: AsyncSession):
                      ultmsg="STR0003", dthr_ultmsg=datetime(2001, 3, 22, 14, 41)),
     ]
     bacen_rows = [
-        BacenControle(ispb="36266751", nome_ispb="Banco Local Bacen", msg_seq=50,
+        BacenControle(ispb="36266751", nome_ispb="Banco Local", msg_seq=50,
                        status_geral="N", dthr_eco=datetime(2001, 3, 22, 15, 0)),
         BacenControle(ispb="00038166", nome_ispb="BACEN Controle", msg_seq=60,
                        status_geral="S", dthr_eco=datetime(2001, 3, 22, 15, 5)),

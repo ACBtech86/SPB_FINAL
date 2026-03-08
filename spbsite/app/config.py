@@ -2,9 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    # Database
-    database_url: str = "postgresql+asyncpg://spbsite:password@localhost:5432/spbsite"
-    catalog_database_url: str = "sqlite+aiosqlite:///./spb_messages.db"
+    # Database (PostgreSQL only)
+    database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/BCSPB"
+    catalog_database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR"
 
     # App
     secret_key: str = "change-me-to-a-random-secret-key"
