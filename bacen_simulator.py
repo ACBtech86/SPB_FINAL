@@ -1,7 +1,9 @@
-#!/usr/bin/env python3
 """
 BACEN Message Simulator
 Simulates Central Bank responses for SPB testing
+
+Usage:
+    py bacen_simulator.py
 """
 
 import asyncio

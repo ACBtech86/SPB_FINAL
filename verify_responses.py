@@ -1,5 +1,8 @@
-#!/usr/bin/env python3
-"""Verify BACEN simulator responses in database."""
+"""Verify BACEN simulator responses in database.
+
+Usage:
+    py verify_responses.py
+"""
 
 import asyncio
 import asyncpg
