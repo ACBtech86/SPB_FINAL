@@ -3,7 +3,6 @@ from pathlib import Path
 from fastapi import FastAPI, Request
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.config import settings
@@ -19,9 +18,6 @@ app.add_middleware(SessionMiddleware, secret_key=settings.secret_key)
 
 # Static files
 app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
-
-# Jinja2 templates (shared instance)
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
 
 
 @app.exception_handler(AuthRequired)

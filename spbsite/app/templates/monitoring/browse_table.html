@@ -51,9 +51,9 @@
                     {% if direction == 'inbound' %}
                     <td>
                         {% if row.cod_msg and row.cod_msg not in ('REPORT', 'ERRO') %}
-                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row.id }}" class="btn-msg">{{ row.cod_msg }}</a>
+                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row | composite_key }}" class="btn-msg">{{ row.cod_msg }}</a>
                         {% elif row.cod_msg == 'REPORT' or row.cod_msg == 'ERRO' %}
-                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row.id }}" class="btn-msg btn-report">{{ row.cod_msg }}</a>
+                        <a href="/viewer/{{ 'spb_bacen_to_local' if channel != 'selic' else 'spb_selic_to_local' }}/{{ row | composite_key }}" class="btn-msg btn-report">{{ row.cod_msg }}</a>
                         {% else %}
                         {{ row.cod_msg or '' }}
                         {% endif %}

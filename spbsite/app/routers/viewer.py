@@ -6,12 +6,12 @@ Replaces ShwMsg.asp and ReportMsg.asp.
 from datetime import datetime
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.dependencies import get_current_user
+from app.templates_config import templates
 from spb_shared.models import (
     User,
     SPBBacenToLocal,
@@ -23,7 +23,6 @@ from spb_shared.models import (
 from app.services.xml_utils import parse_xml, xml_to_tree
 
 router = APIRouter(prefix="/viewer", tags=["viewer"])
-templates = Jinja2Templates(directory="app/templates")
 
 # Allowed tables for XML viewing (prevent SQL injection)
 ALLOWED_TABLES = {

@@ -8,17 +8,16 @@ Note: Form catalog operations use catalog_db (spb_messages.db).
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db, get_catalog_db
 from app.dependencies import get_current_user
+from app.templates_config import templates
 from spb_shared.models import User
 from app.services.form_engine import get_message_types, load_form, validate_form
 from app.services.xml_builder import build_spb_xml, submit_message
 
 router = APIRouter(prefix="/messages", tags=["messages"])
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/select", response_class=HTMLResponse)

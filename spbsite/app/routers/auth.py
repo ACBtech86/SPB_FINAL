@@ -1,16 +1,14 @@
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 from passlib.hash import bcrypt
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
+from app.templates_config import templates
 from spb_shared.models import User
 
 router = APIRouter(tags=["auth"])
-
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/login", response_class=HTMLResponse)

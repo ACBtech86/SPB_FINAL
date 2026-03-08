@@ -5,11 +5,11 @@ Replaces SPB/pr_calc3.asp, SPB/Atualiza.asp, SPB/Mostra.asp.
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.dependencies import get_current_user
+from app.templates_config import templates
 from spb_shared.models import User
 from app.services.queue_manager import (
     get_balance_summary,
@@ -20,7 +20,6 @@ from app.services.queue_manager import (
 from app.services.xml_utils import format_currency_br, parse_xml, xml_to_tree
 
 router = APIRouter(prefix="/queue", tags=["queue"])
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("", response_class=HTMLResponse)

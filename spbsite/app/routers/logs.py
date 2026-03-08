@@ -5,16 +5,15 @@ Replaces bwseSPBLOG.asp, bwseLOGBacen.asp, bwseLOGSelic.asp.
 
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import get_db
 from app.dependencies import get_current_user
+from app.templates_config import templates
 from spb_shared.models import User
 from app.services.monitoring import get_logs
 
 router = APIRouter(prefix="/logs", tags=["logs"])
-templates = Jinja2Templates(directory="app/templates")
 
 
 @router.get("/{channel}", response_class=HTMLResponse)
