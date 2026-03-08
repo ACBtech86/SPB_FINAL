@@ -518,7 +518,6 @@ pytest tests/ -v
 
 ### Project Management
 - [PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md) - Cleanup summary
-- [CLEANUP_PLAN.md](CLEANUP_PLAN.md) - Cleanup planning
 
 ### Reference
 - [HSM_Guide.pdf](HSM_Guide.pdf) - HSM documentation
