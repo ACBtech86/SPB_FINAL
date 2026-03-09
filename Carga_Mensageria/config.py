@@ -8,12 +8,13 @@ Set these values or use environment variables:
 import os
 
 # PostgreSQL connection settings
+# Using unified catalog database (shared across all SPB projects)
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": os.getenv("DB_PORT", "5432"),
-    "database": os.getenv("DB_NAME", "spb_mensageria"),
+    "database": os.getenv("DB_NAME", "spb_catalog"),  # Unified catalog
     "user": os.getenv("DB_USER", "postgres"),
-    "password": os.getenv("DB_PASSWORD", ""),
+    "password": os.getenv("DB_PASSWORD", "Rama1248"),  # Set password
 }
 
 # Default ISPB for Banco Cidade
