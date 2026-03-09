@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """
-Load SPB message catalog data from XSD schemas into PostgreSQL database.
+Load SPB message catalog data from XSD schemas into the unified catalog database.
 
-This script adapts the import_from_xsd.py from Carga_Mensageria to work with PostgreSQL
-instead of SQLite, populating the catalog tables created by setup_database.py.
+NOTE: The preferred way to manage catalog data is via Carga_Mensageria (main.py).
+This script is provided as a standalone alternative for BCSrvSqlMq environments
+where Carga_Mensageria is not available.
+
+Target database: spb_catalog (unified catalog)
 
 Tables populated:
   - SPB_MENSAGEM     - Message definitions
@@ -22,11 +25,11 @@ import xml.etree.ElementTree as ET
 import psycopg2
 from psycopg2 import sql
 
-# Database configuration
+# Database configuration - unified catalog
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'bcspbstr',
+    'dbname': 'spb_catalog',
     'user': 'postgres',
     'password': 'Rama1248',
 }

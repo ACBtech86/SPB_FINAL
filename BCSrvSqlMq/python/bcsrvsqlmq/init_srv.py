@@ -58,6 +58,7 @@ class CInitSrv(CNTService):
         self.m_DBPort = 5432
         self.m_DBUserName = 'postgres'
         self.m_DBPassword = ''
+        self.m_DBCatalogName = 'spb_catalog'
         self.m_DbTbControle = 'CONTROLE'
         self.m_DbTbStrLog = 'BCIDADE_STR_LOG'
         self.m_DbTbBacenCidadeApp = 'BACEN_TO_BCIDADE_APP'
@@ -244,6 +245,7 @@ class CInitSrv(CNTService):
         self.m_DBPort = get_int('DataBase', 'DBPort', 5432)
         self.m_DBUserName = get_str('DataBase', 'DBUserName', 'postgres')
         self.m_DBPassword = get_str('DataBase', 'DBPassword', '')
+        self.m_DBCatalogName = get_str('DataBase', 'DBCatalogName', 'spb_catalog')
         self.m_DbTbControle = get_str('DataBase', 'DbTbControle', 'CONTROLE')
         self.m_DbTbStrLog = get_str('DataBase', 'DbTbStrLog', 'BCIDADE_STR_LOG')
         self.m_DbTbBacenCidadeApp = get_str('DataBase', 'DbTbBacenCidadeApp',
@@ -357,6 +359,7 @@ class CInitSrv(CNTService):
         set_val('DataBase', 'DBPort', self.m_DBPort)
         set_val('DataBase', 'DBUserName', self.m_DBUserName)
         set_val('DataBase', 'DBPassword', self.m_DBPassword)
+        set_val('DataBase', 'DBCatalogName', self.m_DBCatalogName)
         set_val('DataBase', 'DbTbControle', self.m_DbTbControle)
         set_val('DataBase', 'DbTbStrLog', self.m_DbTbStrLog)
         set_val('DataBase', 'DbTbBacenCidadeApp', self.m_DbTbBacenCidadeApp)

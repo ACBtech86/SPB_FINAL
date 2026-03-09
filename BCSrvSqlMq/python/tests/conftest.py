@@ -42,6 +42,7 @@ def sample_ini(tmp_path):
         'DBPort': '5432',
         'DBUserName': 'testuser',
         'DBPassword': 'testpass',
+        'DBCatalogName': 'spb_catalog',
         'DbTbControle': 'spb_controle',
         'DbTbStrLog': 'spb_log_bacen',
         'DbTbBacenCidadeApp': 'spb_bacen_to_local',

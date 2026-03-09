@@ -10,7 +10,7 @@ from spb_shared import models  # noqa: F401
 engine = create_async_engine(settings.database_url, echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
-# Catalog database (spb_messages.db) - form catalog tables only
+# Catalog database (spb_catalog) - unified SPB message catalog
 catalog_engine = create_async_engine(settings.catalog_database_url, echo=False)
 catalog_async_session = async_sessionmaker(catalog_engine, class_=AsyncSession, expire_on_commit=False)
 

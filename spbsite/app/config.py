@@ -4,7 +4,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     # Database (PostgreSQL only)
     database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/BCSPB"
-    catalog_database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR"
+    catalog_database_url: str = "postgresql+asyncpg://postgres:password@localhost:5432/spb_catalog"
 
     # App
     secret_key: str = "change-me-to-a-random-secret-key"

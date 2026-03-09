@@ -10,7 +10,11 @@ DirAudFile=C:\BCSRVSQLMQ\Bacen\AuditFiles
 [DataBase]
 DBAliasName=BCSPBSTR
 DBServer=SRVCX077
-DBName=BCSPBSTR
+DBName=BCSPB
+DBPort=5432
+DBUserName=postgres
+DBPassword=
+DBCatalogName=spb_catalog
 DbTbStrLog=SPB_LOG_BACEN
 DbTbBacenCidadeApp=SPB_BACEN_TO_LOCAL
 DbTbCidadeBacenApp=SPB_LOCAL_TO_BACEN

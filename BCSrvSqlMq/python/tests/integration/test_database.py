@@ -13,11 +13,11 @@ except ImportError:
 pytestmark = pytest.mark.skipif(not HAS_PSYCOPG2, reason='psycopg2 not installed')
 
 
-# Database connection parameters - override via environment variables
+# Database connection parameters - operational database
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'bcspbstr',
+    'dbname': 'BCSPB',
     'user': 'postgres',
     'password': 'Rama1248',
 }
