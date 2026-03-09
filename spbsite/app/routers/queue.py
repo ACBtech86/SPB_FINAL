@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database import get_db
+from app.database import get_db, get_catalog_db
 from app.dependencies import get_current_user
 from app.templates_config import templates
 from spb_shared.models import User
@@ -26,10 +26,11 @@ router = APIRouter(prefix="/queue", tags=["queue"])
 async def queue_view(
     request: Request,
     db: AsyncSession = Depends(get_db),
+    catalog_db: AsyncSession = Depends(get_catalog_db),
     user: User = Depends(get_current_user),
 ):
     """Piloto STR - payment queue management page (replaces pr_calc3.asp)."""
-    messages = await get_pending_messages(db)
+    messages = await get_pending_messages(db, catalog_db)
     balance = await get_balance_summary(db)
 
     total_valor = sum(m["valor"] for m in messages)

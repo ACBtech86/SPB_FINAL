@@ -13,41 +13,45 @@ from spb_shared.models import SPBMensagem
 from spb_shared.models import Camaras, Fila
 
 
-async def get_pending_messages(db: AsyncSession) -> list[dict[str, Any]]:
+async def get_pending_messages(
+    db: AsyncSession, catalog_db: AsyncSession
+) -> list[dict[str, Any]]:
     """Get pending messages from the queue with descriptions.
 
     Replaces the JOIN query from pr_calc3.asp:
     SELECT Fila.*, SPB_MENSAGEM.MSG_DESCR FROM Fila
     INNER JOIN SPB_MENSAGEM ON Fila.Mensagem = SPB_MENSAGEM.MSG_ID
     ORDER BY Fila.Data
+
+    Uses two sessions because Fila is in BCSPB and SPBMensagem is in spb_catalog.
     """
-    query = (
-        select(
-            Fila.seq,
-            Fila.valor,
-            Fila.mensagem,
-            SPBMensagem.msg_descr,
-            Fila.status,
-            Fila.tipo,
-            Fila.contraparte,
-            Fila.data,
-            Fila.prdade,
-            Fila.msg_xml,
+    # 1) Query Fila from the operational database (BCSPB)
+    fila_query = select(Fila).order_by(Fila.data)
+    fila_result = await db.execute(fila_query)
+    fila_rows = fila_result.scalars().all()
+
+    if not fila_rows:
+        return []
+
+    # 2) Collect unique message codes and fetch descriptions from catalog (spb_catalog)
+    msg_codes = {row.mensagem for row in fila_rows if row.mensagem}
+    descr_map: dict[str, str] = {}
+    if msg_codes:
+        cat_query = select(SPBMensagem.msg_id, SPBMensagem.msg_descr).where(
+            SPBMensagem.msg_id.in_(msg_codes)
         )
-        .join(SPBMensagem, Fila.mensagem == SPBMensagem.msg_id)
-        .order_by(Fila.data)
-    )
+        cat_result = await catalog_db.execute(cat_query)
+        for row in cat_result.all():
+            descr_map[row.msg_id] = row.msg_descr or ""
 
-    result = await db.execute(query)
-    rows = result.all()
-
+    # 3) Merge results
     messages = []
-    for row in rows:
+    for row in fila_rows:
         messages.append({
             "seq": row.seq,
             "valor": row.valor or Decimal("0"),
             "mensagem": row.mensagem,
-            "descr": row.msg_descr or "",
+            "descr": descr_map.get(row.mensagem, ""),
             "status": row.status,
             "tipo": row.tipo,
             "contraparte": row.contraparte,

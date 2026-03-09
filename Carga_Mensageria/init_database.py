@@ -154,6 +154,43 @@ CREATE TABLE IF NOT EXISTS "SPB_XMLXSL" (
     "form_xml"        TEXT,
     "form_xsl"        TEXT
 );
+
+
+-- =====================================================================
+-- COMPATIBILITY VIEWS (used by SPBSite / spb-shared SQLAlchemy models)
+-- =====================================================================
+
+-- Lowercase view over SPB_MENSAGEM
+CREATE OR REPLACE VIEW spb_mensagem_view AS
+SELECT
+    "MSG_ID"            AS msg_id,
+    "MSG_DESCR"         AS msg_descr
+FROM "SPB_MENSAGEM";
+
+-- Lowercase view over SPB_MSGFIELD (with synthetic id and cod_grade)
+CREATE OR REPLACE VIEW spb_msgfield_view AS
+SELECT
+    ROW_NUMBER() OVER (ORDER BY "MSG_ID", "MSG_SEQ") AS id,
+    NULL::VARCHAR(50)   AS cod_grade,
+    "MSG_ID"            AS msg_id,
+    "MSG_TAG"           AS msg_tag,
+    "MSG_DESCR"         AS msg_descr,
+    "MSG_EMISSOR"       AS msg_emissor,
+    "MSG_DESTINATARIO"  AS msg_destinatario,
+    CAST("MSG_SEQ" AS INTEGER) AS msg_seq,
+    "MSG_CPOTAG"        AS msg_cpotag,
+    "MSG_CPONOME"       AS msg_cponome,
+    "MSG_CPOOBRIG"      AS msg_cpoobrig
+FROM "SPB_MSGFIELD";
+
+-- Lowercase view over SPB_DICIONARIO
+CREATE OR REPLACE VIEW spb_dicionario_view AS
+SELECT
+    "MSG_CPOTAG"        AS msg_cpotag,
+    "MSG_CPOTIPO"       AS msg_cpotipo,
+    "MSG_CPOTAM"        AS msg_cpotam,
+    "MSG_CPOFORMATO"    AS msg_cpoform
+FROM "SPB_DICIONARIO";
 """
 
 
