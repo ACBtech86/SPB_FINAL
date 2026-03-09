@@ -1,128 +1,67 @@
-# Unified Catalog Migration - Session Notes
+# SPB Database Consolidation - Session Notes
 **Date:** 2026-03-09
-**Status:** ALL TASKS COMPLETED - All projects using unified spb_catalog
+**Status:** ALL COMPLETE - Single database `banuxSPB`
 
-## FINAL RESULT
+## CURRENT STATE
 
-**Database:** `spb_catalog` on PostgreSQL
-**Total rows imported:** 17,897
+**Database:** `banuxSPB` on PostgreSQL (single database for everything)
+**Total catalog rows:** 17,897
 
-| Table | Rows | Status |
-|-------|------|--------|
-| SPB_MENSAGEM | 1,093 | Populated |
-| SPB_DICIONARIO | 2,363 | Populated |
-| SPB_MSGFIELD | 14,489 | Populated |
-| SPB_XMLXSL | 0 | Generate via Etapa A |
-| PLAN_MENSAGEM | 1,093 | Populated |
-| PLAN_EVENTO | 1,093 | Populated |
-| PLAN_Mensagem_Dados | 14,489 | Populated |
-| PLAN_DADOS | 2,363 | Populated |
-| PLAN_TIPOLOGIA | 1,128 | Populated |
+| Table | Rows | Type |
+|-------|------|------|
+| SPB_MENSAGEM | 1,093 | Catalog |
+| SPB_DICIONARIO | 2,363 | Catalog |
+| SPB_MSGFIELD | 14,489 | Catalog |
+| SPB_XMLXSL | 0 | Catalog (generate via Etapa A) |
+| PLAN_MENSAGEM | 1,093 | Catalog |
+| PLAN_EVENTO | 1,093 | Catalog |
+| PLAN_Mensagem_Dados | 14,489 | Catalog |
+| PLAN_DADOS | 2,363 | Catalog |
+| PLAN_TIPOLOGIA | 1,128 | Catalog |
+| spb_log_bacen | 0 | Operational |
+| spb_bacen_to_local | 0 | Operational |
+| spb_local_to_bacen | 0 | Operational |
+| spb_controle | 1 | Operational |
 
-**Resolution:** Updated schema to use quoted uppercase identifiers to preserve PostgreSQL case sensitivity.
+**Views:** `spb_mensagem_view`, `spb_msgfield_view`, `spb_dicionario_view`
+(lowercase aliases over quoted uppercase catalog tables, used by SPBSite SQLAlchemy models)
 
 ---
 
-## Git Commits (Pushed to origin)
+## Git Commits (All pushed to origin/main)
 
 ```
 3f739ff feat: Create unified SPB catalog database (spb_catalog)
 d6cac88 feat: Point BCSrvSqlMq and SPBSite to unified spb_catalog database
+6b72d59 fix: Add catalog compatibility views and fix cross-database JOIN
+b5aca7f feat: Consolidate to single banuxSPB database
 ```
 
 ---
 
-## What We Accomplished
-
-### Phase 1: Project Analysis
-- Analyzed Carga_Mensageria project structure
-- Identified duplicate catalog tables across 3 projects:
-  - **Carga_Mensageria** (ETL tool - 15 tables including PLAN_* and SPB_*)
-  - **BCSrvSqlMq** (Message processor - simplified catalog)
-  - **SPBSite** (Web interface - views only)
-
-### Phase 2: Cleaned Up Obsolete Code
-- **Removed:** `import_from_mdb.py` (obsolete Access database import)
-- **Reason:** XSD import from BCB is the current, maintained approach
-- **Updated:** README.md to reflect only XSD import method
-
-### Phase 3: PostgreSQL Migration
-- **Migrated FROM:** SQLite (BCSPBSTR.db)
-- **Migrated TO:** PostgreSQL
-- **Updated Files:**
-  - `config.py` - Now uses PostgreSQL connection
-  - `db_connection.py` - Uses psycopg (PostgreSQL driver)
-  - `init_database.py` - PostgreSQL schema
-  - `main.py` - Shows PostgreSQL connection info
-  - All SQL queries updated for PostgreSQL
-
-### Phase 4: Unified Catalog Design
-- **Created Files:**
-  - `create_unified_catalog.py` - Creates spb_catalog database
-  - `migrate_to_unified_catalog.py` - Migrates data between databases
-  - `UNIFIED_CATALOG_GUIDE.md` - Complete documentation
-  - `requirements.txt` - Python dependencies (psycopg)
-  - `.env.example` - Configuration template
-
-- **Database Created:** `spb_catalog`
-  - 6 core tables (spb_mensagem, spb_dicionario, spb_msgfield, spb_xmlxsl, spb_dominios, spb_ispb)
-  - 4 compatibility views (for SPBSite/BCSrvSqlMq)
-  - Foreign keys, indexes, audit timestamps
-
-### Phase 5: Configuration Updates
-- `config.py` now points to `spb_catalog`
-- Database: `spb_catalog` (unified catalog)
-
-### Phase 6: BCSrvSqlMq Updated (Session 2)
-- **INI config:** Added `dbcatalogname = spb_catalog`
-- **setup_database.py:** Changed to `DB_NAME = 'BCSPB'`, removed catalog tables (now in spb_catalog)
-- **init_srv.py:** Added `m_DBCatalogName` config property
-- **load_catalog_from_xsd.py:** Points to `spb_catalog`
-- **verify_db_config.py:** Rewritten to check both BCSPB and spb_catalog
-- **Tests:** Updated all DB references from `bcspbstr` to `BCSPB`
-
-### Phase 7: SPBSite Updated (Session 2)
-- **config.py:** `catalog_database_url` default changed to `spb_catalog`
-- **.env:** `CATALOG_DATABASE_URL` changed from `BCSPBSTR` to `spb_catalog`
-- **.env.example:** PostgreSQL examples updated
-- **database.py:** Comment updated
-
-## RESOLVED: PostgreSQL Case Sensitivity
-
-### Original Problem
-PostgreSQL automatically lowercases unquoted identifiers:
-- **Code expects:** `SPB_MENSAGEM`, `MSG_ID` (uppercase)
-- **PostgreSQL created:** `spb_mensagem`, `msg_id` (lowercase)
-
-### Resolution Applied
-**Chose Option 1:** Updated schema to use quoted uppercase identifiers
-
-**Actions Taken:**
-1. Dropped and recreated `spb_catalog` database
-2. Ran `init_database.py` with quoted identifiers
-3. Verified uppercase preservation in PostgreSQL
-4. Ran `import_from_xsd.py` successfully
-5. Imported 17,897 rows from spb_schemas.zip
-
 ## Database Architecture (Final)
 
 ```
-+-----------------------+     +------------------+
-|   spb_catalog         |     |   BCSPB          |
-|   (Unified Catalog)   |     |   (Operational)  |
-|                       |     |                  |
-|  "SPB_MENSAGEM"       |     | SPB_LOG_BACEN    |
-|  "SPB_DICIONARIO"     |     | SPB_BACEN_TO_LOCAL|
-|  "SPB_MSGFIELD"       |     | SPB_LOCAL_TO_BACEN|
-|  "SPB_XMLXSL"         |     | SPB_CONTROLE     |
-|  "PLAN_MENSAGEM"      |     +--------+---------+
-|  "PLAN_DADOS"         |              |
-|  "PLAN_EVENTO"        |     Used by BCSrvSqlMq
-|  "PLAN_TIPOLOGIA"     |     runtime only
-|  "PLAN_Mensagem_Dados"|
-+-----------+-----------+
++-----------------------------------------------+
+|                  banuxSPB                      |
+|                                                |
+|  CATALOG TABLES (quoted uppercase):            |
+|    "SPB_MENSAGEM"    "SPB_DICIONARIO"          |
+|    "SPB_MSGFIELD"    "SPB_XMLXSL"              |
+|    "PLAN_MENSAGEM"   "PLAN_DADOS"              |
+|    "PLAN_EVENTO"     "PLAN_TIPOLOGIA"          |
+|    "PLAN_Mensagem_Dados"  etc.                 |
+|                                                |
+|  COMPATIBILITY VIEWS (lowercase):              |
+|    spb_mensagem_view  spb_dicionario_view      |
+|    spb_msgfield_view                           |
+|                                                |
+|  OPERATIONAL TABLES (lowercase):               |
+|    spb_log_bacen      spb_bacen_to_local       |
+|    spb_local_to_bacen spb_controle             |
++-----------------------------------------------+
             |
-   Shared by all projects:
+    Used by all 3 projects:
             |
     +-------+--------+-----------+
     |                |           |
@@ -130,102 +69,123 @@ PostgreSQL automatically lowercases unquoted identifiers:
 | Carga   |  | BCSrvSql|  | SPBSite|
 | Mensag. |  | Mq      |  |        |
 |         |  |         |  |        |
-| WRITE   |  | READ    |  | READ   |
-+---------+  +---------+  +--------+
+| WRITE   |  | READ+   |  | READ   |
+| catalog |  | WRITE   |  |        |
++---------+  | operat. |  +--------+
+             +---------+
 ```
 
 ## Connection Details
 
 ```python
-# PostgreSQL Connection (Catalog)
-postgresql://postgres:Rama1248@localhost:5432/spb_catalog
+# Single connection for all projects
+postgresql://postgres:Rama1248@localhost:5432/banuxSPB
 
 # Async (for SPBSite)
-postgresql+asyncpg://postgres:Rama1248@localhost:5432/spb_catalog
-
-# Operational DB (BCSrvSqlMq runtime)
-postgresql://postgres:Rama1248@localhost:5432/BCSPB
+postgresql+asyncpg://postgres:Rama1248@localhost:5432/banuxSPB
 ```
 
 ## Key Files Reference
 
 ### Carga_Mensageria
-- `config.py` - Database connection (spb_catalog)
-- `init_database.py` - Create schema
-- `import_from_xsd.py` - Import from BCB XSD files
+- `config.py` - `database = "banuxSPB"`
+- `init_database.py` - Creates catalog tables + compatibility views
+- `import_from_xsd.py` - Populates catalog from BCB XSD schemas
 - `main.py` - Tkinter GUI
-- `etapas.py` - ETL business logic (12 steps)
 
 ### BCSrvSqlMq
-- `BCSrvSqlMq.ini` - Config with `dbcatalogname = spb_catalog`
-- `setup_database.py` - Creates BCSPB (operational only)
-- `python/bcsrvsqlmq/init_srv.py` - Reads `m_DBCatalogName`
-- `verify_db_config.py` - Checks both databases
+- `BCSrvSqlMq.ini` - `dbname = banuxSPB` (no separate catalog DB)
+- `setup_database.py` - Creates operational tables in banuxSPB
+- `python/bcsrvsqlmq/init_srv.py` - Single DB config
+- `verify_db_config.py` - Checks all tables in banuxSPB
 
 ### SPBSite
-- `app/config.py` - `catalog_database_url` -> spb_catalog
-- `.env` - Runtime config
-- `app/database.py` - Catalog engine connection
+- `app/config.py` - Single `database_url` -> banuxSPB
+- `.env` - `DATABASE_URL=postgresql+asyncpg://postgres:Rama1248@localhost:5432/banuxSPB`
+- `app/database.py` - Single engine, single `get_db()` (no catalog_db)
+- `app/routers/queue.py` - Simple JOIN (single DB session)
+- `app/routers/messages.py` - Uses `db` for both catalog and operational queries
 
-## Remaining Optional Tasks
+## How to Set Up on a New Machine
 
-1. **Generate SPB_XMLXSL** (Optional - can be done later)
-   ```bash
-   python main.py
-   # Click "Etapa A" to generate XML/XSL forms
-   ```
+```bash
+# 1. Create database
+psql -U postgres -c 'CREATE DATABASE "banuxSPB";'
 
-2. **Test All Applications End-to-End**
-   - Carga_Mensageria: `python main.py` (data imported successfully)
-   - BCSrvSqlMq: Test message processing with `verify_db_config.py`
-   - SPBSite: Test web interface
+# 2. Create operational tables
+cd BCSrvSqlMq
+PYTHONIOENCODING=utf-8 python setup_database.py
+
+# 3. Create catalog tables + views
+cd Carga_Mensageria
+pip install psycopg psycopg-binary
+python init_database.py
+
+# 4. Populate catalog data
+python import_from_xsd.py spb_schemas.zip
+
+# 5. (Optional) Generate XML/XSL forms
+python main.py  # Click "Etapa A"
+```
+
+## Known Issues
+
+### SPB_XMLXSL generation warning
+`import_from_xsd.py` Etapa A uses unquoted `SPB_XMLXSL` table name.
+PostgreSQL lowercases it to `spb_xmlxsl` which doesn't match the quoted `"SPB_XMLXSL"`.
+**Workaround:** Generate via `main.py` GUI (Etapa A button) instead.
+
+### Windows console emoji encoding
+`setup_database.py` prints emoji characters that fail on Windows cp1252 console.
+**Workaround:** Run with `PYTHONIOENCODING=utf-8 python setup_database.py`
+
+### PostgreSQL case sensitivity
+Catalog tables use quoted uppercase identifiers (`"SPB_MENSAGEM"`, `"MSG_ID"`).
+Operational tables use lowercase (`spb_controle`, `spb_log_bacen`).
+Compatibility views bridge the gap for SPBSite SQLAlchemy models.
 
 ## Troubleshooting
 
 ### Case Sensitivity Errors
 ```
-ERROR: column "MSG_ID" does not exist
 ERROR: relation "SPB_MENSAGEM" does not exist
 ```
 **Solution:** Use quoted identifiers: `SELECT "MSG_ID" FROM "SPB_MENSAGEM"`
 
-### Import Fails
+### Module Not Found
 ```
 ERROR: No module named 'psycopg'
 ```
-**Solution:** `pip install -r requirements.txt`
+**Solution:** `pip install psycopg psycopg-binary`
 
-### Connection Fails
+### Database Does Not Exist
 ```
-ERROR: database "spb_catalog" does not exist
+ERROR: database "banuxSPB" does not exist
 ```
-**Solution:** `python create_unified_catalog.py`
+**Solution:** `psql -U postgres -c 'CREATE DATABASE "banuxSPB";'`
 
 ---
 
-## Session Summary
+## Session History
 
-**Session 1 Date:** 2026-03-09
+**Session 1 (2026-03-09):**
 - Created spb_catalog, migrated Carga_Mensageria to PostgreSQL
 - Populated 17,897 rows
 
-**Session 2 Date:** 2026-03-09
-- Updated BCSrvSqlMq: operational DB = BCSPB, catalog = spb_catalog
-- Updated SPBSite: catalog_database_url -> spb_catalog
-- Committed and pushed both commits to origin
+**Session 2 (2026-03-09):**
+- Updated BCSrvSqlMq and SPBSite to use spb_catalog
+- Committed and pushed
 
-**Session 3 Date:** 2026-03-09
-- Fixed SPBSite compatibility issues with spb_catalog:
-  1. Added compatibility views to `init_database.py`: `spb_mensagem_view`, `spb_msgfield_view`, `spb_dicionario_view`
-     - Map quoted uppercase table columns to lowercase aliases expected by spb-shared SQLAlchemy models
-     - `spb_msgfield_view` includes synthetic `id` (ROW_NUMBER) and NULL `cod_grade` columns
-     - `spb_dicionario_view` maps `MSG_CPOFORMATO` -> `msg_cpoform`
-  2. Fixed cross-database JOIN in `spbsite/app/services/queue_manager.py`
-     - `Fila` (BCSPB) cannot JOIN with `SPBMensagem` (spb_catalog) in a single session
-     - Split into two queries: fetch Fila rows from BCSPB, then batch-lookup descriptions from spb_catalog
-     - Updated `get_pending_messages()` signature to accept both `db` and `catalog_db` sessions
-  3. Updated `spbsite/app/routers/queue.py` to inject `catalog_db` dependency
+**Session 3 (2026-03-09):**
+- Added compatibility views for SPBSite models
+- Fixed cross-database JOIN in queue_manager.py
+
+**Session 4 (2026-03-09):**
+- Consolidated everything into single database `banuxSPB`
+- Removed separate catalog_database_url, catalog_engine, get_catalog_db
+- Reverted queue_manager.py to simple JOIN (single DB)
+- Created banuxSPB, ran setup_database.py + init_database.py + import_from_xsd.py
+- All 22 tables/views created, 17,897 catalog rows populated
 
 **Status:** ALL COMPLETE
-**Blocker:** None
-**Git:** 2 commits pushed to origin/main (session 3 changes pending commit)
+**Git:** 4 commits pushed to origin/main
