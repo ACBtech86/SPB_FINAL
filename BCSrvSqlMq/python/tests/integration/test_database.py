@@ -17,7 +17,7 @@ pytestmark = pytest.mark.skipif(not HAS_PSYCOPG2, reason='psycopg2 not installed
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'BCSPB',
+    'dbname': 'banuxSPB',
     'user': 'postgres',
     'password': 'Rama1248',
 }

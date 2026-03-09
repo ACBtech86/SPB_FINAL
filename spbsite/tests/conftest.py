@@ -10,7 +10,7 @@ from httpx import ASGITransport, AsyncClient
 from passlib.hash import bcrypt
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
-from app.database import Base, get_db, get_catalog_db
+from app.database import Base, get_db
 from app.main import app
 from spb_shared.models import User
 from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField
@@ -25,7 +25,7 @@ from spb_shared.models import (
 from spb_shared.models import Camaras, Fila
 
 # Use PostgreSQL for testing (separate test database)
-TEST_DATABASE_URL = "postgresql+asyncpg://postgres:Rama1248@localhost:5432/BCSPB_TEST"
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:Rama1248@localhost:5432/banuxSPB_TEST"
 
 
 @pytest_asyncio.fixture(scope="function")
@@ -54,11 +54,7 @@ async def client(db_session: AsyncSession) -> AsyncGenerator[AsyncClient, None]:
     async def override_get_db():
         yield db_session
 
-    async def override_get_catalog_db():
-        yield db_session
-
     app.dependency_overrides[get_db] = override_get_db
-    app.dependency_overrides[get_catalog_db] = override_get_catalog_db
 
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url="http://test"

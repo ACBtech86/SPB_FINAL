@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
 Complete database setup for BCSrvSqlMq
-Creates the operational database (BCSPB) and all required tables.
+Creates the operational database (banuxSPB) and all required tables.
 
-Catalog tables (SPB_MENSAGEM, SPB_DICIONARIO, SPB_MSGFIELD) are managed
-separately in the unified catalog database (spb_catalog) by Carga_Mensageria.
+Catalog tables (SPB_MENSAGEM, SPB_DICIONARIO, SPB_MSGFIELD) are populated
+by Carga_Mensageria into the same database.
 """
 import sys
 import psycopg2
@@ -18,7 +18,7 @@ DB_CONFIG = {
     'user': 'postgres',
     'password': 'Rama1248',
 }
-DB_NAME = 'BCSPB'
+DB_NAME = 'banuxSPB'
 
 def create_database():
     """Create the database if it doesn't exist."""
@@ -54,7 +54,7 @@ def create_database():
         return False
 
 def create_tables():
-    """Create operational tables (catalog tables are in spb_catalog)."""
+    """Create operational tables."""
     print("\n" + "=" * 70)
     print("Step 2: Creating Operational Tables")
     print("=" * 70)
@@ -158,8 +158,7 @@ def create_tables():
         print("✅ Default control record inserted")
 
         # NOTE: Catalog tables (SPB_MENSAGEM, SPB_DICIONARIO, SPB_MSGFIELD)
-        # are now in the unified catalog database (spb_catalog),
-        # managed by Carga_Mensageria.
+        # are populated by Carga_Mensageria into this same database.
 
         cur.close()
         conn.close()
@@ -240,7 +239,7 @@ def main():
     print("\nYou can now:")
     print("  1. Run the BCSrvSqlMq application")
     print("  2. Test database connection with verify_db_config.py")
-    print(f"\nNote: Catalog tables are in the unified 'spb_catalog' database.")
+    print(f"\nNote: Run Carga_Mensageria to populate catalog tables.")
     print("=" * 70)
 
 if __name__ == '__main__':

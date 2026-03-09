@@ -11,7 +11,7 @@ Usage:
 
 Prerequisites:
     - PostgreSQL running on localhost:5432
-    - Database 'BCSPB' with operational tables created
+    - Database 'banuxSPB' with operational tables created
     - Update DB_CONFIG below with your credentials
 """
 
@@ -29,7 +29,7 @@ except ImportError:
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'BCSPB',
+    'dbname': 'banuxSPB',
     'user': 'postgres',
     'password': 'Rama1248',
 }

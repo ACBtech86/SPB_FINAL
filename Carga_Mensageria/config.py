@@ -12,7 +12,7 @@ import os
 DB_CONFIG = {
     "host": os.getenv("DB_HOST", "localhost"),
     "port": os.getenv("DB_PORT", "5432"),
-    "database": os.getenv("DB_NAME", "spb_catalog"),  # Unified catalog
+    "database": os.getenv("DB_NAME", "banuxSPB"),
     "user": os.getenv("DB_USER", "postgres"),
     "password": os.getenv("DB_PASSWORD", "Rama1248"),  # Set password
 }

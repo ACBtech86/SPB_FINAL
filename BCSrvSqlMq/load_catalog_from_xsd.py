@@ -6,7 +6,7 @@ NOTE: The preferred way to manage catalog data is via Carga_Mensageria (main.py)
 This script is provided as a standalone alternative for BCSrvSqlMq environments
 where Carga_Mensageria is not available.
 
-Target database: spb_catalog (unified catalog)
+Target database: banuxSPB
 
 Tables populated:
   - SPB_MENSAGEM     - Message definitions
@@ -25,11 +25,11 @@ import xml.etree.ElementTree as ET
 import psycopg2
 from psycopg2 import sql
 
-# Database configuration - unified catalog
+# Database configuration
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'dbname': 'spb_catalog',
+    'dbname': 'banuxSPB',
     'user': 'postgres',
     'password': 'Rama1248',
 }

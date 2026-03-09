@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Verify database configuration from BCSrvSqlMq.ini
-Checks both the operational database (BCSPB) and catalog database (spb_catalog).
+Checks that banuxSPB has both operational and catalog tables.
 """
 import configparser
 import os
@@ -16,33 +16,31 @@ def verify_database():
 
     # Get database settings
     db_server = config.get('DataBase', 'DBServer', fallback='localhost')
-    db_name = config.get('DataBase', 'DBName', fallback='BCSPB')
+    db_name = config.get('DataBase', 'DBName', fallback='banuxSPB')
     db_port = config.getint('DataBase', 'DBPort', fallback=5432)
     db_user = config.get('DataBase', 'DBUserName', fallback='postgres')
     db_password = config.get('DataBase', 'DBPassword', fallback='Rama1248')
-    db_catalog = config.get('DataBase', 'DBCatalogName', fallback='spb_catalog')
 
     print("=" * 70)
     print("Database Configuration Verification")
     print("=" * 70)
-    print(f"Server:           {db_server}:{db_port}")
-    print(f"User:             {db_user}")
-    print(f"Operational DB:   {db_name}")
-    print(f"Catalog DB:       {db_catalog}")
+    print(f"Server:     {db_server}:{db_port}")
+    print(f"User:       {db_user}")
+    print(f"Database:   {db_name}")
     print("=" * 70)
 
     success = True
 
-    # --- Verify operational database (BCSPB) ---
-    print(f"\n--- Operational Database: {db_name} ---")
     try:
         conn = psycopg2.connect(
             host=db_server, port=db_port,
             dbname=db_name, user=db_user, password=db_password,
         )
-        print(f"  Connected to: {db_name}\n")
+        print(f"\nConnected to: {db_name}\n")
         cur = conn.cursor()
 
+        # Operational tables
+        print("--- Operational Tables ---")
         operational_tables = [
             ('SPB_LOG_BACEN', 'Log table'),
             ('SPB_BACEN_TO_LOCAL', 'Bacen to Local messages'),
@@ -59,33 +57,8 @@ def verify_database():
                 print(f"  {table_name:25} - Error: {e}")
                 conn.rollback()
 
-        # Show SPB_CONTROLE data
-        try:
-            cur.execute("SELECT ispb, nome_ispb, status_geral FROM SPB_CONTROLE")
-            rows = cur.fetchall()
-            if rows:
-                print(f"\n  SPB_CONTROLE data:")
-                for row in rows:
-                    print(f"    ISPB: {row[0]}, Name: {row[1]}, Status: {row[2]}")
-        except Exception:
-            conn.rollback()
-
-        cur.close()
-        conn.close()
-    except psycopg2.Error as e:
-        print(f"  Connection failed: {e}")
-        success = False
-
-    # --- Verify catalog database (spb_catalog) ---
-    print(f"\n--- Catalog Database: {db_catalog} ---")
-    try:
-        conn = psycopg2.connect(
-            host=db_server, port=db_port,
-            dbname=db_catalog, user=db_user, password=db_password,
-        )
-        print(f"  Connected to: {db_catalog}\n")
-        cur = conn.cursor()
-
+        # Catalog tables (quoted uppercase)
+        print("\n--- Catalog Tables ---")
         catalog_tables = [
             ('SPB_MENSAGEM', 'Message catalog'),
             ('SPB_DICIONARIO', 'Data dictionary'),
@@ -100,6 +73,17 @@ def verify_database():
             except Exception as e:
                 print(f"  {table_name:25} - Error: {e}")
                 conn.rollback()
+
+        # Show SPB_CONTROLE data
+        try:
+            cur.execute("SELECT ispb, nome_ispb, status_geral FROM SPB_CONTROLE")
+            rows = cur.fetchall()
+            if rows:
+                print(f"\n  SPB_CONTROLE data:")
+                for row in rows:
+                    print(f"    ISPB: {row[0]}, Name: {row[1]}, Status: {row[2]}")
+        except Exception:
+            conn.rollback()
 
         cur.close()
         conn.close()
