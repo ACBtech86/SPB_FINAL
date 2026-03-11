@@ -45,7 +45,7 @@ async def simulate_bacen_response(nu_ope: str, request_xml: str) -> tuple:
         cod_msg = cod_msg_elem.text if cod_msg_elem is not None else 'UNKNOWN'
 
         # Generate response message code (append R1 for response)
-        response_code = f"{cod_msg}R1" if not cod_msg.endswith('R1') else cod_msg
+        response_code = f"{cod_msg}R1" if cod_msg is None or not cod_msg.endswith('R1') else cod_msg
 
         # Build response XML
         response_xml = f'''<?xml version="1.0"?>
@@ -131,7 +131,7 @@ async def process_pending_messages():
             request_xml = msg['msg']
             db_datetime = msg['db_datetime']
 
-            print(f"[PROCESSING] Message:")
+            print("[PROCESSING] Message:")
             print(f"   Operation: {nu_ope}")
             print(f"   DateTime: {db_datetime}")
             print(f"   XML length: {len(request_xml)} bytes")
@@ -165,15 +165,15 @@ async def process_pending_messages():
                         mq_header, security_header, response_nu_ope, response_xml,
                         response_code, 'S', 'N', 'QL.REQ.00038166.36266751.01', response_datetime)
 
-                    print(f"[SUCCESS] Response generated:")
+                    print("[SUCCESS] Response generated:")
                     print(f"   Response Operation: {response_nu_ope}")
-                    print(f"   Stored in: spb_bacen_to_local")
+                    print("   Stored in: spb_bacen_to_local")
                     print(f"   XML length: {len(response_xml)} bytes")
 
                 except Exception as e:
                     print(f"[ERROR] Error storing response: {e}")
             else:
-                print(f"[ERROR] Failed to generate response")
+                print("[ERROR] Failed to generate response")
 
             print()
 
