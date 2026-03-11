@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-pencil-square"></i> Editar Perfil: {{ profile.name }}</h2>
+                <a href="/admin/profiles" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            {% if request.query_params.get('success') == '1' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> Permissões atualizadas com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0">Informações do Perfil</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>ID:</strong> {{ profile.id }}</p>
+                            <p><strong>Nome:</strong> {{ profile.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Descrição:</strong> {{ profile.description or '-' }}</p>
+                            <p><strong>Status:</strong>
+                                {% if profile.is_active %}
+                                <span class="badge bg-success">Ativo</span>
+                                {% else %}
+                                <span class="badge bg-secondary">Inativo</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Mensagens Permitidas ({{ allowed_msg_ids|length }} de {{ all_messages|length }})</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="/admin/profiles/{{ profile.id }}/permissions">
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="selectAll">
+                                <label class="form-check-label" for="selectAll">
+                                    <strong>Selecionar / Desselecionar Todas</strong>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="searchMessages" placeholder="Buscar mensagens...">
+                        </div>
+
+                        <div class="row" id="messagesList">
+                            {% for msg in all_messages %}
+                            <div class="col-md-3 message-item">
+                                <div class="form-check">
+                                    <input
+                                        class="form-check-input message-checkbox"
+                                        type="checkbox"
+                                        name="msg_ids"
+                                        value="{{ msg.msg_id }}"
+                                        id="msg_{{ msg.msg_id }}"
+                                        {% if msg.msg_id in allowed_msg_ids %}checked{% endif %}
+                                    >
+                                    <label class="form-check-label" for="msg_{{ msg.msg_id }}">
+                                        {{ msg.msg_id }}
+                                    </label>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-save"></i> Salvar Permissões
+                            </button>
+                            <a href="/admin/profiles" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Select/Deselect all checkboxes
+document.getElementById('selectAll').addEventListener('change', function() {
+    const checkboxes = document.querySelectorAll('.message-checkbox');
+    checkboxes.forEach(cb => cb.checked = this.checked);
+});
+
+// Search functionality
+document.getElementById('searchMessages').addEventListener('input', function(e) {
+    const searchTerm = e.target.value.toLowerCase();
+    const items = document.querySelectorAll('.message-item');
+
+    items.forEach(item => {
+        const label = item.querySelector('label').textContent.toLowerCase();
+        if (label.includes(searchTerm)) {
+            item.style.display = '';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+});
+</script>
+{% endblock %}
