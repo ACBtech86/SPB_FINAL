@@ -24,7 +24,9 @@ async def list_profiles(
 ):
     """List all user profiles."""
     result = await db.execute(
-        select(Profile).order_by(Profile.name)
+        select(Profile)
+        .options(selectinload(Profile.message_permissions))
+        .order_by(Profile.name)
     )
     profiles = list(result.scalars().all())
 
