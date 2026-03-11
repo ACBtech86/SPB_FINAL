@@ -1,115 +1,289 @@
-# SPB System Documentation
+# SPB System - Brazilian Payment System Integration
 
-Complete documentation for the Brazilian Payment System (SPB) integration system.
+Monorepo containing complete SPB (Sistema de Pagamentos Brasileiro) integration system for Finvest DTVM.
 
----
+## 🏗️ Repository Structure
 
-## 📚 Documentation Index
+```
+Novo_SPB/
+├── Docs/                # 📚 Complete documentation
+├── spb-shared/          # Shared database models package
+├── spbsite/             # Web interface (FastAPI)
+├── BCSrvSqlMq/          # Backend server (IBM MQ integration)
+├── Carga_Mensageria/    # Message catalog ETL tool
+└── README.md            # This file
+```
 
-### 🚀 Getting Started
+**📖 Full Documentation:** See [Docs/](Docs/) folder or start with [PROJECTS_OVERVIEW.md](Docs/PROJECTS_OVERVIEW.md)
 
-Start here if you're new to the SPB system:
+## 📦 Projects
 
-- **[PROJECTS_OVERVIEW.md](PROJECTS_OVERVIEW.md)** - Complete system overview and architecture
-- **[INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md)** - Full installation guide for all components
-- **[QUICK_INSTALL.md](QUICK_INSTALL.md)** - Quick installation for development
+### 1. spb-shared - Shared Models Package
 
-### ⚙️ Setup & Configuration
+Centralized SQLAlchemy models ensuring schema synchronization between all projects.
 
-- **[PYTHON312_SETUP.md](PYTHON312_SETUP.md)** - Python 3.12 environment setup
-- **[POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md)** - PostgreSQL database configuration
-- **[IBM_MQ_SETUP.md](IBM_MQ_SETUP.md)** - IBM MQ installation for Windows
-- **[IBM_MQ_SETUP_UBUNTU.md](IBM_MQ_SETUP_UBUNTU.md)** - IBM MQ installation for Ubuntu Server
-- **[VSCODE_GUIDE.md](VSCODE_GUIDE.md)** - VS Code workspace configuration
-- **[UBUNTU_DEPLOYMENT_GUIDE.md](UBUNTU_DEPLOYMENT_GUIDE.md)** - Ubuntu Server deployment with VS Code Remote
+**Technology**: Python 3.10+, SQLAlchemy 2.0, Alembic
 
-### 🔧 Integration & Backend
+**Key Features**:
+- Single source of truth for database schema
+- PostgreSQL database support
+- Automatic migrations via Alembic
+- Type-safe ORM models
 
-- **[BCSRVSQLMQ_INTEGRATION.md](BCSRVSQLMQ_INTEGRATION.md)** - BCSrvSqlMq integration guide
-- **[MIGRATION_GUIDE.md](MIGRATION_GUIDE.md)** - Database migration procedures
+**Installation**:
+```bash
+cd spb-shared
+pip install -e .
+```
 
-### ✅ Testing & Validation
+**Models**:
+- Messages: `SPBBacenToLocal`, `SPBSelicToLocal`, `SPBLocalToBacen`, `SPBLocalToSelic`
+- Control: `SPBControle`, `BacenControle`
+- Logs: `SPBLogBacen`, `SPBLogSelic`
+- Catalog: `SPBMensagem`, `SPBMsgField`, `SPBDicionario`
+- Queue: `Fila`, `Camaras`
+- Auth: `User`
 
-- **[E2E_TEST_EXECUTION_REPORT.md](E2E_TEST_EXECUTION_REPORT.md)** - ⭐ Latest E2E test execution report (2026-03-10)
-- **[E2E_TEST_PLAN.md](E2E_TEST_PLAN.md)** - End-to-end test plan
-- **[END_TO_END_TEST_REPORT.md](END_TO_END_TEST_REPORT.md)** - E2E test results
-- **[FULL_INTEGRATION_TEST.md](FULL_INTEGRATION_TEST.md)** - Full integration test documentation
-- **[INTEGRATION_SUCCESS_REPORT.md](INTEGRATION_SUCCESS_REPORT.md)** - Integration success report
-- **[ARCHITECTURE_VERIFICATION.md](ARCHITECTURE_VERIFICATION.md)** - Architecture validation
+### 2. SPBSite - Web Interface
 
-### 📊 Project Management
+FastAPI web application for SPB message management and monitoring.
 
-- **[PROJECT_CLEANUP_SUMMARY.md](PROJECT_CLEANUP_SUMMARY.md)** - Project cleanup summary
+**Technology**: FastAPI, Jinja2, Bootstrap 5, SQLAlchemy Async
 
----
+**Features**:
+- ✅ User authentication and authorization
+- ✅ Dynamic message form generation
+- ✅ Real-time monitoring dashboard
+- ✅ Message submission and tracking
+- ✅ Queue management
+- ✅ System logs viewer
+- ✅ XML message viewer
 
-## 📁 Project-Specific Documentation
+**Installation**:
+```bash
+cd spbsite
+pip install -r requirements.txt
+pip install -e ../spb-shared
 
-### Carga_Mensageria - Message Catalog ETL Tool
+# Seed database
+python -m app.seed
 
-- **[README.md](Carga_Mensageria/README.md)** - Project overview and usage guide
-- **[SESSION_NOTES.md](Carga_Mensageria/SESSION_NOTES.md)** - Database consolidation session notes
+# Run server
+uvicorn app.main:app --reload --port 8000
+```
 
-### BCSrvSqlMq - Backend MQ Service
+**Access**: http://localhost:8000
+**Default Login**: `admin` / `admin`
 
-- **[IBM_MQ_SETUP_GUIDE.md](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md)** - IBM MQ setup and configuration
-- **[SETUP_COMPLETE.md](BCSrvSqlMq/SETUP_COMPLETE.md)** - Setup completion checklist
-- **[SESSION_NOTES.md](BCSrvSqlMq/SESSION_NOTES.md)** - Development session notes
-- **[MESSAGE_FLOWS.md](BCSrvSqlMq/MESSAGE_FLOWS.md)** - Message flow documentation
-- **[MESSAGE_FLOW_TEST.md](BCSrvSqlMq/MESSAGE_FLOW_TEST.md)** - Message flow testing guide
-- **[MQ_QUICK_REFERENCE.md](BCSrvSqlMq/MQ_QUICK_REFERENCE.md)** - Quick reference for MQ operations
-- **[BACEN_AUTO_RESPONDER_INTEGRATION.md](BCSrvSqlMq/BACEN_AUTO_RESPONDER_INTEGRATION.md)** - BACEN auto-responder integration
-- **[SPBSITE_INTEGRATION.md](BCSrvSqlMq/SPBSITE_INTEGRATION.md)** - SPBSite integration documentation
-- **[COMPLETE_INTEGRATION_SUMMARY.md](BCSrvSqlMq/COMPLETE_INTEGRATION_SUMMARY.md)** - Complete integration summary
-- **[SESSION_HANDOFF.md](BCSrvSqlMq/SESSION_HANDOFF.md)** - Session handoff notes
+### 3. BCSrvSqlMq - Backend Server
 
-### SPBSite - Web Interface
+C++/Python hybrid service for IBM MQ message queue integration with SPB.
 
-- **[TEST_PLAN.md](SPBSite/TEST_PLAN.md)** - Testing plan and test cases
+**Technology**: Python 3.10+, psycopg2, IBM MQ Client
 
----
+**Features**:
+- ✅ IBM MQ queue management
+- ✅ Message routing (BACEN/SELIC)
+- ✅ PostgreSQL data persistence
+- ✅ Message acknowledgment tracking
+- ✅ Windows Service support
 
-## Quick Links
+**Installation**:
+```bash
+cd BCSrvSqlMq/python
+pip install -r requirements.txt
+pip install -e ../../spb-shared
 
-### By Role
+# Configure
+cp BCSrvSqlMq.ini.example BCSrvSqlMq.ini
+# Edit BCSrvSqlMq.ini with your settings
 
-**🆕 New Developer:**
-1. [INSTALLATION_GUIDE.md](INSTALLATION_GUIDE.md) - Install everything
-2. [PROJECTS_OVERVIEW.md](PROJECTS_OVERVIEW.md) - Understand the system
-3. [VSCODE_GUIDE.md](VSCODE_GUIDE.md) - Setup your IDE
+# Run
+python -m bcsrvsqlmq.main_srv
+```
 
-**🖥️ DevOps / Sysadmin:**
-1. [UBUNTU_DEPLOYMENT_GUIDE.md](UBUNTU_DEPLOYMENT_GUIDE.md) - Deploy on Ubuntu Server
-2. [POSTGRESQL_SETUP.md](POSTGRESQL_SETUP.md) - Configure database
-3. [IBM_MQ_SETUP.md](IBM_MQ_SETUP.md) - Setup message queue
+## 🚀 Quick Start
 
-**🧪 QA / Tester:**
-1. [E2E_TEST_PLAN.md](E2E_TEST_PLAN.md) - Test plan
-2. [FULL_INTEGRATION_TEST.md](FULL_INTEGRATION_TEST.md) - Integration testing
-3. [END_TO_END_TEST_REPORT.md](END_TO_END_TEST_REPORT.md) - Test results
+### Prerequisites
 
----
-
-## System Components
-
-### Main Projects
-- **spb-shared** - Shared database models (SQLAlchemy)
-- **spbsite** - Web interface (FastAPI)
-- **BCSrvSqlMq** - Message queue service (IBM MQ integration)
-- **Carga_Mensageria** - Message catalog ETL tool
-
-### Technologies
-- Python 3.10+
+- **Python 3.10 - 3.12** (3.13 not compatible with pymqi - see [PYTHON312_SETUP.md](Docs/PYTHON312_SETUP.md))
 - PostgreSQL 15+
-- FastAPI
-- IBM MQ
-- SQLAlchemy 2.0 (Async)
-- Alembic
+- IBM MQ Client 9.x (for BCSrvSqlMq)
+- Git
+- Visual Studio 2022 with C++ tools (for pymqi compilation)
+
+### Setup All Projects
+
+```bash
+# Clone repository
+git clone <repository-url>
+cd Novo_SPB
+
+# Install shared models
+cd spb-shared
+pip install -e .
+
+# Setup SPBSite
+cd ../spbsite
+pip install -r requirements.txt
+python -m app.seed
+uvicorn app.main:app --reload --port 8000 &
+
+# Setup BCSrvSqlMq
+cd ../BCSrvSqlMq/python
+pip install -r requirements.txt
+cp ../BCSrvSqlMq.ini.example ../BCSrvSqlMq.ini
+# Configure BCSrvSqlMq.ini
+python -m bcsrvsqlmq.main_srv
+```
+
+## 🔄 Database Schema Synchronization
+
+All projects share the same database schema via `spb-shared` package.
+
+**Making Schema Changes**:
+
+1. Edit models in `spb-shared/spb_shared/models/`
+2. Create migration:
+   ```bash
+   cd spb-shared
+   alembic revision --autogenerate -m "Description"
+   alembic upgrade head
+   ```
+3. Apply to other projects:
+   ```bash
+   cd ../spbsite
+   alembic upgrade head
+   
+   cd ../BCSrvSqlMq
+   alembic upgrade head
+   ```
+
+## 📊 Database Configuration
+
+### PostgreSQL Setup
+
+```bash
+# spbsite/.env
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPB
+CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR
+
+# BCSrvSqlMq.ini
+[Database]
+Server=localhost
+Port=5432
+Database=BCSPB
+DBAliasName=BCSPBSTR
+User=postgres
+Password=password
+```
+
+## 🧪 Testing
+
+```bash
+# SPBSite tests
+cd spbsite
+pytest tests/ -v
+
+# Expected: 89 tests passing
+```
+
+## 📚 Documentation
+
+**📁 Complete Documentation:** [Docs/](Docs/) folder
+
+**Quick Links:**
+- **[Projects Overview](Docs/PROJECTS_OVERVIEW.md)** - Complete system architecture and overview
+- **[Installation Guide](Docs/INSTALLATION_GUIDE.md)** - Full installation instructions
+- **[Quick Install](Docs/QUICK_INSTALL.md)** - Quick setup for development
+- **[Ubuntu Deployment](Docs/UBUNTU_DEPLOYMENT_GUIDE.md)** - Deploy on Ubuntu Server with VS Code Remote
+- **[Migration Guide](Docs/MIGRATION_GUIDE.md)** - Database migration instructions
+- **[BCSrvSqlMq Integration](Docs/BCSRVSQLMQ_INTEGRATION.md)** - Backend integration guide
+- **[IBM MQ Setup](BCSrvSqlMq/IBM_MQ_SETUP_GUIDE.md)** - MQ configuration guide
+
+**See [Docs/README.md](Docs/README.md) for complete documentation index.**
+
+## 🔐 Security
+
+- Session-based authentication
+- Password hashing with bcrypt
+- CSRF protection
+- SQL injection prevention via ORM
+- Input validation on all forms
+
+**Default Credentials** (⚠️ Change in production):
+- Username: `admin`
+- Password: `admin`
+
+## 🏢 System Architecture
+
+```
+┌─────────────┐         ┌──────────────┐         ┌─────────────┐
+│   SPBSite   │────────▶│  spb-shared  │◀────────│ BCSrvSqlMq  │
+│  (FastAPI)  │         │   (Models)   │         │  (MQ Srv)   │
+└─────────────┘         └──────────────┘         └─────────────┘
+      │                        │                        │
+      └────────────────────────┼────────────────────────┘
+                               ▼
+                        ┌──────────────┐         ┌─────────────┐
+                        │  PostgreSQL  │         │    IBM MQ   │
+                        │    BCSPB     │         │             │
+                        └──────────────┘         └─────────────┘
+```
+
+## 🛠️ Technology Stack
+
+| Component | Technology |
+|-----------|------------|
+| Backend Framework | FastAPI |
+| ORM | SQLAlchemy 2.0 (Async) |
+| Database | PostgreSQL |
+| Message Queue | IBM MQ |
+| Template Engine | Jinja2 |
+| Frontend | Bootstrap 5 |
+| Authentication | Session-based |
+| Migrations | Alembic |
+
+## 📝 Configuration
+
+### Environment Variables (SPBSite)
+
+```bash
+# .env
+DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPB
+CATALOG_DATABASE_URL=postgresql+asyncpg://postgres:password@localhost:5432/BCSPBSTR
+SECRET_KEY=your-secret-key-here
+ISPB_LOCAL=36266751
+ISPB_BACEN=00038166
+ISPB_SELIC=00038121
+```
+
+### BCSrvSqlMq Configuration
+
+See `BCSrvSqlMq/BCSrvSqlMq.ini.example`
+
+## 🤝 Contributing
+
+1. Create feature branch
+2. Make changes in appropriate project
+3. If schema changes: update `spb-shared` models
+4. Run tests
+5. Create pull request
+
+## 📄 License
+
+Proprietary - Finvest DTVM
+
+## 👥 Authors
+
+- Finvest DTVM Development Team
+- Built with assistance from Claude (Anthropic)
+
+## 📞 Support
+
+For issues or questions, contact the Finvest DTVM IT team.
 
 ---
 
-## Support
-
-For questions or issues, contact the Finvest DTVM IT team.
-
-**Last Updated:** March 10, 2026
+**Version**: 1.0.0  
+**Last Updated**: March 2026
