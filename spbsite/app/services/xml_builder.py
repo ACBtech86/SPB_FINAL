@@ -210,14 +210,14 @@ async def submit_message(
             db_datetime=now,
             msg=xml_string,
             status_msg="P",
-            flag_proc="N",
+            flag_proc="P",
             mq_qn_destino=queue_name,
         )
     else:
         record = SPBLocalToBacen(
             db_datetime=now,
             status_msg="P",
-            flag_proc="N",
+            flag_proc="P",
             mq_qn_destino=queue_name,
             nu_ope=nu_ope,
             cod_msg=msg_id,
