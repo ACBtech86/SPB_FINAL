@@ -15,7 +15,7 @@ from bcsrvsqlmq.thread_mq import CThreadMQ, connect_qmgr
 from bcsrvsqlmq.msg_sgr import (
     COMHDR, SECHDR, SECHDR_SIZE, MAXMSGLENGTH,
     ALG_RSA_2048, ALG_3DES_168, ALG_HASH_SHA256,
-    SECHDR_VERSION_V2, CA_SERPRO,
+    SECHDR_VERSION_CLEAR, SECHDR_VERSION_V2, CA_SERPRO,
 )
 from bcsrvsqlmq.db.bc_database import CBCDatabase
 from bcsrvsqlmq.db.if_app_rs import CIFAppRS
@@ -280,6 +280,8 @@ class CIFReq(CThreadMQ):
 
         if init_srv.m_SecurityEnable == 'S':
             sec_hdr.Versao = SECHDR_VERSION_V2
+        else:
+            sec_hdr.Versao = SECHDR_VERSION_CLEAR
             sec_hdr.CodErro = 0x00
             sec_hdr.AlgAssymKey = ALG_RSA_2048
             sec_hdr.AlgSymKey = ALG_3DES_168

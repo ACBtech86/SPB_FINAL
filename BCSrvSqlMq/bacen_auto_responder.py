@@ -25,6 +25,8 @@ sys.path.insert(0, PYTHON_DIR)
 import pymqi
 import pymqi.CMQC
 
+from bcsrvsqlmq.msg_sgr import SECHDR_SIZE
+
 # MQ Configuration
 QM_NAME = 'QM.36266751.01'
 CHANNEL = 'FINVEST.SVRCONN'
@@ -138,6 +140,21 @@ class BacenAutoResponder:
                     info['emissor'] = elem.text.strip()
                 elif tag == 'IdentdDestinatario' and elem.text:
                     info['destinatario'] = elem.text.strip()
+                # SPBDOC format: Id_Emissor / Id_Destinatario
+                elif tag == 'Id_Emissor' and elem.text:
+                    info['emissor'] = elem.text.strip()
+                elif tag == 'Id_Destinatario' and elem.text:
+                    info['destinatario'] = elem.text.strip()
+
+            # SPBDOC format: message type is the first child tag of SISMSG
+            if not info['cod_msg']:
+                sismsg = root.find('SISMSG')
+                if sismsg is not None:
+                    for child in sismsg:
+                        tag = child.tag.split('}')[-1]
+                        if not tag.startswith('/'):
+                            info['cod_msg'] = tag
+                            break
         except:
             pass
 
@@ -184,9 +201,9 @@ class BacenAutoResponder:
     def process_message(self, raw_msg: bytes, msg_id: bytes, correl_id: bytes) -> Optional[str]:
         """Process a single message and return response."""
         try:
-            # For now, assume clear text (no security header)
-            # In production, would need to handle SECHDR
-            xml_text = self.decode_payload(raw_msg)
+            # Skip SECHDR (always prepended, even in clear-text mode)
+            payload = raw_msg[SECHDR_SIZE:] if len(raw_msg) > SECHDR_SIZE else raw_msg
+            xml_text = self.decode_payload(payload)
 
             if not xml_text or '<' not in xml_text:
                 return None
@@ -247,11 +264,14 @@ class BacenAutoResponder:
         try:
             queue = pymqi.Queue(self.qmgr, queue_name, pymqi.CMQC.MQOO_OUTPUT)
 
-            # Encode response
-            payload = self.encode_payload(response_xml)
+            # Prepend clear-text SECHDR (RmtReq validates first 2 bytes as size marker)
+            from bcsrvsqlmq.msg_sgr import SECHDR, SECHDR_VERSION_CLEAR
+            sec_hdr = SECHDR()
+            sec_hdr.Versao = SECHDR_VERSION_CLEAR
+            sechdr_bytes = sec_hdr.pack()
 
-            # For testing, send as clear text (no SECHDR)
-            # In production, would add SECHDR
+            # Encode response XML as UTF-16BE
+            payload = sechdr_bytes + self.encode_payload(response_xml)
 
             # Create message descriptor
             md = pymqi.MD()

@@ -434,7 +434,7 @@ class CBacenReq(CThreadMQ):
             write_log(self.m_szTaskName, 8075, False)
             return True
 
-        hdr_size_val = int.from_bytes(bytes(self.m_buffermsg[0:2]), 'little')
+        hdr_size_val = int.from_bytes(bytes(self.m_buffermsg[0:2]), 'big')
         if hdr_size_val == SECHDR_V1_SIZE:
             actual_hdr_size = SECHDR_V1_SIZE
         else:

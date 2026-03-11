@@ -15,7 +15,7 @@ from bcsrvsqlmq.thread_mq import CThreadMQ, connect_qmgr
 from bcsrvsqlmq.msg_sgr import (
     COMHDR, SECHDR, SECHDR_SIZE, MAXMSGLENGTH,
     ALG_RSA_2048, ALG_3DES_168, ALG_HASH_SHA256,
-    SECHDR_VERSION_V2, CA_SERPRO,
+    SECHDR_VERSION_CLEAR, SECHDR_VERSION_V2, CA_SERPRO,
 )
 from bcsrvsqlmq.db.bc_database import CBCDatabase
 from bcsrvsqlmq.db.if_app_rs import CIFAppRS
@@ -270,6 +270,8 @@ class CIFRsp(CThreadMQ):
             sec_hdr.AlgHash = ALG_HASH_SHA256
             sec_hdr.CADest = CA_SERPRO
             sec_hdr.CALocal = CA_SERPRO
+        else:
+            sec_hdr.Versao = SECHDR_VERSION_CLEAR
 
         sec_packed = sec_hdr.pack()
         self.m_buffermsg[:SECHDR_SIZE] = sec_packed
