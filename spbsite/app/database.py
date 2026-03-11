@@ -6,7 +6,7 @@ from spb_shared.database import Base  # Import shared Base
 # Import all models to register them with Base
 from spb_shared import models  # noqa: F401
 
-# Single database (banuxSPB) - all tables (operational + catalog)
+# Single database (BanuxSPB) - all tables (operational + catalog)
 engine = create_async_engine(settings.database_url, echo=False)
 async_session = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 

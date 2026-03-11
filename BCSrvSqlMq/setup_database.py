@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Complete database setup for BCSrvSqlMq
-Creates the operational database (banuxSPB) and all required tables.
+Creates the operational database (BanuxSPB) and all required tables.
 
 Catalog tables (SPB_MENSAGEM, SPB_DICIONARIO, SPB_MSGFIELD) are populated
 by Carga_Mensageria into the same database.

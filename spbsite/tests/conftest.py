@@ -25,7 +25,7 @@ from spb_shared.models import (
 from spb_shared.models import Camaras, Fila
 
 # Use PostgreSQL for testing (separate test database)
-TEST_DATABASE_URL = "postgresql+asyncpg://postgres:Rama1248@localhost:5432/banuxSPB_TEST"
+TEST_DATABASE_URL = "postgresql+asyncpg://postgres:Rama1248@localhost:5432/BanuxSPB_TEST"
 
 
 @pytest_asyncio.fixture(scope="function")

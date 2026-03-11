@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Verify database configuration from BCSrvSqlMq.ini
-Checks that banuxSPB has both operational and catalog tables.
+Checks that BanuxSPB has both operational and catalog tables.
 """
 import configparser
 import os
@@ -16,7 +16,7 @@ def verify_database():
 
     # Get database settings
     db_server = config.get('DataBase', 'DBServer', fallback='localhost')
-    db_name = config.get('DataBase', 'DBName', fallback='banuxSPB')
+    db_name = config.get('DataBase', 'DBName', fallback='BanuxSPB')
     db_port = config.getint('DataBase', 'DBPort', fallback=5432)
     db_user = config.get('DataBase', 'DBUserName', fallback='postgres')
     db_password = config.get('DataBase', 'DBPassword', fallback='Rama1248')

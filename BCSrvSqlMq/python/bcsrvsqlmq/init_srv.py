@@ -239,8 +239,8 @@ class CInitSrv(CNTService):
 
         # [DataBase]
         self.m_DBServer = get_str('DataBase', 'DBServer', platform.node())
-        self.m_DBAliasName = get_str('DataBase', 'DBAliasName', 'banuxSPB')
-        self.m_DBName = get_str('DataBase', 'DBName', 'banuxSPB')
+        self.m_DBAliasName = get_str('DataBase', 'DBAliasName', 'BanuxSPB')
+        self.m_DBName = get_str('DataBase', 'DBName', 'BanuxSPB')
         self.m_DBPort = get_int('DataBase', 'DBPort', 5432)
         self.m_DBUserName = get_str('DataBase', 'DBUserName', 'postgres')
         self.m_DBPassword = get_str('DataBase', 'DBPassword', '')

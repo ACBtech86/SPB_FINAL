@@ -36,7 +36,7 @@ from pathlib import Path
 DB_CONFIG = {
     'host': 'localhost',
     'port': 5432,
-    'database': 'banuxSPB',
+    'database': 'BanuxSPB',
     'user': 'postgres',
     'password': 'Rama1248',
 }

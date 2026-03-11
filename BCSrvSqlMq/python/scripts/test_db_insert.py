@@ -11,7 +11,7 @@ Usage:
 
 Prerequisites:
     - PostgreSQL running on localhost:5432
-    - Database 'banuxSPB' with operational tables created
+    - Database 'BanuxSPB' with operational tables created
     - Update DB_CONFIG below with your credentials
 """
 
