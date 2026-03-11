@@ -1,6 +1,6 @@
 """SQLAlchemy models for SPB system."""
 
-from spb_shared.models.auth import User
+from spb_shared.models.auth import User, Profile, ProfileMessagePermission
 from spb_shared.models.catalog import SPBDicionario, SPBMensagem, SPBMsgField, SPBXmlXsl
 from spb_shared.models.control import BacenControle, SPBControle
 from spb_shared.models.logs import SPBLogBacen, SPBLogSelic
@@ -15,6 +15,8 @@ from spb_shared.models.queue import Camaras, Fila
 __all__ = [
     # Auth
     "User",
+    "Profile",
+    "ProfileMessagePermission",
     # Control
     "SPBControle",
     "BacenControle",
