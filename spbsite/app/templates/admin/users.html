@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Usuários{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-people"></i> Gerenciar Usuários</h2>
+                <a href="/admin/users/new" class="btn btn-primary">
+                    <i class="bi bi-person-plus"></i> Novo Usuário
+                </a>
+            </div>
+
+            {% if request.query_params.get('success') == 'created' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> Usuário criado com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% elif request.query_params.get('success') == 'updated' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> Perfil do usuário atualizado com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Usuário</th>
+                                <th>Perfil</th>
+                                <th>Status</th>
+                                <th>Criado em</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td>{{ u.id }}</td>
+                                <td><strong>{{ u.username }}</strong></td>
+                                <td>
+                                    <form method="POST" action="/admin/users/{{ u.id }}/profile" class="d-inline">
+                                        <select name="profile_id" class="form-select form-select-sm d-inline-block" style="width: auto; min-width: 200px;" onchange="this.form.submit()">
+                                            <option value="">Sem perfil</option>
+                                            {% for p in profiles %}
+                                            <option value="{{ p.id }}" {% if u.profile_id == p.id %}selected{% endif %}>
+                                                {{ p.name }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                </td>
+                                <td>
+                                    {% if u.is_active %}
+                                    <span class="badge bg-success">Ativo</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ u.created_at.strftime('%d/%m/%Y %H:%M') if u.created_at else '-' }}</td>
+                                <td>
+                                    {% if u.profile %}
+                                    <a href="/admin/profiles/{{ u.profile.id }}" class="btn btn-sm btn-outline-info" title="Ver permissões do perfil">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

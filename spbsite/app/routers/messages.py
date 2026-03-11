@@ -24,7 +24,7 @@ async def message_selector(
     user: User = Depends(get_current_user),
 ):
     """Message type selector dropdown (replaces msgmenu.asp)."""
-    msg_types = await get_message_types(db)
+    msg_types = await get_message_types(db, user)
     return templates.TemplateResponse(
         "messages/selector.html",
         {"request": request, "user": user, "msg_types": msg_types},
@@ -58,7 +58,7 @@ async def message_combined(
     user: User = Depends(get_current_user),
 ):
     """Combined page with selector and form (replaces separate selector/form pages)."""
-    msg_types = await get_message_types(db)
+    msg_types = await get_message_types(db, user)
     return templates.TemplateResponse(
         "messages/combined.html",
         {"request": request, "user": user, "msg_types": msg_types},

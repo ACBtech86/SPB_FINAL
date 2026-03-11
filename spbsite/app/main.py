@@ -7,7 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 
 from app.config import settings
 from app.dependencies import AuthRequired
-from app.routers import auth, logs, messages, monitoring, queue, viewer
+from app.routers import admin, auth, logs, messages, monitoring, queue, viewer
 
 BASE_DIR = Path(__file__).resolve().parent
 
@@ -59,6 +59,7 @@ async def test_viewer_fix():
 
 # Register routers
 app.include_router(auth.router)
+app.include_router(admin.router)
 app.include_router(monitoring.router)
 app.include_router(messages.router)
 app.include_router(queue.router)

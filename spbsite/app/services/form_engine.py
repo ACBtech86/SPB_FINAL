@@ -12,7 +12,7 @@ from typing import Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField, SPBXmlXsl
+from spb_shared.models import SPBDicionario, SPBMensagem, SPBMsgField, SPBXmlXsl, User, ProfileMessagePermission
 
 
 @dataclass
@@ -49,11 +49,31 @@ class ValidationResult:
     errors: list[str] = field(default_factory=list)
 
 
-async def get_message_types(db: AsyncSession) -> list[SPBMensagem]:
-    """Get all available message types for the selector dropdown."""
-    result = await db.execute(
-        select(SPBMensagem).order_by(SPBMensagem.msg_id)
+async def get_message_types(db: AsyncSession, user: Optional[User] = None) -> list[SPBMensagem]:
+    """Get available message types for the selector dropdown.
+
+    If user has a profile, filter messages based on profile permissions.
+    If user has no profile, return all messages.
+    """
+    # If user has no profile or profile_id is None, return all messages
+    if not user or not user.profile_id:
+        result = await db.execute(
+            select(SPBMensagem).order_by(SPBMensagem.msg_id)
+        )
+        return list(result.scalars().all())
+
+    # Filter messages based on user's profile permissions
+    query = (
+        select(SPBMensagem)
+        .join(
+            ProfileMessagePermission,
+            SPBMensagem.msg_id == ProfileMessagePermission.msg_id
+        )
+        .where(ProfileMessagePermission.profile_id == user.profile_id)
+        .order_by(SPBMensagem.msg_id)
     )
+
+    result = await db.execute(query)
     return list(result.scalars().all())
 
 

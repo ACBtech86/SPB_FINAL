@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar Perfis{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2><i class="bi bi-shield-lock"></i> Gerenciar Perfis de Usuário</h2>
+                <a href="/admin/profiles/new" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Novo Perfil
+                </a>
+            </div>
+
+            {% if request.query_params.get('success') == 'created' %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="bi bi-check-circle"></i> Perfil criado com sucesso!
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Mensagens Permitidas</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for profile in profiles %}
+                            <tr>
+                                <td>{{ profile.id }}</td>
+                                <td><strong>{{ profile.name }}</strong></td>
+                                <td>{{ profile.description or '-' }}</td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ profile.message_permissions|length }} mensagens
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if profile.is_active %}
+                                    <span class="badge bg-success">Ativo</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Inativo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a href="/admin/profiles/{{ profile.id }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
