@@ -429,6 +429,7 @@ document.getElementById('spbMessageForm').addEventListener('submit', async funct
     try {
         const response = await fetch('/messages/submit', {
             method: 'POST',
+            headers: { 'Accept': 'application/json' },
             body: formData
         });
 

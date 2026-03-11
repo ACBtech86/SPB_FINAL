@@ -201,11 +201,13 @@ async def submit_message(
     db: AsyncSession, xml_string: str, msg_id: str, nu_ope: str, dest_table: str, queue_name: str
 ) -> None:
     """Insert the generated message into the outbound table."""
+    now = datetime.now()
+
     if dest_table == "spb_local_to_selic":
         record = SPBLocalToSelic(
             nu_ope=nu_ope,
             cod_msg=msg_id,
-            db_datetime=datetime.now(),
+            db_datetime=now,
             msg=xml_string,
             status_msg="P",
             flag_proc="N",
@@ -213,13 +215,13 @@ async def submit_message(
         )
     else:
         record = SPBLocalToBacen(
-            nu_ope=nu_ope,
-            cod_msg=msg_id,
-            db_datetime=datetime.now(),
-            msg=xml_string,
+            db_datetime=now,
             status_msg="P",
             flag_proc="N",
             mq_qn_destino=queue_name,
+            nu_ope=nu_ope,
+            cod_msg=msg_id,
+            msg=xml_string,
         )
 
     db.add(record)

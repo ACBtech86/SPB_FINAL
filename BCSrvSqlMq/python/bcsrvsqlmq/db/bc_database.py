@@ -34,7 +34,7 @@ class CBCDatabase:
             )
             self.connection.autocommit = not self.m_bTransactions
             return True
-        except psycopg2.Error:
+        except (psycopg2.Error, UnicodeDecodeError):
             return False
 
     def open_ex(self, connection_string: str, options: int = 0) -> bool:

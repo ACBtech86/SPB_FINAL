@@ -390,26 +390,41 @@ class CMainSrv:
                 except Exception:
                     pass
 
-    def monta_audit(self, mq_header: bytes, sec_header: bytes, msg_xml: bytes) -> bytes:
-        """Assemble audit record from components."""
-        now = datetime.now()
+    def monta_audit(self, t, md, buflen: int, buffermsg) -> bytes:
+        """Assemble audit record from current MQ message components.
+
+        Args:
+            t: datetime of message processing
+            md: pymqi.MD message descriptor object
+            buflen: actual length of valid data in buffermsg
+            buffermsg: bytearray with layout [sec_header | xml_body]
+        """
+        from bcsrvsqlmq.msg_sgr import SECHDR_SIZE
+        now = t if t is not None else datetime.now()
         audit = STAUDITFILE()
         audit.AUD_AAAAMMDD = now.strftime('%Y%m%d').encode('ascii')
         audit.AUD_HHMMDDSS = now.strftime('%H%M%S00').encode('ascii')[:8]
 
-        # Pad MQ header to 512 bytes
-        audit.AUD_MQ_HEADER = mq_header[:512].ljust(512, b'\x00')
+        # Serialize MQ message descriptor to bytes for audit header (512 bytes)
+        try:
+            mq_header_bytes = bytes(md)
+        except Exception:
+            mq_header_bytes = b''
+        audit.AUD_MQ_HEADER = mq_header_bytes[:512].ljust(512, b'\x00')
 
-        # Security header
-        from bcsrvsqlmq.msg_sgr import SECHDR_SIZE
-        audit.AUD_SEC_HEADER = sec_header[:SECHDR_SIZE].ljust(SECHDR_SIZE, b'\x00')
+        # Security header is first SECHDR_SIZE bytes of buffermsg
+        buf_bytes = bytes(buffermsg) if buffermsg else b''
+        audit.AUD_SEC_HEADER = buf_bytes[:SECHDR_SIZE].ljust(SECHDR_SIZE, b'\x00')
 
-        # SPB document
-        audit.AUD_SPBDOC = msg_xml[:32767]
+        # XML body follows security header
+        xml_body = buf_bytes[SECHDR_SIZE:buflen] if buflen > SECHDR_SIZE else b''
+        audit.AUD_SPBDOC = xml_body[:32767]
 
         # Calculate record size
         total = (2 + 8 + 8 + 512 + SECHDR_SIZE + len(audit.AUD_SPBDOC) + 2)
         audit.AUD_TAMREG = total
         audit.AUD_TAMREG_PREV = total
 
-        return audit.pack()
+        audit_bytes = audit.pack()
+        self.write_audit(audit_bytes)
+        return audit_bytes

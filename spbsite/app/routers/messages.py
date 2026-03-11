@@ -141,7 +141,7 @@ async def submit_form(
     try:
         xml_string, nu_ope, dest_table, queue_name = await build_spb_xml(db, msg_id, form_data)
         await submit_message(db, xml_string, msg_id, nu_ope, dest_table, queue_name)
-    except ValueError as e:
+    except Exception as e:
         if wants_json:
             return JSONResponse(content={"success": False, "errors": [str(e)]})
         return templates.TemplateResponse(
