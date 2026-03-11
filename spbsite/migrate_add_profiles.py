@@ -31,7 +31,7 @@ async def create_profiles_table():
             )
         """))
 
-    print("✅ Profiles table created")
+    print("[OK] Profiles table created")
 
 
 async def create_profile_message_permissions_table():
@@ -60,7 +60,7 @@ async def create_profile_message_permissions_table():
             ON profile_message_permissions(msg_id)
         """))
 
-    print("✅ Profile message permissions table created")
+    print("[OK] Profile message permissions table created")
 
 
 async def add_profile_id_to_users():
@@ -76,7 +76,7 @@ async def add_profile_id_to_users():
         """))
 
         if result.fetchone():
-            print("⚠️  profile_id column already exists in users table")
+            print("[WARN]  profile_id column already exists in users table")
             return
 
         # Add profile_id column
@@ -90,7 +90,7 @@ async def add_profile_id_to_users():
             CREATE INDEX IF NOT EXISTS idx_users_profile_id ON users(profile_id)
         """))
 
-    print("✅ profile_id column added to users table")
+    print("[OK] profile_id column added to users table")
 
 
 async def create_default_profiles():
@@ -103,7 +103,7 @@ async def create_default_profiles():
         count = result.scalar()
 
         if count > 0:
-            print("⚠️  Profiles already exist")
+            print("[WARN]  Profiles already exist")
             return
 
         # Create 'Administrador' profile (full access to all messages)
@@ -119,10 +119,10 @@ async def create_default_profiles():
         admin_profile_id = result.scalar()
 
         # Grant admin profile access to all message types
-        # This inserts all msg_id from SPB_MENSAGEM into permissions
+        # This inserts all msg_id from spb_mensagem_view into permissions
         await session.execute(text(f"""
             INSERT INTO profile_message_permissions (profile_id, msg_id)
-            SELECT {admin_profile_id}, msg_id FROM "SPB_MENSAGEM"
+            SELECT {admin_profile_id}, msg_id FROM spb_mensagem_view
         """))
 
         # Create 'Operador Básico' profile (limited to common message types)
@@ -141,7 +141,7 @@ async def create_default_profiles():
         await session.execute(text(f"""
             INSERT INTO profile_message_permissions (profile_id, msg_id)
             SELECT {operator_profile_id}, msg_id
-            FROM "SPB_MENSAGEM"
+            FROM spb_mensagem_view
             WHERE msg_id LIKE 'GEN%'
                OR msg_id LIKE 'STR%'
                OR msg_id LIKE 'LTR%'
@@ -150,7 +150,7 @@ async def create_default_profiles():
 
         await session.commit()
 
-        print("✅ Default profiles created:")
+        print("[OK] Default profiles created:")
         print("   - Administrador (full access)")
         print("   - Operador Básico (limited access)")
 
@@ -167,7 +167,7 @@ async def update_existing_users():
         admin_profile_id = result.scalar()
 
         if not admin_profile_id:
-            print("⚠️  Admin profile not found, skipping user update")
+            print("[WARN]  Admin profile not found, skipping user update")
             return
 
         # Assign admin profile to all existing users
@@ -184,7 +184,7 @@ async def update_existing_users():
 
         await session.commit()
 
-        print(f"✅ Updated {count} existing user(s) with Administrador profile")
+        print(f"[OK] Updated {count} existing user(s) with Administrador profile")
 
 
 async def verify_migration():
@@ -208,9 +208,9 @@ async def verify_migration():
         )
         user_count = result.scalar()
 
-        print(f"✅ Profiles: {profile_count}")
-        print(f"✅ Message permissions: {permission_count}")
-        print(f"✅ Users with profiles: {user_count}")
+        print(f"[OK] Profiles: {profile_count}")
+        print(f"[OK] Message permissions: {permission_count}")
+        print(f"[OK] Users with profiles: {user_count}")
 
 
 async def main():
@@ -230,7 +230,7 @@ async def main():
 
         print()
         print("=" * 60)
-        print("✅ Migration Complete!")
+        print("[OK] Migration Complete!")
         print("=" * 60)
         print()
         print("Default Profiles Created:")
@@ -242,7 +242,7 @@ async def main():
         print()
 
     except Exception as e:
-        print(f"❌ Migration failed: {e}")
+        print(f"[ERROR] Migration failed: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)

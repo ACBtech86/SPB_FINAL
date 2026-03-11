@@ -28,7 +28,7 @@ async def create_users_table():
         # Create users table
         await conn.run_sync(Base.metadata.create_all)
 
-    print("✅ Users table created")
+    print("[OK] Users table created")
 
 
 async def create_default_user():
@@ -43,7 +43,7 @@ async def create_default_user():
         count = result.scalar()
 
         if count > 0:
-            print("⚠️  Admin user already exists")
+            print("[WARN]  Admin user already exists")
             return
 
         # Create admin user with password "admin"
@@ -64,10 +64,10 @@ async def create_default_user():
 
         await session.commit()
 
-        print("✅ Default admin user created")
+        print("[OK] Default admin user created")
         print("   Username: admin")
         print("   Password: admin")
-        print("   ⚠️  IMPORTANT: Change this password in production!")
+        print("   [WARN]  IMPORTANT: Change this password in production!")
 
 
 async def verify_setup():
@@ -78,7 +78,7 @@ async def verify_setup():
         result = await session.execute(text("SELECT COUNT(*) FROM users"))
         count = result.scalar()
 
-        print(f"✅ Users table exists with {count} user(s)")
+        print(f"[OK] Users table exists with {count} user(s)")
 
 
 async def main():
@@ -95,18 +95,18 @@ async def main():
 
         print()
         print("=" * 60)
-        print("✅ Setup Complete!")
+        print("[OK] Setup Complete!")
         print("=" * 60)
         print()
         print("You can now log in to SPBSite:")
         print("  Username: admin")
         print("  Password: admin")
         print()
-        print("⚠️  Remember to change the password after first login!")
+        print("[WARN]  Remember to change the password after first login!")
         print()
 
     except Exception as e:
-        print(f"❌ Error: {e}")
+        print(f"[ERROR] Error: {e}")
         import traceback
         traceback.print_exc()
         sys.exit(1)
