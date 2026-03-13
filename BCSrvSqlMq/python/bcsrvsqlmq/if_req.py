@@ -230,7 +230,7 @@ class CIFReq(CThreadMQ):
         and send via MQPUT for each."""
         init_srv = self.pMainSrv.pInitSrv
         write_log = init_srv.m_WriteLog
-        remote_queue_name = init_srv.m_MqQrCidadeBacenReq
+        local_queue_name = init_srv.m_MqQlIFCidadeReq
 
         processa = True
         while processa:
@@ -239,7 +239,7 @@ class CIFReq(CThreadMQ):
                 self.m_pRS.close()
                 self.m_pDb1.begin_trans()
                 self.m_pRS.m_index = 2
-                self.m_pRS.m_ParamMQ_QN_DESTINO = remote_queue_name
+                self.m_pRS.m_ParamMQ_QN_DESTINO = local_queue_name
                 self.m_pRS.m_ParamFLAG_PROC = 'P'
                 self.m_pRS.open()
             except Exception as exc:
@@ -440,6 +440,10 @@ class CIFReq(CThreadMQ):
                 write_log(self.m_szTaskName, 8029, False, str(exc))
                 erro = True
 
+        # -- Save original queue name before update changes it --
+        if not erro:
+            self.m_original_queue_name = rs.m_MQ_QN_DESTINO
+
         # -- Update app record fields --
         if not erro:
             erro = self.update_db_reg_app()
@@ -547,8 +551,8 @@ class CIFReq(CThreadMQ):
         # Flag: S = sent (apos aplicativo ler -> enviado)
         rs.m_FLAG_PROC = 'E'
 
-        # Destination queue
-        rs.m_MQ_QN_DESTINO = self.pMainSrv.pInitSrv.m_MqQrCidadeBacenReq
+        # Destination queue - keep original value from database, don't overwrite
+        # rs.m_MQ_QN_DESTINO = self.pMainSrv.pInitSrv.m_MqQrCidadeBacenReq
 
         # Put date/time
         rs.m_MQ_DATETIME_PUT = datetime.utcnow()
@@ -597,7 +601,6 @@ class CIFReq(CThreadMQ):
                   SET mq_msg_id = %s,
                       status_msg = %s,
                       flag_proc = %s,
-                      mq_qn_destino = %s,
                       mq_datetime_put = %s,
                       mq_header = %s,
                       security_header = %s
@@ -610,13 +613,12 @@ class CIFReq(CThreadMQ):
                 psycopg2.Binary(rs.m_MQ_MSG_ID) if rs.m_MQ_MSG_ID else None,
                 rs.m_STATUS_MSG,
                 rs.m_FLAG_PROC,
-                rs.m_MQ_QN_DESTINO,
                 rs.m_MQ_DATETIME_PUT,
                 psycopg2.Binary(rs.m_MQ_HEADER) if rs.m_MQ_HEADER else None,
                 psycopg2.Binary(rs.m_SECURITY_HEADER) if rs.m_SECURITY_HEADER else None,
                 rs.m_DB_DATETIME,
                 rs.m_COD_MSG,
-                self.pMainSrv.pInitSrv.m_MqQrCidadeBacenReq,
+                self.m_original_queue_name,
             ))
         finally:
             cursor.close()

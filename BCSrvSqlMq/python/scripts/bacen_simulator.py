@@ -455,14 +455,16 @@ def send_to_finvest(crypto: BacenCrypto):
     for line in xml_text.split('\n'):
         print(f'    {line}')
 
-    payload = encode_xml_to_payload(xml_text)
-
     if use_security:
+        # Encrypted mode: use UTF-16BE encoding
+        payload = encode_xml_to_payload(xml_text)
         print(f'\n  Signing with Bacen key + Encrypting with Finvest cert...')
         sec_hdr, encrypted_payload = crypto.encrypt_message(payload)
         mq_msg = sec_hdr.pack() + encrypted_payload
         print(f'  SECHDR: {SECHDR_SIZE} bytes, Payload: {len(encrypted_payload)} bytes')
     else:
+        # Clear text mode: use plain UTF-8 encoding (matching BCSrvSqlMq)
+        payload = xml_text.encode('utf-8')
         sec_hdr = SECHDR()
         sec_hdr.Versao = SECHDR_VERSION_CLEAR
         mq_msg = sec_hdr.pack() + payload

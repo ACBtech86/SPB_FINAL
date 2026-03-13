@@ -35,11 +35,16 @@ def _determine_destination(cod_grade: str) -> tuple[str, str]:
 
 
 def _determine_queue_name(msg_id: str, ispb_dest: str) -> str:
-    """Determine the MQ queue destination name based on message type."""
+    """Determine the MQ queue destination name based on message type.
+
+    Uses Local IF queues for bacen_simulator compatibility.
+    """
     ispb_local = settings.ispb_local
+    # Use Local IF queues (QL.*) instead of Remote queues (QR.*)
+    # These queues connect to bacen_simulator.py on the same queue manager
     if "R1" in msg_id or "R2" in msg_id:
-        return f"QR.RSP.{ispb_local}.{ispb_dest}.01"
-    return f"QR.REQ.{ispb_local}.{ispb_dest}.01"
+        return f"QL.{ispb_local}.01.SAIDA.IF"
+    return f"QL.{ispb_local}.01.ENTRADA.IF"
 
 
 def _convert_date(value: str) -> str:
