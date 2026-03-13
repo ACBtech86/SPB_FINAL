@@ -41,8 +41,11 @@ FINVEST_OUTBOUND_QUEUES = {
 }
 
 # Queues where Bacen PUTS inbound messages (Finvest reads these)
+# When BACEN responds to Finvest's REQ (GEN0001/GEN0002/GEN0003), the response
+# goes to the RSP queue (CBacenRsp handles GEN0001R1/GEN0002R1/GEN0003R1).
+# The REQ queue is for BACEN-initiated requests TO Finvest (different flow).
 FINVEST_INBOUND_QUEUES = {
-    'REQ': 'QL.REQ.00038166.36266751.01',
+    'REQ': 'QL.RSP.00038166.36266751.01',  # Responses to Finvest's requests → RSP queue
     'RSP': 'QL.RSP.00038166.36266751.01',
     'REP': 'QL.REP.00038166.36266751.01',
     'SUP': 'QL.SUP.00038166.36266751.01',
@@ -161,20 +164,30 @@ class BacenAutoResponder:
         return info
 
     def generate_response(self, request_info: Dict[str, str]) -> str:
-        """Generate BACEN response XML."""
+        """Generate BACEN response XML.
+
+        Maps SPB request types to their correct response types:
+          GEN0001 (Echo request)    → GEN0001R1 with GENReqECORespReq
+          GEN0002 (Log request)     → GEN0002R1 with GENReqLOGRespReq
+          GEN0003 (UltMsg request)  → GEN0003R1 with GENReqUltMsgRespReq
+        """
         cod_msg = request_info['cod_msg']
         nu_ope = request_info['nu_ope']
 
-        # Generate response message code
-        if cod_msg.endswith('0001'):  # Request type
-            response_cod = cod_msg[:-4] + '0002'  # Response type
-        else:
-            response_cod = cod_msg + 'R1'
+        # Map request → response code (all requests get R1 suffix)
+        response_cod = cod_msg + 'R1'
+
+        # Map request → inner response tag expected by CBacenRsp
+        resp_tag_map = {
+            'GEN0001R1': 'GENReqECORespReq',
+            'GEN0002R1': 'GENReqLOGRespReq',
+            'GEN0003R1': 'GENReqUltMsgRespReq',
+        }
+        inner_tag = resp_tag_map.get(response_cod, 'GENReqECORespReq')
 
         now = datetime.now()
         response_nu_ope = f"{ISPB_BACEN}{now.strftime('%Y%m%d%H%M%S')}"
 
-        # Build response XML (simple GEN response format)
         response_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
 <DOC xmlns="http://www.bcb.gov.br/SPB/{response_cod}.xsd">
   <BCMSG>
@@ -186,12 +199,14 @@ class BacenAutoResponder:
   <SISMSG>
     <{response_cod}>
       <CodMsg>{response_cod}</CodMsg>
-      <SitRetReqECO>
-        <CodSitRetReq>00</CodSitRetReq>
-        <DescrSitRetReq>Processado com Sucesso - BACEN Simulator</DescrSitRetReq>
-      </SitRetReqECO>
-      <NumCtrlIF>BACEN{now.strftime('%H%M%S')}</NumCtrlIF>
-      <DtHrBC>{now.strftime('%Y-%m-%dT%H:%M:%S')}</DtHrBC>
+      <{inner_tag}>
+        <SitRetReqECO>
+          <CodSitRetReq>00</CodSitRetReq>
+          <DescrSitRetReq>Processado com Sucesso - BACEN Simulator</DescrSitRetReq>
+        </SitRetReqECO>
+        <NumCtrlIF>BACEN{now.strftime('%H%M%S')}</NumCtrlIF>
+        <DtHrBC>{now.strftime('%Y-%m-%dT%H:%M:%S')}</DtHrBC>
+      </{inner_tag}>
     </{response_cod}>
   </SISMSG>
 </DOC>'''
@@ -264,14 +279,14 @@ class BacenAutoResponder:
         try:
             queue = pymqi.Queue(self.qmgr, queue_name, pymqi.CMQC.MQOO_OUTPUT)
 
-            # Prepend clear-text SECHDR (RmtReq validates first 2 bytes as size marker)
+            # Prepend clear-text SECHDR
             from bcsrvsqlmq.msg_sgr import SECHDR, SECHDR_VERSION_CLEAR
             sec_hdr = SECHDR()
             sec_hdr.Versao = SECHDR_VERSION_CLEAR
             sechdr_bytes = sec_hdr.pack()
 
-            # Encode response XML as UTF-16BE
-            payload = sechdr_bytes + self.encode_payload(response_xml)
+            # Encode response XML as UTF-8 (clear-text mode, matching BCSrvSqlMq expectation)
+            payload = sechdr_bytes + response_xml.encode('utf-8')
 
             # Create message descriptor
             md = pymqi.MD()
