@@ -13,7 +13,7 @@ Complete guide for deploying and updating the SPB system on Ubuntu Server using 
 - Git credentials configured
 
 ### Ubuntu Server
-- Ubuntu Server 20.04 LTS or newer
+- Ubuntu Server 22.04 LTS or newer (24.04 LTS recommended)
 - SSH server running
 - User with sudo privileges
 - Internet connection
@@ -30,8 +30,9 @@ SSH into your Ubuntu server and install dependencies:
 # Update system
 sudo apt update && sudo apt upgrade -y
 
-# Install Python 3.10+ and essentials
-sudo apt install -y python3.10 python3.10-venv python3-pip git curl wget
+# Install Python and essentials
+# Ubuntu 22.04 ships with Python 3.10; Ubuntu 24.04 ships with Python 3.12
+sudo apt install -y python3 python3-venv python3-pip git curl wget
 
 # Install PostgreSQL
 sudo apt install -y postgresql postgresql-contrib libpq-dev
@@ -42,6 +43,9 @@ sudo apt install -y build-essential python3-dev
 # Install IBM MQ Client (if needed for BCSrvSqlMq)
 # See IBM_MQ_SETUP.md for IBM MQ installation on Linux
 ```
+
+> **Note:** Do **not** install `python3.10` explicitly — it is not available in Ubuntu 24.04 default repos.
+> Use `python3` (3.12 on Ubuntu 24.04, 3.10 on Ubuntu 22.04). The SPB system is compatible with both.
 
 ### 1.2 Configure PostgreSQL
 
@@ -125,7 +129,20 @@ cd ~/projects/SPB_FINAL
 git pull origin main
 ```
 
-### 3.2 Run Installation Script
+### 3.2 Create Databases
+
+Before running the install script, ensure the PostgreSQL databases exist. You can use the included helper script:
+
+```bash
+cd ~/projects/SPB_FINAL
+source venv/bin/activate 2>/dev/null || python3 -m venv venv && source venv/bin/activate
+pip install psycopg2-binary
+python create_databases.py
+```
+
+This creates the `BCSPB` and `BCSPBSTR` databases (safe to run if they already exist).
+
+### 3.3 Run Installation Script
 
 ```bash
 # Make the script executable
@@ -138,11 +155,11 @@ chmod +x install_spb_system.sh
 The script will:
 - ✅ Create Python virtual environment
 - ✅ Install all dependencies
-- ✅ Set up spb-shared package
+- ✅ Set up `spb-shared` package (shared models/utilities)
 - ✅ Configure environment files
 - ✅ Run database migrations
 
-### 3.3 Configure Environment Variables
+### 3.4 Configure Environment Variables
 
 Edit the configuration files:
 
@@ -165,7 +182,6 @@ ISPB_SELIC=00038121
 **BCSrvSqlMq `BCSrvSqlMq.ini`:**
 ```bash
 cd ~/projects/SPB_FINAL/BCSrvSqlMq
-cp BCSrvSqlMq.ini.example BCSrvSqlMq.ini
 nano BCSrvSqlMq.ini
 ```
 
@@ -184,7 +200,7 @@ Port=1414
 Channel=FINVEST.SVRCONN
 ```
 
-### 3.4 Initialize Databases
+### 3.5 Initialize Databases
 
 ```bash
 # Activate virtual environment
@@ -229,9 +245,36 @@ cd BCSrvSqlMq/python
 python -m bcsrvsqlmq.main_srv
 ```
 
+**Start BCSrvSqlMq BACEN Auto-Responder (for testing):**
+```bash
+cd ~/projects/SPB_FINAL
+source venv/bin/activate
+cd BCSrvSqlMq
+
+# Listens to Finvest outbound queues and auto-generates BACEN responses
+python bacen_auto_responder.py
+```
+
+**Quick start SPBSite for remote access:**
+```bash
+cd ~/projects/SPB_FINAL
+./start_spbsite_remote.sh
+```
+
 ### 4.2 Production Deployment with Systemd
 
 Create systemd service files for automatic startup:
+
+**Automated service install script (recommended):**
+```bash
+cd ~/projects/SPB_FINAL
+chmod +x install_spbsite_service.sh
+./install_spbsite_service.sh
+```
+
+This script handles service file creation, enabling, and starting automatically.
+
+Alternatively, create the service files manually:
 
 **SPBSite Service:**
 ```bash
@@ -413,10 +456,12 @@ echo "📦 Updating dependencies..."
 pip install --upgrade pip
 cd spbsite && pip install -r requirements.txt --upgrade
 cd ../BCSrvSqlMq/python && pip install -r requirements.txt --upgrade
+cd ../../Carga_Mensageria && pip install -r requirements.txt --upgrade
+cd ../spb-shared && pip install -e .
 
 # Run migrations
 echo "🗄️  Running database migrations..."
-cd ../../spbsite
+cd ../spbsite
 alembic upgrade head
 
 # Restart services
@@ -444,7 +489,29 @@ cd ~/projects/SPB_FINAL
 
 ---
 
-## Part 6: Monitoring & Maintenance
+## Part 6: Utility & Testing Scripts
+
+The root of the repository contains several helper scripts for development and testing:
+
+| Script | Purpose |
+|---|---|
+| `create_databases.py` | Creates PostgreSQL databases (`BCSPB`, `BCSPBSTR`) — safe to run if already exist |
+| `bacen_simulator.py` | Manually simulate BACEN responses for a specific operation ID |
+| `monitor_flow.py` | Real-time monitor of message flow through the SPB database tables |
+| `BCSrvSqlMq/bacen_auto_responder.py` | Automated BACEN response service — listens to outbound queues and auto-responds (used in testing) |
+| `install_spbsite_service.sh` | Installs SPBSite as a systemd service in one step |
+| `start_spbsite_remote.sh` | Quick-starts SPBSite for ad-hoc remote access (no systemd) |
+
+**Run the message flow monitor:**
+```bash
+cd ~/projects/SPB_FINAL
+source venv/bin/activate
+python monitor_flow.py
+```
+
+---
+
+## Part 7: Monitoring & Maintenance
 
 ### 6.1 View Service Logs
 
@@ -521,7 +588,7 @@ crontab -e
 
 ---
 
-## Part 7: VS Code Remote Development Tips
+## Part 8: VS Code Remote Development Tips
 
 ### 7.1 Recommended Extensions (Install on Remote)
 
@@ -555,7 +622,7 @@ Forward ports from server to local machine:
 
 ---
 
-## Part 8: Troubleshooting
+## Part 9: Troubleshooting
 
 ### Service Won't Start
 
@@ -632,4 +699,4 @@ source venv/bin/activate
 **Questions or Issues?**
 Contact the Finvest DTVM IT team.
 
-**Last Updated:** March 8, 2026
+**Last Updated:** March 14, 2026
