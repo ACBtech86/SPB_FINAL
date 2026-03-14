@@ -96,3 +96,13 @@ temp/
 # SPB Configuration files with sensitive data
 BCSrvSqlMq/*.ini
 !BCSrvSqlMq/*.ini.example
+
+# pymqi build artifacts
+compile_pymqi.py
+pymqi-*.tar.gz
+pymqi-*/
+
+# Temporary project files
+SPBSITE_ACCESS_INFO.txt
+last_operation.txt
+emissor.txt
