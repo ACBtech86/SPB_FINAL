@@ -170,37 +170,6 @@ python test_scripts/e2e_full_system_test.py
 
 ---
 
-## Option 4: tmux 4-Pane Monitor
-
-For advanced users who want to see raw logs, MQ depths, DB rows, and auto-responder output simultaneously:
-
-```bash
-cd /home/ubuntu/SPBFinal/SPB_FINAL
-./live_test.sh
-```
-
-### Layout
-
-```
-┌──────────────────────┬──────────────────────┐
-│  BCSrvSqlMq Logs     │  MQ Queue Depths     │
-├──────────────────────┼──────────────────────┤
-│  BACEN Auto-Responder│  DB Message Watcher  │
-└──────────────────────┴──────────────────────┘
-```
-
-### tmux Controls
-
-| Keys | Action |
-|------|--------|
-| `Ctrl+B` then arrow keys | Switch between panes |
-| `Ctrl+B` then `z` | Zoom/unzoom current pane |
-| `Ctrl+B` then `d` | Detach (session keeps running) |
-| `tmux attach -t spb-live` | Reattach to session |
-| `tmux kill-session -t spb-live` | Stop everything |
-
-**Important:** Press `ENTER` in the bottom-left pane to start the BACEN auto-responder.
-
 ---
 
 ## Cleaning Up Before Testing
@@ -287,7 +256,6 @@ Start with `GEN0001` for basic testing, then try more complex messages.
 | File | Purpose |
 |------|---------|
 | `monitor_live.py` | Event-driven visual flow monitor |
-| `live_test.sh` | tmux 4-pane raw monitor |
 | `test_scripts/e2e_full_system_test.py` | Automated 15-check E2E test |
 | `BCSrvSqlMq/bacen_auto_responder.py` | Simulated BACEN responses |
 | `BCSrvSqlMq/BCSrvSqlMq.ini` | Service configuration |

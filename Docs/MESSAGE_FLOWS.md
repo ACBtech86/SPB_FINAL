@@ -38,39 +38,24 @@ Per Manual de Seguranca do SFN v5 (BACEN 2024 update).
 ## Flow 1: IF -> Bacen (Outbound)
 
 ```mermaid
-flowchart TD
-    subgraph FINVEST ["FINVEST (IF) -- ISPB 36266751"]
-        DB_OUT[("PostgreSQL\n---------\nspb_local_to_bacen\nflag_proc = 'P'")]
-        IFREQ["CIFReq Thread\n(if_req.py)"]
-        DB_UPD[("PostgreSQL\n---------\nflag_proc 'P' -> 'E'\n+ INSERT spb_log_bacen")]
-        QL_IF["QL.36266751.01.ENTRADA.IF\n(local staging queue)"]
-    end
+graph TD
+    DB_OUT[("PostgreSQL<br/>spb_local_to_bacen<br/>flag_proc = P")]
+    IFREQ["CIFReq Thread<br/>if_req.py"]
+    SIGN["SIGN<br/>Finvest Private Key<br/>RSA-2048 + SHA-256"]
+    ENCRYPT["ENCRYPT<br/>Bacen Public Cert<br/>3DES + RSA-2048"]
+    QL_IF["QL.36266751.01.ENTRADA.IF"]
+    QR_REQ["QR.REQ.36266751.00038166.01"]
+    DB_UPD[("PostgreSQL<br/>flag_proc P to E<br/>+ spb_log_bacen")]
+    BC_QM["BACEN Queue Manager"]
 
-    subgraph SECURITY_OUT ["Security Layer -- Outbound (V2)"]
-        SIGN["1. SIGN\nFinvest Private Key\nRSA-2048 + SHA-256\n-> 256B signature in SECHDR"]
-        ENCRYPT["2. ENCRYPT\nBacen Public Cert\n3DES key wrapped with RSA-2048\npayload encrypted 3DES-CBC"]
-    end
-
-    subgraph MQ_OUT ["IBM MQ -- QM.36266751.01"]
-        QR_REQ["QR.REQ.36266751.00038166.01\n(remote queue definition)"]
-    end
-
-    subgraph BACEN ["BACEN -- ISPB 00038166"]
-        BC_QM["Bacen Queue Manager\nQL.REQ.00038166.36266751.01"]
-    end
-
-    DB_OUT -->|"1. SELECT WHERE\nflag_proc='P'"| IFREQ
-    IFREQ -->|"2. Read XML\n3. Build SECHDR (588 bytes)\n4. Encode Latin-1 -> UTF-16BE"| SIGN
+    DB_OUT -->|"SELECT flag_proc=P"| IFREQ
+    IFREQ -->|"Build SECHDR 588B<br/>Latin-1 to UTF-16BE"| SIGN
     SIGN --> ENCRYPT
-    ENCRYPT -->|"5. MQPUT\n(syncpoint)\nSECHDR + encrypted payload"| QL_IF
+    ENCRYPT -->|"MQPUT syncpoint"| QL_IF
     QL_IF --> QR_REQ
-    IFREQ -->|"6. Update DB + MQCMIT"| DB_UPD
-    QR_REQ -->|"MQ Channel\nto Bacen"| BC_QM
+    IFREQ -->|"Update DB + MQCMIT"| DB_UPD
+    QR_REQ -->|"MQ Channel"| BC_QM
 
-    style FINVEST fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    style SECURITY_OUT fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style MQ_OUT fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
     style DB_OUT fill:#e8f5e9,stroke:#2e7d32
     style DB_UPD fill:#e8f5e9,stroke:#2e7d32
     style SIGN fill:#fff8e1,stroke:#f57f17
@@ -78,6 +63,7 @@ flowchart TD
     style QL_IF fill:#ede7f6,stroke:#4527a0
     style QR_REQ fill:#ede7f6,stroke:#4527a0
     style BC_QM fill:#ffcdd2,stroke:#c62828
+    style IFREQ fill:#bbdefb,stroke:#1565c0
 ```
 
 ### Outbound Steps:
@@ -97,37 +83,22 @@ flowchart TD
 ## Flow 2: Bacen -> IF (Inbound)
 
 ```mermaid
-flowchart TD
-    subgraph BACEN ["BACEN -- ISPB 00038166"]
-        BC_QM["Bacen Queue Manager\nsends encrypted message"]
-    end
+graph TD
+    BC_QM["BACEN Queue Manager"]
+    QL_BC["QL.REQ.00038166.36266751.01"]
+    BCREQ["CBacenReq Thread<br/>bacen_req.py"]
+    DECRYPT["DECRYPT<br/>Finvest Private Key<br/>RSA-2048 unwrap 3DES"]
+    VERIFY["VERIFY SIGNATURE<br/>Bacen Public Cert<br/>RSA-2048 + SHA-256"]
+    PARSE["Parse XML<br/>Extract NuOpe, CodMsg<br/>GEN0001, GEN0002, GEN0003"]
+    DB_IN[("PostgreSQL<br/>INSERT spb_bacen_to_local<br/>INSERT spb_log_bacen<br/>MQCMIT + DB COMMIT")]
 
-    subgraph MQ_IN ["IBM MQ -- QM.36266751.01"]
-        QL_BC["QL.REQ.00038166.36266751.01\n(local queue -- Bacen msgs\narriving for Finvest)"]
-    end
-
-    subgraph SECURITY_IN ["Security Layer -- Inbound (V2)"]
-        DECRYPT["1. DECRYPT\nFinvest Private Key\nRSA-2048 unwrap 3DES key\nthen 3DES-CBC decrypt"]
-        VERIFY["2. VERIFY SIGNATURE\nBacen Public Cert\nRSA-2048 + SHA-256\ncheck hash matches"]
-    end
-
-    subgraph FINVEST ["FINVEST (IF) -- ISPB 36266751"]
-        BCREQ["CBacenReq Thread\n(bacen_req.py)"]
-        PARSE["Parse XML\n---------\nExtract: NuOpe, CodMsg\nEmissor, Destinatario\n---------\nSpecial: GEN0001 (Echo)\nGEN0002 (Log)\nGEN0003 (UltMsg)"]
-        DB_IN[("PostgreSQL\n---------\nINSERT spb_bacen_to_local\nINSERT spb_log_bacen\nMQCMIT + DB COMMIT")]
-    end
-
-    BC_QM -->|"MQ Channel\nfrom Bacen"| QL_BC
-    QL_BC -->|"1. MQGET\n(exclusive, syncpoint, wait)"| BCREQ
-    BCREQ -->|"2. Parse SECHDR\n(588 bytes V2 / 332 bytes V1)"| DECRYPT
+    BC_QM -->|"MQ Channel"| QL_BC
+    QL_BC -->|"MQGET exclusive syncpoint"| BCREQ
+    BCREQ -->|"Parse SECHDR 588B"| DECRYPT
     DECRYPT --> VERIFY
-    VERIFY -->|"3. Decode\nUTF-16BE -> Latin-1"| PARSE
-    PARSE -->|"4. INSERT + COMMIT"| DB_IN
+    VERIFY -->|"UTF-16BE to Latin-1"| PARSE
+    PARSE -->|"INSERT + COMMIT"| DB_IN
 
-    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
-    style MQ_IN fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    style SECURITY_IN fill:#fff3e0,stroke:#e65100,stroke-width:2px
-    style FINVEST fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     style BC_QM fill:#ffcdd2,stroke:#c62828
     style QL_BC fill:#ede7f6,stroke:#4527a0
     style DECRYPT fill:#fff8e1,stroke:#f57f17
@@ -154,86 +125,53 @@ flowchart TD
 ## Complete Architecture
 
 ```mermaid
-flowchart LR
-    subgraph DB ["PostgreSQL -- bcspbstr"]
-        TBL_OUT[("spb_local_to_bacen\n(outbound msgs)")]
-        TBL_IN[("spb_bacen_to_local\n(inbound msgs)")]
-        TBL_LOG[("spb_log_bacen\n(audit log)")]
-        TBL_CTR[("spb_controle\n(control)")]
+graph LR
+    subgraph DB ["PostgreSQL"]
+        TBL_OUT[("spb_local_to_bacen")]
+        TBL_IN[("spb_bacen_to_local")]
+        TBL_LOG[("spb_log_bacen")]
     end
 
-    subgraph SRV ["BCSrvSqlMq Service"]
-        direction TB
-        subgraph OUT_THREADS ["Outbound Threads (DB -> MQ)"]
-            IF_REQ["CIFReq"]
-            IF_RSP["CIFRsp"]
-            IF_REP["CIFRep"]
-            IF_SUP["CIFSup"]
-        end
-        subgraph IN_THREADS ["Inbound Threads (MQ -> DB)"]
-            BC_REQ["CBacenReq"]
-            BC_RSP["CBacenRsp"]
-            BC_REP["CBacenRep"]
-            BC_SUP["CBacenSup"]
-        end
-        subgraph CRYPTO ["Security (V2)"]
-            PRV["Finvest RSA-2048\nprivate key"]
-            PUB["Bacen RSA-2048\npublic cert"]
-        end
+    subgraph SRV ["BCSrvSqlMq - 8 Threads"]
+        IF_REQ["CIFReq"]
+        IF_RSP["CIFRsp"]
+        BC_RSP["CBacenRsp"]
+        BC_REQ["CBacenReq"]
     end
 
-    subgraph MQ ["IBM MQ -- QM.36266751.01\nlocalhost:1414 / FINVEST.SVRCONN"]
-        direction TB
-        subgraph IF_QUEUES ["IF Staging Queues (local)"]
-            QL_E["QL...ENTRADA.IF"]
-            QL_S["QL...SAIDA.IF"]
-            QL_RP["QL...REPORT.IF"]
-            QL_SP["QL...SUPORTE.IF"]
-        end
-        subgraph QR_QUEUES ["Remote Queue Definitions"]
-            QR_REQ2["QR.REQ..."]
-            QR_RSP2["QR.RSP..."]
-            QR_REP2["QR.REP..."]
-            QR_SUP2["QR.SUP..."]
-        end
-        subgraph BC_QUEUES ["Bacen Local Queues"]
-            QL_REQ2["QL.REQ.00038166..."]
-            QL_RSP2["QL.RSP.00038166..."]
-            QL_REP2["QL.REP.00038166..."]
-            QL_SUP2["QL.SUP.00038166..."]
-        end
+    subgraph MQ ["IBM MQ - QM.36266751.01"]
+        QL_E["ENTRADA.IF"]
+        QL_S["SAIDA.IF"]
+        QR_REQ2["QR.REQ..."]
+        QR_RSP2["QR.RSP..."]
+        QL_REQ2["QL.REQ.00038166..."]
+        QL_RSP2["QL.RSP.00038166..."]
     end
 
-    subgraph BACEN ["BACEN\nISPB 00038166"]
-        BC_NET["Bacen Network\n(RSFN)"]
-    end
+    BC_NET["BACEN / RSFN"]
 
-    TBL_OUT --> IF_REQ & IF_RSP & IF_REP & IF_SUP
-    IF_REQ --> QL_E --> QR_REQ2
-    IF_RSP --> QL_S --> QR_RSP2
-    IF_REP --> QL_RP --> QR_REP2
-    IF_SUP --> QL_SP --> QR_SUP2
-    QR_REQ2 & QR_RSP2 & QR_REP2 & QR_SUP2 --> BC_NET
+    TBL_OUT --> IF_REQ
+    TBL_OUT --> IF_RSP
+    IF_REQ --> QL_E
+    IF_RSP --> QL_S
+    QL_E --> QR_REQ2
+    QL_S --> QR_RSP2
+    QR_REQ2 --> BC_NET
+    QR_RSP2 --> BC_NET
 
-    BC_NET --> QL_REQ2 & QL_RSP2 & QL_REP2 & QL_SUP2
+    BC_NET --> QL_REQ2
+    BC_NET --> QL_RSP2
     QL_REQ2 --> BC_REQ
     QL_RSP2 --> BC_RSP
-    QL_REP2 --> BC_REP
-    QL_SUP2 --> BC_SUP
-    BC_REQ & BC_RSP & BC_REP & BC_SUP --> TBL_IN
-    BC_REQ & BC_RSP & BC_REP & BC_SUP --> TBL_LOG
-    IF_REQ & IF_RSP & IF_REP & IF_SUP --> TBL_LOG
+    BC_REQ --> TBL_IN
+    BC_RSP --> TBL_IN
+    BC_REQ --> TBL_LOG
+    IF_REQ --> TBL_LOG
 
     style DB fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
     style SRV fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
     style MQ fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    style BACEN fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
-    style OUT_THREADS fill:#bbdefb,stroke:#1565c0
-    style IN_THREADS fill:#bbdefb,stroke:#1565c0
-    style CRYPTO fill:#fff8e1,stroke:#f57f17
-    style IF_QUEUES fill:#ede7f6,stroke:#4527a0
-    style QR_QUEUES fill:#ede7f6,stroke:#4527a0
-    style BC_QUEUES fill:#ede7f6,stroke:#4527a0
+    style BC_NET fill:#ffcdd2,stroke:#c62828
 ```
 
 ---
@@ -241,35 +179,31 @@ flowchart LR
 ## Security Detail -- Message Envelope V2
 
 ```mermaid
-flowchart LR
-    subgraph MSG ["MQ Message Payload"]
-        direction LR
-        subgraph HDR ["SECHDR V2 (588 bytes)"]
-            direction TB
-            H1["C01 TamSecHeader (2B)\n0x024C = 588"]
-            H2["C02 Versao (1B)\n0x00=clear, 0x02=V2"]
-            H3["C03 CodErro (1B)"]
-            H4["C04 TratamentoEspecial (1B)"]
-            H5["C05 Reservado (1B)"]
-            H6["C06 AlgAssymKey (1B)\n0x02=RSA-2048"]
-            H7["C07 AlgSymKey (1B)\n0x01=3DES-168"]
-            H8["C08 AlgAssymKeyLocal (1B)\n0x02=RSA-2048"]
-            H9["C09 AlgHash (1B)\n0x03=SHA-256"]
-            H10["C10 CADest (1B)"]
-            H11["C11 NumSerieCertDest (32B)"]
-            H12["C12 CALocal (1B)"]
-            H13["C13 NumSerieCertLocal (32B)"]
-            H14["C14 SymKeyCifr (256B)\nRSA-2048 wrapped 3DES key"]
-            H15["C15 HashCifrSign (256B)\nRSA-2048 digital signature"]
-        end
-        subgraph PAYLOAD ["Payload"]
-            PL["XML Document\n(UTF-16BE encoded)\n---------\nIf Versao=0x02:\nEncrypted with 3DES-CBC\n(zero IV)"]
-        end
+graph LR
+    subgraph HDR ["SECHDR V2 - 588 bytes"]
+        H1["C01 TamSecHeader 2B"]
+        H2["C02 Versao 1B"]
+        H6["C06 AlgAssymKey 1B<br/>RSA-2048"]
+        H7["C07 AlgSymKey 1B<br/>3DES-168"]
+        H9["C09 AlgHash 1B<br/>SHA-256"]
+        H14["C14 SymKeyCifr 256B<br/>RSA wrapped 3DES key"]
+        H15["C15 HashCifrSign 256B<br/>RSA digital signature"]
     end
 
-    style MSG fill:#f5f5f5,stroke:#424242,stroke-width:2px
+    subgraph PL ["Payload"]
+        XML["XML Document<br/>UTF-16BE encoded<br/>3DES-CBC encrypted"]
+    end
+
+    H1 --- H2
+    H2 --- H6
+    H6 --- H7
+    H7 --- H9
+    H9 --- H14
+    H14 --- H15
+    H15 --- XML
+
     style HDR fill:#fff8e1,stroke:#f57f17,stroke-width:2px
-    style PAYLOAD fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
+    style PL fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
 ```
 
 ### V1 vs V2 Header Comparison
@@ -295,49 +229,26 @@ The Bacen Simulator (`python/scripts/bacen_simulator.py`) acts as the Central Ba
 ### Simulator Architecture
 
 ```mermaid
-flowchart LR
-    subgraph FINVEST_SRV ["BCSrvSqlMq Service (Finvest)"]
-        direction TB
-        IF_REQ["CIFReq\n(outbound DB->MQ)"]
-        BC_REQ["CBacenReq\n(inbound MQ->DB)"]
-        subgraph FIN_CRYPTO ["Finvest Crypto"]
-            FIN_PRV["finvest_sim.key\n(sign + decrypt)"]
-            FIN_PUB["bacen_sim.cer\n(encrypt + verify)"]
-        end
-    end
+graph LR
+    IF_REQ["CIFReq<br/>outbound DB to MQ"]
+    QL_IF["QL...ENTRADA.IF"]
+    SIM_RCV["Simulator<br/>Receive + Decrypt"]
+    SIM_SND["Simulator<br/>Sign + Encrypt"]
+    QL_BC["QL.RSP.00038166..."]
+    BC_RSP["CBacenRsp<br/>inbound MQ to DB"]
 
-    subgraph MQ ["IBM MQ -- QM.36266751.01"]
-        direction TB
-        QL_IF["QL.36266751.01.ENTRADA.IF\n(IF staging queue)"]
-        QL_BC["QL.REQ.00038166.36266751.01\n(Bacen local queue)"]
-    end
-
-    subgraph BACEN_SIM ["Bacen Simulator"]
-        direction TB
-        SIM_RCV["Receive\n(MQGET from IF queues)"]
-        SIM_SND["Send\n(MQPUT to Bacen queues)"]
-        subgraph BC_CRYPTO ["Bacen Crypto"]
-            BC_PRV["bacen_sim.key\n(sign + decrypt)"]
-            BC_PUB["finvest_sim.cer\n(encrypt + verify)"]
-        end
-    end
-
-    IF_REQ -->|"sign(finvest_sim.key)\nencrypt(bacen_sim.cer)"| QL_IF
+    IF_REQ -->|"sign finvest_sim.key<br/>encrypt bacen_sim.cer"| QL_IF
     QL_IF -->|"MQGET"| SIM_RCV
-    SIM_RCV -->|"decrypt(bacen_sim.key)\nverify(finvest_sim.cer)"| BC_CRYPTO
+    SIM_RCV -->|"decrypt bacen_sim.key<br/>verify finvest_sim.cer"| SIM_SND
+    SIM_SND -->|"sign bacen_sim.key<br/>encrypt finvest_sim.cer"| QL_BC
+    QL_BC -->|"MQGET"| BC_RSP
 
-    BC_CRYPTO -->|"sign(bacen_sim.key)\nencrypt(finvest_sim.cer)"| SIM_SND
-    SIM_SND -->|"MQPUT"| QL_BC
-    QL_BC -->|"MQGET"| BC_REQ
-    BC_REQ -->|"decrypt(finvest_sim.key)\nverify(bacen_sim.cer)"| FIN_CRYPTO
-
-    style FINVEST_SRV fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    style MQ fill:#f3e5f5,stroke:#6a1b9a,stroke-width:2px
-    style BACEN_SIM fill:#fce4ec,stroke:#b71c1c,stroke-width:2px
-    style FIN_CRYPTO fill:#fff8e1,stroke:#f57f17
-    style BC_CRYPTO fill:#fff8e1,stroke:#f57f17
+    style IF_REQ fill:#bbdefb,stroke:#1565c0
+    style BC_RSP fill:#bbdefb,stroke:#1565c0
     style QL_IF fill:#ede7f6,stroke:#4527a0
     style QL_BC fill:#ede7f6,stroke:#4527a0
+    style SIM_RCV fill:#ffcdd2,stroke:#c62828
+    style SIM_SND fill:#ffcdd2,stroke:#c62828
 ```
 
 ### Simulation Certificates
@@ -361,17 +272,19 @@ flowchart LR
 ### How to Run
 
 ```bash
+cd /home/ubuntu/SPBFinal/SPB_FINAL
+source venv/bin/activate
+
 # Terminal 1: Finvest server
-cd python
-py -m bcsrvsqlmq -d
+cd BCSrvSqlMq/python
+python -m bcsrvsqlmq -d
 
-# Terminal 2: Bacen simulator
-cd python
-py scripts/bacen_simulator.py
+# Terminal 2: Bacen auto-responder
+cd BCSrvSqlMq
+python bacen_auto_responder.py
 
-# Terminal 3 (optional): Insert test message in DB
-cd python
-py scripts/test_db_insert.py
+# Terminal 3: Visual flow monitor (recommended)
+python monitor_live.py --inject
 ```
 
 ### End-to-End Test Flow
