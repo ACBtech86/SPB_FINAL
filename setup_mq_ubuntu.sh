@@ -89,11 +89,17 @@ cat > "$MQSC_FILE" << 'MQSC'
 * Queue Manager: QM.36266751.01
 * ====================================================================
 
-* Local Queues — Messages FROM Bacen TO Finvest
+* Local Queues — Messages FROM Bacen TO Finvest (inbound)
 DEFINE QLOCAL('QL.REQ.00038166.36266751.01') DESCR('Bacen Request to Finvest')   DEFPSIST(YES) MAXDEPTH(5000) REPLACE
 DEFINE QLOCAL('QL.RSP.00038166.36266751.01') DESCR('Bacen Response to Finvest')  DEFPSIST(YES) MAXDEPTH(5000) REPLACE
 DEFINE QLOCAL('QL.REP.00038166.36266751.01') DESCR('Bacen Report to Finvest')    DEFPSIST(YES) MAXDEPTH(5000) REPLACE
 DEFINE QLOCAL('QL.SUP.00038166.36266751.01') DESCR('Bacen Support to Finvest')   DEFPSIST(YES) MAXDEPTH(5000) REPLACE
+
+* Local IF Staging Queues — Outbound messages staged here before routing to Bacen
+DEFINE QLOCAL('QL.36266751.01.ENTRADA.IF') DESCR('IF Staging - Outbound Requests')  DEFPSIST(YES) MAXDEPTH(5000) REPLACE
+DEFINE QLOCAL('QL.36266751.01.SAIDA.IF')   DESCR('IF Staging - Outbound Responses') DEFPSIST(YES) MAXDEPTH(5000) REPLACE
+DEFINE QLOCAL('QL.36266751.01.REPORT.IF')  DESCR('IF Staging - Outbound Reports')   DEFPSIST(YES) MAXDEPTH(5000) REPLACE
+DEFINE QLOCAL('QL.36266751.01.SUPORTE.IF') DESCR('IF Staging - Outbound Support')   DEFPSIST(YES) MAXDEPTH(5000) REPLACE
 
 * Remote Queues — Messages FROM Finvest TO Bacen
 DEFINE QREMOTE('QR.REQ.36266751.00038166.01') DESCR('Finvest Request to Bacen')  RNAME('QL.REQ.36266751.00038166.01') RQMNAME('QM.BACEN') XMITQ('QL.RSP.00038166.36266751.01') REPLACE
@@ -136,9 +142,9 @@ else
     fail "Queue manager $QM status: $QM_STATUS"
 fi
 
-# Count local queues (expect 5: 4 app + dead letter)
+# Count local queues (expect 9: 4 inbound + 4 IF staging + dead letter)
 LOCAL_COUNT=$(echo "DISPLAY QLOCAL(*)" | "$MQ_BIN/runmqsc" "$QM" 2>/dev/null | grep -c "QUEUE(" || true)
-ok "Local queues found: $LOCAL_COUNT (expect 5)"
+ok "Local queues found: $LOCAL_COUNT (expect 9)"
 
 # Count remote queues (expect 4)
 REMOTE_COUNT=$(echo "DISPLAY QREMOTE(*)" | "$MQ_BIN/runmqsc" "$QM" 2>/dev/null | grep -c "QUEUE(" || true)
