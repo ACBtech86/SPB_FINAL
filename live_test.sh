@@ -32,7 +32,7 @@ tmux kill-session -t "$SESSION" 2>/dev/null
 # Create new session — Pane 0: BCSrvSqlMq logs
 tmux new-session -d -s "$SESSION" -x 200 -y 50
 
-tmux send-keys -t "$SESSION" "echo '=== BCSrvSqlMq Logs ===' && tail -f /tmp/bcsrvsqlmq.log" C-m
+tmux send-keys -t "$SESSION" "echo '=== BCSrvSqlMq Logs ===' && tail -f $PROJECT_DIR/BCSrvSqlMq/Traces/TRACE_SPB__\$(date +%Y%m%d).log" C-m
 
 # Pane 1 (right): MQ Queue Depth Watcher
 tmux split-window -h -t "$SESSION"
