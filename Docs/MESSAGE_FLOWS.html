@@ -3,10 +3,10 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       
-      <link rel="stylesheet" href="file:////home/ubuntu/.vscode-server/extensions/shd101wyy.markdown-preview-enhanced-0.8.20/crossnote/dependencies/katex/katex.min.css">
+      <link rel="stylesheet" href="file:////home/ubuntu/.vscode-server/extensions/shd101wyy.markdown-preview-enhanced-0.8.21/crossnote/dependencies/katex/katex.min.css">
       
       
-      <script type="text/javascript" src="file:////home/ubuntu/.vscode-server/extensions/shd101wyy.markdown-preview-enhanced-0.8.20/crossnote/dependencies/mermaid/mermaid.min.js" charset="UTF-8"></script>
+      <script type="text/javascript" src="file:////home/ubuntu/.vscode-server/extensions/shd101wyy.markdown-preview-enhanced-0.8.21/crossnote/dependencies/mermaid/mermaid.min.js" charset="UTF-8"></script>
       
       
       <style>
@@ -15,13 +15,13 @@
 /*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
 
       </style>
-      <!-- The content below will be included at the end of the <head> element. --><script type="text/javascript">
+      <script type="text/javascript">
   document.addEventListener("DOMContentLoaded", function () {
     // your code here
   });
-</script></head><body for="html-export">
-    
-    
+</script>
+    </head>
+    <body for="html-export">
       <div class="crossnote markdown-preview  ">
       
 <h1 id="bcsrvsqlmq---message-flows">BCSrvSqlMq - Message Flows </h1>
@@ -516,7 +516,7 @@ mermaid.initialize(MERMAID_CONFIG || {})
 if (typeof(window['Reveal']) !== 'undefined') {
   function mermaidRevealHelper(event) {
     var currentSlide = event.currentSlide
-    var diagrams = currentSlide.querySelectorAll('.mermaid')
+    var diagrams = currentSlide.querySelectorAll('div.mermaid')
     for (var i = 0; i < diagrams.length; i++) {
       var diagram = diagrams[i]
       if (!diagram.hasAttribute('data-processed')) {
@@ -529,11 +529,11 @@ if (typeof(window['Reveal']) !== 'undefined') {
   Reveal.addEventListener('slidetransitionend', mermaidRevealHelper)
   Reveal.addEventListener('ready', mermaidRevealHelper)
   await mermaid.run({
-    nodes: document.querySelectorAll('.mermaid')
+    nodes: document.querySelectorAll('div.mermaid')
   })
 } else {
   await mermaid.run({
-    nodes: document.querySelectorAll('.mermaid')
+    nodes: document.querySelectorAll('div.mermaid')
   })
 }
 </script>

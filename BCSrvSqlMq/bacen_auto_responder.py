@@ -188,28 +188,33 @@ class BacenAutoResponder:
         now = datetime.now()
         response_nu_ope = f"{ISPB_BACEN}{now.strftime('%Y%m%d%H%M%S')}"
 
-        response_xml = f'''<?xml version="1.0" encoding="UTF-8"?>
-<DOC xmlns="http://www.bcb.gov.br/SPB/{response_cod}.xsd">
+        response_xml = f'''<?xml version="1.0"?>
+<!DOCTYPE SPBDOC SYSTEM "SPBDOC.DTD">
+<SPBDOC>
   <BCMSG>
-    <IdentdEmissor>{ISPB_BACEN}</IdentdEmissor>
-    <IdentdDestinatario>{ISPB_FINVEST}</IdentdDestinatario>
-    <DomSist>SPB</DomSist>
+    <Grupo_EmissorMsg>
+      <TipoId_Emissor>P</TipoId_Emissor>
+      <Id_Emissor>{ISPB_BACEN}</Id_Emissor>
+    </Grupo_EmissorMsg>
+    <DestinatarioMsg>
+      <TipoId_Destinatario>P</TipoId_Destinatario>
+      <Id_Destinatario>{ISPB_FINVEST}</Id_Destinatario>
+    </DestinatarioMsg>
     <NUOp>{response_nu_ope}</NUOp>
   </BCMSG>
   <SISMSG>
-    <{response_cod}>
-      <CodMsg>{response_cod}</CodMsg>
-      <{inner_tag}>
-        <SitRetReqECO>
-          <CodSitRetReq>00</CodSitRetReq>
-          <DescrSitRetReq>Processado com Sucesso - BACEN Simulator</DescrSitRetReq>
-        </SitRetReqECO>
-        <NumCtrlIF>BACEN{now.strftime('%H%M%S')}</NumCtrlIF>
-        <DtHrBC>{now.strftime('%Y-%m-%dT%H:%M:%S')}</DtHrBC>
-      </{inner_tag}>
-    </{response_cod}>
+    <CodMsg>{response_cod}</CodMsg>
+    <{inner_tag}>
+      <SitRetReqECO>
+        <CodSitRetReq>00</CodSitRetReq>
+        <DescrSitRetReq>Processado com Sucesso - BACEN Simulator</DescrSitRetReq>
+      </SitRetReqECO>
+      <NumCtrlIF>BACEN{now.strftime('%H%M%S')}</NumCtrlIF>
+      <DtHrBC>{now.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]}-03:00</DtHrBC>
+      <DtMovto>{now.strftime('%Y-%m-%d')}</DtMovto>
+    </{inner_tag}>
   </SISMSG>
-</DOC>'''
+</SPBDOC>'''
 
         return response_xml
 

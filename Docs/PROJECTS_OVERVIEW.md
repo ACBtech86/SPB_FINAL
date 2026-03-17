@@ -35,14 +35,16 @@ Novo_SPB/
 - Type-safe async ORM models
 
 ### Models Structure
-```
-spb_shared/models/
-├── auth.py         # User authentication
-├── catalog.py      # SPBMensagem, SPBMsgField, SPBDicionario
-├── control.py      # SPBControle, BacenControle
-├── logs.py         # SPBLogBacen, SPBLogSelic
-├── messages.py     # SPBBacenToLocal, SPBSelicToLocal, etc.
-└── queue.py        # Fila, Camaras
+
+```mermaid
+graph LR
+    Models["spb_shared/models/"]
+    Models --> auth["auth.py<br/><i>User authentication</i>"]
+    Models --> catalog["catalog.py<br/><i>SPBMensagem, SPBMsgField, SPBDicionario</i>"]
+    Models --> control["control.py<br/><i>SPBControle, BacenControle</i>"]
+    Models --> logs["logs.py<br/><i>SPBLogBacen, SPBLogSelic</i>"]
+    Models --> messages["messages.py<br/><i>SPBBacenToLocal, SPBSelicToLocal, etc.</i>"]
+    Models --> queue["queue.py<br/><i>Fila, Camaras</i>"]
 ```
 
 ### Available Models
@@ -258,27 +260,29 @@ Carga_Mensageria/
 
 ### ETL Steps
 
-#### Configuration Steps (0A-0)
-| Step | Description | Output Table |
-|------|-------------|--------------|
-| **0A** | Load operation grades | `PLAN_Grade` |
-| **0**  | Associate messages to grades | `PLAN_Grade_X_Msg` |
+```mermaid
+graph LR
+    subgraph "Configuration"
+        S0A["0A: Load grades<br/>→ PLAN_Grade"]
+        S0["0: Associate msgs<br/>→ PLAN_Grade_X_Msg"]
+    end
 
-#### Table Generation Steps (1-5)
-| Step | Description | Output Table |
-|------|-------------|--------------|
-| **1**  | Generate grade codes with ISPB routing | `SPB_CODGRADE` |
-| **2**  | Map grade × message × destination | `APP_CODGRADE_X_MSG` |
-| **3**  | Consolidate message catalog | `SPB_MENSAGEM` |
-| **4**  | Generate data dictionary | `SPB_DICIONARIO` |
-| **5**  | Denormalize message field structure | `SPB_MSGFIELD` |
+    subgraph "Table Generation"
+        S1["1: Grade codes + ISPB<br/>→ SPB_CODGRADE"]
+        S2["2: Grade × Msg × Dest<br/>→ APP_CODGRADE_X_MSG"]
+        S3["3: Message catalog<br/>→ SPB_MENSAGEM"]
+        S4["4: Data dictionary<br/>→ SPB_DICIONARIO"]
+        S5["5: Field structure<br/>→ SPB_MSGFIELD"]
+    end
 
-#### Artifact Generation Steps (A-C)
-| Step | Description | Output |
-|------|-------------|--------|
-| **A**  | Generate XML/XSL schemas | `SPB_XMLXSL` table |
-| **B**  | Generate domain HTML files | `*.htm` files |
-| **C**  | Generate ISPB registry HTML | `ISPB.htm` |
+    subgraph "Artifact Generation"
+        SA["A: XML/XSL schemas<br/>→ SPB_XMLXSL"]
+        SB["B: Domain HTML<br/>→ *.htm files"]
+        SC["C: ISPB registry<br/>→ ISPB.htm"]
+    end
+
+    S0A --> S0 --> S1 --> S2 --> S3 --> S4 --> S5 --> SA --> SB --> SC
+```
 
 ### Data Model
 
@@ -323,57 +327,88 @@ python main.py
 
 ## System Integration Architecture
 
-```
-┌─────────────────────┐         ┌─────────────────────┐
-│   SPBSite (Web UI)  │────────▶│    spb-shared       │
-│   FastAPI:8000      │         │  (Shared Models)    │
-│   - Message Forms   │         │  - SQLAlchemy ORM   │
-│   - Monitoring      │         │  - Alembic          │
-│   - Queue Mgmt      │         └─────────────────────┘
-└─────────────────────┘                    ▲
-         │                                 │
-         │ Database                        │ Database
-         │ Operations                      │ Operations
-         ▼                                 │
-┌─────────────────────┐         ┌─────────────────────┐
-│    PostgreSQL       │◀────────│   BCSrvSqlMq        │
-│  - BCSPB (main DB)  │         │  (MQ Service)       │
-│  - BCSPBSTR (cat)   │         │  - Message Routing  │
-│                     │         │  - Persistence      │
-└─────────────────────┘         │  - Acknowledgments  │
-                                └─────────────────────┘
-                                         │
-                                         │ IBM MQ
-                                         │ Protocol
-                                         ▼
-                                ┌─────────────────────┐
-                                │      IBM MQ         │
-                                │  QM.36266751.01     │
-                                │  - 8 Queues         │
-                                │  - REQ/RSP/REP/SUP  │
-                                │  - Port 1414        │
-                                └─────────────────────┘
-                                         │
-                                         │ Network
-                                         ▼
-                                ┌─────────────────────┐
-                                │    BACEN / SELIC    │
-                                │    SPB Network      │
-                                └─────────────────────┘
+```mermaid
+graph TD
+    subgraph Web Layer
+        SPBSite["SPBSite<br/><i>FastAPI :8000</i><br/>Message Forms | Monitoring | Queue Mgmt"]
+    end
 
-         ┌─────────────────────┐
-         │  Carga_Mensageria   │  (Standalone ETL)
-         │  (Message Catalog)  │
-         │  - Import from XSD  │
-         │  - Generate Schemas │
-         │  - Create HTML Docs │
-         └─────────────────────┘
-                  │
-                  ▼
-         ┌─────────────────────┐
-         │    BCSPBSTR.db      │
-         │  (Catalog Database) │
-         └─────────────────────┘
+    subgraph Shared Layer
+        Shared["spb-shared<br/><i>Shared Models</i><br/>SQLAlchemy ORM | Alembic"]
+    end
+
+    subgraph Data Layer
+        PG["PostgreSQL<br/>BCSPB <i>(main)</i> | BCSPBSTR <i>(catalog)</i>"]
+    end
+
+    subgraph Backend Layer
+        BCSrv["BCSrvSqlMq<br/><i>MQ Service</i><br/>Message Routing | Persistence | Acknowledgments"]
+    end
+
+    subgraph Messaging Layer
+        MQ["IBM MQ<br/>QM.36266751.01<br/>8 Queues: REQ / RSP / REP / SUP<br/>Port 1414"]
+    end
+
+    subgraph External
+        BACEN["BACEN / SELIC<br/>SPB Network"]
+    end
+
+    subgraph Standalone
+        Carga["Carga_Mensageria<br/><i>Standalone ETL</i><br/>Import XSD | Generate Schemas | HTML Docs"]
+        CatDB["BCSPBSTR.db<br/><i>Catalog Database</i>"]
+    end
+
+    SPBSite -->|uses models| Shared
+    SPBSite -->|DB Operations| PG
+    BCSrv -->|DB Operations| PG
+    BCSrv -->|uses models| Shared
+    BCSrv <-->|IBM MQ Protocol| MQ
+    MQ <-->|Network| BACEN
+    Carga --> CatDB
+```
+
+### Message Flow Detail
+
+```mermaid
+sequenceDiagram
+    participant Site as SPBSite
+    participant DB as PostgreSQL
+    participant Srv as BCSrvSqlMq
+    participant MQ as IBM MQ
+    participant BC as BACEN
+
+    Site->>DB: INSERT into spb_local_to_bacen
+    Srv->>DB: Poll for new messages
+    Srv->>MQ: MQPUT to QL.*.ENTRADA.IF
+    MQ->>BC: Forward via SPB Network
+    BC->>MQ: Response to QL.RSP.*
+    Srv->>MQ: MQGET from QL.RSP.*
+    Srv->>DB: INSERT into spb_bacen_to_local
+    Site->>DB: Display received messages
+```
+
+### Queue Architecture
+
+```mermaid
+graph LR
+    subgraph "Finvest → BACEN (Remote Queues)"
+        QR_REQ["QR.REQ.36266751.00038166.01"]
+        QR_RSP["QR.RSP.36266751.00038166.01"]
+        QR_REP["QR.REP.36266751.00038166.01"]
+        QR_SUP["QR.SUP.36266751.00038166.01"]
+    end
+
+    subgraph "BACEN → Finvest (Local Queues)"
+        QL_REQ["QL.REQ.00038166.36266751.01"]
+        QL_RSP["QL.RSP.00038166.36266751.01"]
+        QL_REP["QL.REP.00038166.36266751.01"]
+        QL_SUP["QL.SUP.00038166.36266751.01"]
+    end
+
+    QR_REQ -->|REQ| QL_REQ
+    QR_RSP -->|RSP| QL_RSP
+    QR_REP -->|REP| QL_REP
+    QR_SUP -->|SUP| QL_SUP
 ```
 
 ---
