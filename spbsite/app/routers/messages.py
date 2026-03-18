@@ -11,6 +11,7 @@ from app.database import get_db
 from app.dependencies import get_current_user
 from app.templates_config import templates
 from spb_shared.models import User
+from app.config import settings
 from app.services.form_engine import get_message_types, load_form, validate_form
 from app.services.xml_builder import build_spb_xml, submit_message
 
@@ -61,7 +62,7 @@ async def message_combined(
     msg_types = await get_message_types(db, user)
     return templates.TemplateResponse(
         "messages/combined.html",
-        {"request": request, "user": user, "msg_types": msg_types},
+        {"request": request, "user": user, "msg_types": msg_types, "settings": settings},
     )
 
 
@@ -87,6 +88,7 @@ async def get_form_api(
             {
                 "cpotag": f.cpotag,
                 "cponome": f.cponome,
+                "cpotipo": f.cpotipo,
                 "cpoform": f.cpoform,
                 "cpotam": f.cpotam,
                 "cpoobrig": f.cpoobrig,

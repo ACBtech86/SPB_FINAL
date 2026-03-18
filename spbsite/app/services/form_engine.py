@@ -122,8 +122,8 @@ async def load_form(db: AsyncSession, msg_id: str) -> Optional[FormDefinition]:
     level = 0
     for row in rows:
         cpotag = (row.msg_cpotag or "").strip()
-        cpotipo = (row.msg_cpotipo or "").strip().lower()
-        cpoform = (row.msg_cpoform or "").strip().lower()
+        cpotipo = (row.msg_cpotipo or "").strip()
+        cpoform = (row.msg_cpoform or "").strip()
         cpotam = (row.msg_cpotam or "").strip()
         cponome = (row.msg_cponome or "").strip()
         cpoobrig = (row.msg_cpoobrig or "").strip()
@@ -179,18 +179,19 @@ def validate_form(form_def: FormDefinition, form_data: dict) -> ValidationResult
         if not value:
             continue
 
-        # Check date format
-        if field_def.cpoform == "data" and len(value.replace("/", "")) < 8:
+        # Check date format (DB stores "Data", "DataHora", etc.)
+        cpoform_lower = field_def.cpoform.lower()
+        if cpoform_lower == "data" and len(value.replace("/", "")) < 8:
             errors.append(f"Data invalida: {field_def.cponome}")
 
         # Check datetime format
-        if field_def.cpoform == "data hora" and len(
+        if cpoform_lower == "datahora" and len(
             value.replace("/", "").replace(" ", "").replace(":", "")
         ) < 14:
             errors.append(f"Data/hora invalida: {field_def.cponome}")
 
         # Check time format
-        if field_def.cpoform == "hora" and len(value.replace(":", "")) < 6:
+        if cpoform_lower == "hora" and len(value.replace(":", "")) < 6:
             errors.append(f"Hora invalida: {field_def.cponome}")
 
     return ValidationResult(is_valid=len(errors) == 0, errors=errors)

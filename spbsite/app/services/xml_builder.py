@@ -141,33 +141,34 @@ async def build_spb_xml(
 
     for field in fields:
         cpotag = (field.msg_cpotag or "").strip()
-        cpotipo = (field.msg_cpotipo or "").strip().lower()
+        cpotipo = (field.msg_cpotipo or "").strip()
         cpoform = (field.msg_cpoform or "").strip().lower()
 
-        # Determine field type
-        if not cpotipo:
+        # Determine field type (use lowercase for comparison)
+        cpotipo_lower = cpotipo.lower()
+        if not cpotipo_lower:
             if cpotag.startswith("Grupo_"):
-                cpotipo = "grupo"
+                cpotipo_lower = "grupo"
             elif cpotag.startswith("Repet_"):
-                cpotipo = "repeticao"
+                cpotipo_lower = "repeticao"
             elif cpotag.startswith("/Grupo_") or cpotag.startswith("/Repet_"):
-                cpotipo = ""
+                cpotipo_lower = ""
 
         # Get form value
         form_value = form_data.get(cpotag, "")
 
-        if not cpotipo:
+        if not cpotipo_lower:
             if cpotag.startswith("/"):
                 nivel -= 1
             else:
                 collection[0] = _add_xml_node(sismsg, cpotag)
             continue
-        elif cpotipo == "grupo":
+        elif cpotipo_lower == "grupo":
             nivel_ant = nivel
             nivel += 1
             collection[nivel] = _add_xml_node(collection[nivel_ant], cpotag)
             continue
-        elif cpotipo in ("repeticao", "repetição"):
+        elif cpotipo_lower in ("repeticao", "repetição"):
             nivel_ant = nivel
             nivel += 1
             collection[nivel] = _add_xml_node(collection[nivel_ant], cpotag)
@@ -176,13 +177,13 @@ async def build_spb_xml(
         # Apply format conversions
         if cpoform == "data" and form_value:
             form_value = _convert_date(form_value)
-        elif cpoform == "data hora" and form_value:
+        elif cpoform == "datahora" and form_value:
             form_value = _convert_datetime(form_value)
         elif cpoform == "hora" and form_value:
             form_value = _convert_time(form_value)
 
         # Add field to XML
-        if cpotipo:
+        if cpotipo_lower:
             _add_xml_node(collection[nivel], cpotag, form_value)
 
         # Track special values

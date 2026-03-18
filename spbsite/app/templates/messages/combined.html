@@ -4,407 +4,657 @@
 
 {% block extra_head %}
 <style>
-    .header-finvest-combined {
-        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
-        color: white;
-        padding: 32px;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0, 74, 109, 0.2);
-        margin-bottom: 24px;
+    /* ── Legacy SPB Form Styling ── */
+    .spb-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        font-family: "Segoe UI", Tahoma, Verdana, Arial, sans-serif;
+        font-size: 13px;
     }
-    .header-finvest-combined h2 {
-        font-size: 2rem;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
-    .header-finvest-combined p {
-        color: rgba(255, 255, 255, 0.95);
-        font-size: 1.1rem;
-        margin: 0;
-    }
-    .card-finvest {
-        border: none;
-        border-radius: 8px;
-        box-shadow: 0 6px 20px rgba(0, 74, 109, 0.15);
-        margin-bottom: 24px;
-    }
-    .card-header-finvest {
-        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
-        color: white;
-        padding: 16px 24px;
-        border-radius: 8px 8px 0 0;
-    }
-    .card-header-finvest h5 {
-        font-weight: 700;
-        font-size: 1.2rem;
-        margin: 0;
-    }
-    .form-select-finvest {
-        border: 2px solid #dee2e6;
-        border-radius: 6px;
-        padding: 14px;
-        font-size: 1.05rem;
-        transition: all 0.2s ease;
-    }
-    .form-select-finvest:focus {
-        border-color: #008bd6;
-        box-shadow: 0 0 0 0.2rem rgba(0, 139, 214, 0.15);
-    }
-    .alert-finvest-info {
-        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-        border-left: 3px solid #008bd6;
-        border-radius: 4px;
-        box-shadow: 0 2px 6px rgba(0, 139, 214, 0.1);
-    }
-    .fieldset-finvest {
-        border: 2px solid #004a6d;
-        border-radius: 6px;
-        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        box-shadow: 0 2px 6px rgba(0, 74, 109, 0.08);
-        margin-bottom: 16px;
-    }
-    .fieldset-finvest legend {
-        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
-        color: white;
-        padding: 5px 14px;
-        border-radius: 12px;
-        font-weight: 600;
-        font-size: 0.95rem;
-        box-shadow: 0 2px 6px rgba(0, 74, 109, 0.3);
-    }
-    .form-control-finvest {
-        border: 1px solid #dee2e6;
-        border-radius: 4px;
+
+    /* ── Header (gray bar) ── */
+    .spb-header {
+        background: #d4d0c8;
+        border: 1px solid #808080;
         padding: 6px 10px;
-        font-size: 0.95rem;
-        transition: all 0.2s ease;
+        margin-bottom: 0;
     }
-    .form-control-finvest:focus {
-        border-color: #008bd6;
-        box-shadow: 0 0 0 0.2rem rgba(0, 139, 214, 0.15);
+    .spb-header table {
+        width: 100%;
+        border-collapse: collapse;
     }
-    .input-group-text-finvest {
-        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
-        color: white;
+    .spb-header td {
+        padding: 2px 6px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+    .spb-header .hdr-label {
+        font-weight: bold;
+        color: #000;
+        padding-right: 4px;
+    }
+    .spb-header .hdr-value {
+        font-weight: normal;
+        color: #000;
+    }
+    .spb-header select {
+        font-size: 13px;
+        padding: 1px 2px;
+        border: 1px solid #7f9db9;
+    }
+    .spb-header input[type="text"],
+    .spb-header input[type="time"] {
+        font-size: 13px;
+        padding: 1px 4px;
+        border: 1px solid #7f9db9;
+        background: #fff;
+    }
+    .spb-header input[type="checkbox"],
+    .spb-header input[type="radio"] {
+        vertical-align: middle;
+        margin: 0 2px;
+    }
+
+    /* ── Form table (alternating rows) ── */
+    .spb-form-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #808080;
+    }
+    .spb-form-table td {
+        padding: 3px 8px;
+        vertical-align: middle;
+        border-bottom: 1px solid #c0c0c0;
+    }
+    .spb-form-table .field-label {
+        font-weight: bold;
+        color: #000;
+        width: 220px;
+        white-space: nowrap;
+        padding-right: 12px;
+        text-align: right;
+    }
+    .spb-form-table .field-value {
+        padding-left: 8px;
+    }
+    .spb-form-table tr.row-odd {
+        background: #d8d8f0;
+    }
+    .spb-form-table tr.row-even {
+        background: #ffffff;
+    }
+    .spb-form-table tr.row-group {
+        background: #c0c0e0;
+    }
+    .spb-form-table tr.row-group td {
+        font-weight: bold;
+        padding: 4px 8px;
+        color: #333;
+    }
+
+    /* ── Form inputs ── */
+    .spb-form-table input[type="text"],
+    .spb-form-table input[type="date"],
+    .spb-form-table input[type="time"],
+    .spb-form-table input[type="datetime-local"] {
+        font-size: 13px;
+        padding: 1px 4px;
+        border: 1px solid #7f9db9;
+        background: #fff;
+    }
+    .spb-form-table input.input-highlight {
+        background: #ffffcc;
+    }
+    .spb-form-table input.input-readonly {
+        background: #f0f0f0;
         border: none;
-        font-weight: 600;
+        font-weight: bold;
     }
-    .btn-finvest-primary {
-        background: linear-gradient(135deg, #004a6d 0%, #006890 100%);
+    .spb-form-table select {
+        font-size: 13px;
+        padding: 1px 2px;
+        border: 1px solid #7f9db9;
+    }
+
+    /* ── Buttons ── */
+    .spb-buttons {
+        text-align: center;
+        padding: 10px 0;
+        border: 1px solid #808080;
+        border-top: none;
+        background: #f0f0f0;
+    }
+    .spb-buttons button {
+        font-size: 13px;
+        padding: 4px 16px;
+        margin: 0 4px;
+        cursor: pointer;
+        border: 1px solid #808080;
+        background: #e8e8e8;
+    }
+    .spb-buttons button:hover {
+        background: #d0d0d0;
+    }
+
+    /* ── Alerts (keep minimal) ── */
+    .spb-alert {
+        padding: 8px 12px;
+        margin-bottom: 8px;
+        border: 1px solid;
+        font-size: 13px;
+    }
+    .spb-alert-success {
+        background: #d4edda;
+        border-color: #28a745;
+        color: #155724;
+    }
+    .spb-alert-error {
+        background: #f8d7da;
+        border-color: #dc3545;
+        color: #721c24;
+    }
+    .spb-alert-close {
+        float: right;
+        cursor: pointer;
+        font-weight: bold;
+        color: inherit;
         border: none;
-        color: white;
-        padding: 12px 32px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        border-radius: 6px;
-        box-shadow: 0 3px 8px rgba(0, 74, 109, 0.3);
-        transition: all 0.2s ease;
+        background: none;
+        font-size: 16px;
     }
-    .btn-finvest-primary:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 74, 109, 0.4);
-        background: linear-gradient(135deg, #006890 0%, #008bd6 100%);
-        color: white;
-    }
-    .btn-finvest-secondary {
-        background: #6c757d;
-        border: none;
-        color: white;
-        padding: 12px 28px;
-        font-size: 1.05rem;
-        font-weight: 600;
-        border-radius: 6px;
-        transition: all 0.2s ease;
-    }
-    .btn-finvest-secondary:hover {
-        background: #5a6268;
-        transform: translateY(-1px);
-        color: white;
-    }
-    #formCard {
-        display: none;
-    }
-    .spinner-border-finvest {
-        color: #008bd6;
-    }
+
+    /* ── Hide form until message selected ── */
+    #spbFormSection { display: none; }
+    #formLoading { display: none; text-align: center; padding: 20px; }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-lg-11 col-xl-10">
-            <!-- Page Header -->
-            <div class="header-finvest-combined text-center">
-                <h2><i class="bi bi-file-earmark-text me-3"></i>Mensagens SPB</h2>
-                <p>Selecione e preencha mensagens do Sistema de Pagamentos Brasileiro</p>
+<div class="spb-container py-3">
+
+    <!-- Success Alert -->
+    <div id="successAlert" class="spb-alert spb-alert-success" style="display:none;">
+        <button class="spb-alert-close" onclick="this.parentElement.style.display='none'">&times;</button>
+        <strong>Mensagem enviada com sucesso!</strong><br>
+        <strong>Número de Operação:</strong> <span id="successNuOpe"></span> |
+        <strong>Tabela:</strong> <span id="successTable"></span> |
+        <strong>Fila:</strong> <span id="successQueue"></span>
+    </div>
+
+    <!-- Error Alert -->
+    <div id="errorAlert" class="spb-alert spb-alert-error" style="display:none;">
+        <button class="spb-alert-close" onclick="this.parentElement.style.display='none'">&times;</button>
+        <strong>Erros de validação:</strong>
+        <ul id="errorList" style="margin:4px 0 0 20px;padding:0;"></ul>
+    </div>
+
+    <!-- ═══ HEADER SECTION (gray bar) ═══ -->
+    <div class="spb-header">
+        <table>
+            <tr>
+                <td>
+                    <span class="hdr-label">Núm.Msg:</span>
+                    <span class="hdr-value" id="numMsg">---</span>
+                </td>
+                <td colspan="3">
+                    <span class="hdr-label">Núm.Operação:</span>
+                    <span class="hdr-value" id="numOpe">---</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:55%;">
+                    <span class="hdr-label">Sistema:</span>
+                    <select id="sistema_select" style="width:380px;">
+                        <option value="">-- Selecione --</option>
+                    </select>
+                </td>
+                <td>
+                    <input type="checkbox" id="chkPrevisao">
+                    <span class="hdr-label">Previsão:</span>
+                </td>
+                <td>
+                    <input type="radio" name="tipomov" id="radCredito" value="C">
+                    <label for="radCredito">Crédito</label>
+                </td>
+                <td>
+                    <input type="radio" name="tipomov" id="radDebito" value="D">
+                    <label for="radDebito">Débito</label>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">
+                    <span class="hdr-label">Mensagem:</span>
+                    <select id="msg_select" style="width:600px;">
+                        <option value="">-- Selecione o Sistema primeiro --</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span class="hdr-label">Destino:</span>
+                    <select id="destino_select" style="width:250px;">
+                        <option value="00038166">Bacen - 00038166</option>
+                        <option value="00038121">Selic - 00038121</option>
+                    </select>
+                </td>
+                <td colspan="2">
+                    <span class="hdr-label">Hora Prevista:</span>
+                    <input type="text" id="horaPrevista" size="8" readonly
+                           style="background:#f0f0f0;">
+                </td>
+                <td>
+                    <span class="hdr-label">Hora Limite:</span>
+                    <input type="text" id="horaLimite" size="8" readonly
+                           style="background:#f0f0f0;">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- ═══ LOADING SPINNER ═══ -->
+    <div id="formLoading">Carregando formulário...</div>
+
+    <!-- ═══ FORM SECTION ═══ -->
+    <div id="spbFormSection">
+        <form method="post" action="/messages/submit" id="spbMessageForm">
+            <input type="hidden" name="formName" id="hiddenFormName" value="">
+            <table class="spb-form-table" id="spbFieldsTable">
+                <!-- Fields rendered dynamically by JS -->
+            </table>
+            <div class="spb-buttons">
+                <button type="button" onclick="resetForm()">Salvar Modelo</button>
+                <button type="submit">Enviar</button>
             </div>
-
-            <!-- Success Alert -->
-            <div id="successAlert" class="alert alert-success alert-dismissible fade" role="alert" style="display: none;">
-                <h5 class="alert-heading"><i class="bi bi-check-circle-fill me-2"></i>Mensagem enviada com sucesso!</h5>
-                <hr>
-                <p class="mb-0"><strong>Número de Operação:</strong> <span id="successNuOpe"></span></p>
-                <p class="mb-0"><strong>Tabela:</strong> <span id="successTable"></span></p>
-                <p class="mb-0"><strong>Fila de Destino:</strong> <span id="successQueue"></span></p>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
-            <!-- Error Alert -->
-            <div id="errorAlert" class="alert alert-danger alert-dismissible fade" role="alert" style="display: none;">
-                <h5 class="alert-heading"><i class="bi bi-exclamation-triangle-fill me-2"></i>Erros de validação</h5>
-                <ul id="errorList" class="mb-0"></ul>
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-            </div>
-
-            <!-- Card 1: Message Selector -->
-            <div class="card card-finvest">
-                <div class="card-header card-header-finvest">
-                    <h5><i class="bi bi-search me-2"></i>Selecionar Mensagem</h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="mb-3">
-                        <label for="msg_select" class="form-label fw-bold mb-3" style="color: #004a6d; font-size: 1.15rem;">
-                            <i class="bi bi-file-earmark me-2" style="color: #008bd6;"></i>Tipo de Mensagem:
-                        </label>
-                        <select id="msg_select" class="form-select form-select-finvest">
-                            <option value="">-- Selecione uma mensagem SPB --</option>
-                            {% for msg in msg_types %}
-                            <option value="{{ msg.msg_id }}">{{ msg.msg_id }} - {{ msg.msg_descr or '' }}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="form-text mt-2" style="font-size: 0.95rem; color: #6c757d;">
-                            <i class="bi bi-info-circle me-1" style="color: #008bd6;"></i>
-                            <strong>{{ msg_types|length }} tipos de mensagens</strong> disponíveis no catálogo
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Card 2: Message Form (Initially Hidden) -->
-            <div id="formCard" class="card card-finvest">
-                <div class="card-header card-header-finvest">
-                    <h5><i class="bi bi-pencil-square me-2"></i>Preencher Dados da Mensagem</h5>
-                </div>
-                <div class="card-body p-4">
-                    <!-- Loading Spinner -->
-                    <div id="formLoading" class="text-center py-5" style="display: none;">
-                        <div class="spinner-border spinner-border-finvest" role="status" style="width: 3rem; height: 3rem;">
-                            <span class="visually-hidden">Carregando...</span>
-                        </div>
-                        <p class="mt-3 text-muted">Carregando formulário...</p>
-                    </div>
-
-                    <!-- Form Container -->
-                    <form method="post" action="/messages/submit" id="spbMessageForm">
-                        <div id="formContent"></div>
-
-                        <!-- Form Actions -->
-                        <div id="formActions" class="d-flex justify-content-between align-items-center gap-2 mt-4 pt-3" style="border-top: 2px solid #dee2e6; display: none !important;">
-                            <div style="color: #6c757d; font-size: 0.9rem;">
-                                <i class="bi bi-asterisk text-danger me-1" style="font-size: 0.7rem;"></i>
-                                <strong>Campos obrigatórios</strong>
-                            </div>
-                            <div class="d-flex gap-2">
-                                <button type="button" class="btn btn-finvest-secondary" onclick="resetForm()">
-                                    <i class="bi bi-arrow-clockwise me-1"></i>Limpar
-                                </button>
-                                <button type="submit" class="btn btn-finvest-primary">
-                                    <i class="bi bi-send-fill me-1"></i>Enviar Mensagem
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 {% endblock %}
 
 {% block extra_scripts %}
 <script>
-// Message selector change handler
-document.getElementById('msg_select').addEventListener('change', async function() {
-    const msgId = this.value;
-    const formCard = document.getElementById('formCard');
-    const formContent = document.getElementById('formContent');
-    const formLoading = document.getElementById('formLoading');
-    const formActions = document.getElementById('formActions');
+// ── Message data from server ──
+const ALL_MSG_TYPES = [
+    {% for msg in msg_types %}
+    { id: "{{ msg.msg_id }}", descr: "{{ msg.msg_descr or '' }}" },
+    {% endfor %}
+];
 
-    if (!msgId) {
-        formCard.style.display = 'none';
-        return;
-    }
+// ── System prefix → description mapping ──
+const SISTEMA_MAP = {
+    'BMC': 'BMC - Boletos de Pagamento',
+    'CAM': 'CAM - Câmara de Câmbio',
+    'CCR': 'CCR - Conv. de Crédito',
+    'CCS': 'CCS - Cadastro de Clientes',
+    'CIR': 'CIR - Circ. de Cheques',
+    'CMP': 'CMP - Compensação',
+    'COR': 'COR - Correspondentes',
+    'CQL': 'CQL - Consultas',
+    'CSD': 'CSD - Custódia',
+    'CTP': 'CTP - Cobrança',
+    'DDA': 'DDA - Débito Direto Autorizado',
+    'ECR': 'ECR - Encerramento de Contas',
+    'GEN': 'GEN - Genéricas',
+    'LDL': 'LDL - Liquidação Diferida',
+    'LEI': 'LEI - Leilão',
+    'LFL': 'LFL - Liq. Financ. Leilão',
+    'LPI': 'LPI - PIX Liquidação',
+    'LTR': 'LTR - Letras',
+    'PAG': 'PAG - Pagamentos',
+    'PTX': 'PTX - PIX Transações',
+    'RCO': 'RCO - Recolhimento',
+    'RDC': 'RDC - Redesconto',
+    'SEL': 'SEL - SELIC Transferência Títulos',
+    'SLB': 'SLB - SELIC Empréstimo',
+    'SLC': 'SLC - SELIC Compromissadas',
+    'SME': 'SME - SELIC Mensagens',
+    'SML': 'SML - SELIC Moedas',
+    'SRC': 'SRC - SELIC Registro',
+    'STR': 'STR - Transferência Reservas',
+    'TES': 'TES - Tesouro'
+};
 
-    // Show form card and loading spinner
-    formCard.style.display = 'block';
-    formLoading.style.display = 'block';
-    formContent.innerHTML = '';
-    formActions.style.display = 'none';
+// ── Highlight fields (long text fields get yellow background) ──
+const HIGHLIGHT_TAGS = [
+    'NomCli', 'VlrLanc', 'Hist', 'VlrFinanc', 'Vlr', 'NomClt'
+];
 
-    // Scroll to form card
-    formCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+// ── Fields to skip (rendered statically in header rows) ──
+const SKIP_FIELDS = ['CodMsg', 'NumCtrlIF'];
 
-    try {
-        // Fetch form definition
-        const response = await fetch(`/messages/api/form/${msgId}`);
-        if (!response.ok) throw new Error('Failed to load form');
+// ── Pre-filled field values ──
+const ISPB_LOCAL = '{{ settings.ispb_local }}';
 
-        const data = await response.json();
+// ── Domain types → select options (SPB standard values) ──
+const DOMAIN_OPTIONS = {
+    'TpCt': [
+        { v: '', d: '' },
+        { v: 'CC', d: 'CC - Conta Corrente' },
+        { v: 'CP', d: 'CP - Conta Poupança' },
+        { v: 'CG', d: 'CG - Conta Garantida' },
+        { v: 'CI', d: 'CI - Conta Investimento' },
+        { v: 'PG', d: 'PG - Conta Pagamento' },
+        { v: 'CD', d: 'CD - Conta Depósito' },
+        { v: 'CS', d: 'CS - Conta Salário' }
+    ],
+    'TpPessoa': [
+        { v: '', d: '' },
+        { v: 'F', d: 'F - Pessoa Física' },
+        { v: 'J', d: 'J - Pessoa Jurídica' }
+    ],
+    'Pref': [
+        { v: '', d: '' },
+        { v: 'A', d: 'A - Alta' },
+        { v: 'N', d: 'N - Normal' }
+    ],
+    'ISPB': [
+        { v: '', d: '' },
+        { v: '36266751', d: '36266751 - FINVEST' },
+        { v: '00000000', d: '00000000 - BCB' },
+        { v: '00038166', d: '00038166 - BACEN' },
+        { v: '00038121', d: '00038121 - SELIC' },
+        { v: '00000208', d: '00000208 - BRB' },
+        { v: '00360305', d: '00360305 - CAIXA' },
+        { v: '60746948', d: '60746948 - BANCO BBM' },
+        { v: '00416968', d: '00416968 - BANCO INTER' },
+        { v: '60701190', d: '60701190 - ITAÚ' },
+        { v: '00000000', d: '(digite o ISPB manualmente)' }
+    ],
+    'FinlddCli': [
+        { v: '', d: '' },
+        { v: '1', d: '1 - Pagamento de Impostos, Tributos e Taxas' },
+        { v: '2', d: '2 - Pagamento a Concessionárias de Serviço Público' },
+        { v: '3', d: '3 - Pagamento de Dividendos' },
+        { v: '4', d: '4 - Pagamento de Salários' },
+        { v: '5', d: '5 - Pagamento de Fornecedores' },
+        { v: '6', d: '6 - Pagamento de Honorários' },
+        { v: '7', d: '7 - Pagamento de Aluguéis e Taxas de Condomínio' },
+        { v: '8', d: '8 - Pagamento de Duplicatas e Títulos' },
+        { v: '9', d: '9 - Pagamento de Mensalidades Escolares' },
+        { v: '10', d: '10 - Crédito em Conta' },
+        { v: '11', d: '11 - Pagamento a Corretoras' },
+        { v: '99', d: '99 - Outros' }
+    ]
+};
 
-        // Hide loading, show form
-        formLoading.style.display = 'none';
+// ── Build Sistema dropdown ──
+function buildSistemaDropdown() {
+    const sistemas = new Set();
+    ALL_MSG_TYPES.forEach(m => sistemas.add(m.id.substring(0, 3)));
 
-        // Render form
-        renderForm(data);
+    const sel = document.getElementById('sistema_select');
+    sel.innerHTML = '<option value="">-- Selecione --</option>';
+    [...sistemas].sort().forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s;
+        opt.textContent = SISTEMA_MAP[s] || s;
+        sel.appendChild(opt);
+    });
+}
 
-        // Show form actions
-        formActions.style.display = 'flex';
+// ── Filter Mensagem dropdown by Sistema ──
+function filterMensagens(sistema) {
+    const sel = document.getElementById('msg_select');
+    sel.innerHTML = '<option value="">-- Selecione a Mensagem --</option>';
 
-    } catch (error) {
-        console.error('Error loading form:', error);
-        formLoading.style.display = 'none';
-        formContent.innerHTML = `
-            <div class="alert alert-danger">
-                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                Erro ao carregar formulário. Tente novamente.
-            </div>
-        `;
-    }
-});
+    if (!sistema) return;
 
-// Render form fields from JSON definition
+    const filtered = ALL_MSG_TYPES.filter(m => m.id.startsWith(sistema));
+    filtered.forEach(m => {
+        const opt = document.createElement('option');
+        opt.value = m.id;
+        opt.textContent = `${m.id} - ${m.descr}`;
+        sel.appendChild(opt);
+    });
+}
+
+// ── Update header times ──
+function updateTimes() {
+    const now = new Date();
+    const t = now.toLocaleTimeString('pt-BR', { hour12: false });
+    document.getElementById('horaPrevista').value = t;
+    document.getElementById('horaLimite').value = t;
+}
+
+// ── Generate NumCtrlIF ──
+function generateNumCtrlIF() {
+    const now = new Date();
+    const y = now.getFullYear();
+    const mo = String(now.getMonth() + 1).padStart(2, '0');
+    const d = String(now.getDate()).padStart(2, '0');
+    const h = String(now.getHours()).padStart(2, '0');
+    const mi = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    const seq = String(Math.floor(Math.random() * 900000) + 100000);
+    return `JDCCMM${y}${mo}${d}${h}${mi}${s}`;
+}
+
+// ── Determine input size from cpotam ──
+function inputSize(cpotam) {
+    const n = parseInt(cpotam) || 20;
+    if (n <= 4) return 5;
+    if (n <= 8) return 10;
+    if (n <= 15) return 18;
+    if (n <= 25) return 30;
+    if (n <= 40) return 45;
+    return 60;
+}
+
+// ── Render form fields into the table ──
 function renderForm(formDef) {
-    const formContent = document.getElementById('formContent');
-    let html = '';
+    const table = document.getElementById('spbFieldsTable');
+    table.innerHTML = '';
 
-    // Message ID info box
-    html += `
-        <div class="alert alert-finvest-info d-flex align-items-center mb-3 p-2" role="alert">
-            <i class="bi bi-info-circle-fill fs-5 me-3" style="color: #008bd6;"></i>
-            <div class="flex-grow-1">
-                <div class="row align-items-center">
-                    <div class="col-auto">
-                        <strong style="color: #004a6d; font-size: 0.95rem;">Tipo de Mensagem:</strong>
-                    </div>
-                    <div class="col">
-                        <input type="text" class="form-control form-control-finvest d-inline-block bg-white"
-                               name="formName" value="${formDef.msg_id}" readonly required
-                               style="max-width: 200px; font-weight: 600; color: #004a6d; padding: 4px 8px; font-size: 0.9rem;">
-                        <small class="text-muted ms-2" style="font-size: 0.85rem;">${formDef.msg_descr || ''}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
+    // Update header info
+    document.getElementById('hiddenFormName').value = formDef.msg_id;
+    document.getElementById('numOpe').textContent = '36266751' + new Date().toISOString().replace(/[-T:\.Z]/g, '').substring(0, 14);
 
-    // Render fields
-    let openFieldsets = 0;
+    const numCtrl = generateNumCtrlIF();
+
+    // Row 0: Código Mensagem (read-only)
+    let rowIdx = 0;
+    addStaticRow(table, rowIdx++, 'Código Mensagem', formDef.msg_id);
+    addStaticRow(table, rowIdx++, 'Número Controle IF', numCtrl);
+
+    // Dynamic fields
     formDef.fields.forEach(field => {
-        if (field.is_group_start) {
-            html += `
-                <fieldset class="fieldset-finvest p-3 mb-3" style="margin-left: ${field.level * 12}px">
-                    <legend class="float-none w-auto">
-                        <i class="bi bi-folder2-open me-1"></i>${field.cponome}
-                    </legend>
-            `;
-            openFieldsets++;
-        } else {
-            const icon = getFieldIcon(field.cpoform);
-            const required = field.cpoobrig === 'S';
-            const fieldWidth = field.cpotam ? Math.min(Math.max(field.cpotam * 10 + 100, 150), 800) : 300;
+        // Skip fields rendered in header rows
+        if (SKIP_FIELDS.includes(field.cpotag)) return;
 
-            html += `
-                <div class="mb-2" style="margin-left: ${field.level * 12}px">
-                    <div class="row align-items-start">
-                        <label for="${field.cpotag}" class="col-sm-4 col-md-3 col-form-label fw-semibold"
-                               style="color: #004a6d; font-size: 0.9rem; padding-top: 6px; padding-bottom: 2px;">
-                            <i class="bi bi-${icon} me-1" style="color: ${icon === 'pencil' ? '#6c757d' : '#008bd6'}; font-size: 0.85rem;"></i>
-                            ${field.cponome}
-                            ${required ? '<span class="text-danger ms-1" style="font-size: 1rem;">*</span>' : ''}
-                            ${field.cpotam ? `<br><small class="text-muted" style="font-weight: 400; font-size: 0.75rem;">Máx: ${field.cpotam}</small>` : ''}
-                        </label>
-                        <div class="col-sm-8 col-md-9">
-                            ${renderFieldInput(field, fieldWidth)}
-                        </div>
-                    </div>
-                </div>
-            `;
+        if (field.is_group_start) {
+            const tr = table.insertRow();
+            tr.className = 'row-group';
+            const td = document.createElement('td');
+            td.colSpan = 2;
+            td.textContent = field.cponome;
+            td.style.paddingLeft = (12 + field.level * 16) + 'px';
+            tr.appendChild(td);
+            rowIdx++;
+            return;
         }
+
+        const tr = table.insertRow();
+        tr.className = (rowIdx % 2 === 0) ? 'row-even' : 'row-odd';
+
+        // Label cell
+        const tdLabel = document.createElement('td');
+        tdLabel.className = 'field-label';
+        const req = field.cpoobrig === 'S';
+        tdLabel.innerHTML = field.cponome + (req ? ' <span style="color:red;">*</span>' : '');
+        tr.appendChild(tdLabel);
+
+        // Value cell
+        const tdVal = document.createElement('td');
+        tdVal.className = 'field-value';
+        tdVal.innerHTML = renderInput(field);
+        tr.appendChild(tdVal);
+
+        rowIdx++;
     });
 
-    // Close any open fieldsets
-    for (let i = 0; i < openFieldsets; i++) {
-        html += '</fieldset>';
-    }
+    // Pre-fill special fields after rendering
+    prefillFields(formDef);
 
-    formContent.innerHTML = html;
+    // Show the form
+    document.getElementById('spbFormSection').style.display = 'block';
+    document.getElementById('formLoading').style.display = 'none';
 }
 
-// Get icon for field type
-function getFieldIcon(cpoform) {
-    switch (cpoform) {
-        case 'data': return 'calendar3';
-        case 'data hora': return 'calendar-event';
-        case 'hora': return 'clock';
-        default: return 'pencil';
+// ── Render a single input ──
+function renderInput(field) {
+    const req = field.cpoobrig === 'S' ? 'required' : '';
+    const sz = inputSize(field.cpotam);
+    const maxlen = field.cpotam ? `maxlength="${field.cpotam}"` : '';
+    const isHighlight = HIGHLIGHT_TAGS.some(t => field.cpotag.toLowerCase().includes(t.toLowerCase()));
+    const hlClass = isHighlight ? ' input-highlight' : '';
+
+    // Check if this field has domain options (select box)
+    const cpotipo = field.cpotipo || '';
+    if (DOMAIN_OPTIONS[cpotipo]) {
+        const opts = DOMAIN_OPTIONS[cpotipo];
+        let html = `<select id="${field.cpotag}" name="${field.cpotag}" ${req}>`;
+        opts.forEach(o => {
+            html += `<option value="${o.v}">${o.d}</option>`;
+        });
+        html += '</select>';
+        return html;
     }
+
+    // Compare cpoform case-insensitively (DB stores "Data", "DataHora", etc.)
+    const cpoform = (field.cpoform || '').toLowerCase();
+    if (cpoform === 'data') {
+        return `<input type="date" class="date-field" id="${field.cpotag}" name="${field.cpotag}" ${req}>`;
+    }
+    if (cpoform === 'datahora') {
+        return `<input type="datetime-local" class="datetime-field" id="${field.cpotag}" name="${field.cpotag}" step="1" ${req}>`;
+    }
+    if (cpoform === 'hora') {
+        return `<input type="time" class="time-field" id="${field.cpotag}" name="${field.cpotag}" step="1" ${req}>`;
+    }
+
+    // Default text
+    return `<input type="text" class="${hlClass}" id="${field.cpotag}" name="${field.cpotag}" size="${sz}" ${maxlen} ${req}>`;
 }
 
-// Render field input based on type
-function renderFieldInput(field, fieldWidth) {
-    const required = field.cpoobrig === 'S' ? 'required' : '';
+// ── Add a static read-only row ──
+function addStaticRow(table, idx, label, value) {
+    const tr = table.insertRow();
+    tr.className = (idx % 2 === 0) ? 'row-even' : 'row-odd';
 
-    if (field.cpoform === 'data') {
-        return `
-            <div class="input-group" style="max-width: 220px;">
-                <span class="input-group-text input-group-text-finvest"><i class="bi bi-calendar3"></i></span>
-                <input type="date" class="form-control form-control-finvest date-field"
-                       id="${field.cpotag}" name="${field.cpotag}" ${required}>
-            </div>
-        `;
-    } else if (field.cpoform === 'data hora') {
-        return `
-            <div class="input-group" style="max-width: 320px;">
-                <span class="input-group-text input-group-text-finvest"><i class="bi bi-calendar-event"></i></span>
-                <input type="datetime-local" class="form-control form-control-finvest datetime-field"
-                       id="${field.cpotag}" name="${field.cpotag}" step="1" ${required}>
-            </div>
-        `;
-    } else if (field.cpoform === 'hora') {
-        return `
-            <div class="input-group" style="max-width: 200px;">
-                <span class="input-group-text input-group-text-finvest"><i class="bi bi-clock"></i></span>
-                <input type="time" class="form-control form-control-finvest time-field"
-                       id="${field.cpotag}" name="${field.cpotag}" step="1" ${required}>
-            </div>
-        `;
-    } else {
-        return `
-            <input type="text" class="form-control form-control-finvest"
-                   id="${field.cpotag}" name="${field.cpotag}"
-                   ${field.cpotam ? `maxlength="${field.cpotam}" style="max-width: ${fieldWidth}px;"` : ''}
-                   ${required}>
-        `;
-    }
+    const tdLabel = document.createElement('td');
+    tdLabel.className = 'field-label';
+    tdLabel.textContent = label;
+    tr.appendChild(tdLabel);
+
+    const tdVal = document.createElement('td');
+    tdVal.className = 'field-value';
+    tdVal.innerHTML = `<strong>${value}</strong>`;
+    tr.appendChild(tdVal);
 }
 
-// Reset form
+// ── Pre-fill special fields ──
+function prefillFields(formDef) {
+    // ISPB IF Debitada → local ISPB
+    const ispbDebtd = document.getElementById('ISPBIFDebtd');
+    if (ispbDebtd && !ispbDebtd.value) ispbDebtd.value = ISPB_LOCAL;
+
+    // Data Movimento → today
+    const dtMovto = document.getElementById('DtMovto');
+    if (dtMovto && !dtMovto.value) {
+        const now = new Date();
+        dtMovto.value = now.toISOString().split('T')[0]; // YYYY-MM-DD for date input
+    }
+
+    // Add hidden fields for CodMsg and NumCtrlIF (needed for form submission)
+    const form = document.getElementById('spbMessageForm');
+    let hidCod = document.getElementById('hidden_CodMsg');
+    if (!hidCod) {
+        hidCod = document.createElement('input');
+        hidCod.type = 'hidden'; hidCod.name = 'CodMsg'; hidCod.id = 'hidden_CodMsg';
+        form.appendChild(hidCod);
+    }
+    hidCod.value = formDef.msg_id;
+
+    let hidCtrl = document.getElementById('hidden_NumCtrlIF');
+    if (!hidCtrl) {
+        hidCtrl = document.createElement('input');
+        hidCtrl.type = 'hidden'; hidCtrl.name = 'NumCtrlIF'; hidCtrl.id = 'hidden_NumCtrlIF';
+        form.appendChild(hidCtrl);
+    }
+    hidCtrl.value = generateNumCtrlIF();
+}
+
+// ── Reset form ──
 function resetForm() {
-    document.getElementById('msg_select').value = '';
-    document.getElementById('formCard').style.display = 'none';
-    document.getElementById('formContent').innerHTML = '';
+    document.getElementById('sistema_select').value = '';
+    document.getElementById('msg_select').innerHTML = '<option value="">-- Selecione o Sistema primeiro --</option>';
+    document.getElementById('spbFormSection').style.display = 'none';
+    document.getElementById('spbFieldsTable').innerHTML = '';
+    document.getElementById('numMsg').textContent = '---';
+    document.getElementById('numOpe').textContent = '---';
     hideAlerts();
 }
 
-// Hide alerts
+// ── Hide alerts ──
 function hideAlerts() {
-    document.getElementById('successAlert').classList.remove('show');
     document.getElementById('successAlert').style.display = 'none';
-    document.getElementById('errorAlert').classList.remove('show');
     document.getElementById('errorAlert').style.display = 'none';
 }
+
+// ── Date conversion ──
+function html5ToBrDate(v) {
+    if (!v) return '';
+    const [y, m, d] = v.split('-');
+    return `${d}/${m}/${y}`;
+}
+
+function html5ToBrDateTime(v) {
+    if (!v) return '';
+    const [dp, tp] = v.split('T');
+    const [y, m, d] = dp.split('-');
+    return `${d}/${m}/${y} ${tp || '00:00:00'}`;
+}
+
+// ══════════════════════════════════════════════
+//  EVENT HANDLERS
+// ══════════════════════════════════════════════
+
+// Sistema change → filter Mensagem dropdown
+document.getElementById('sistema_select').addEventListener('change', function() {
+    filterMensagens(this.value);
+    document.getElementById('spbFormSection').style.display = 'none';
+    document.getElementById('numMsg').textContent = '---';
+    document.getElementById('numOpe').textContent = '---';
+});
+
+// Mensagem change → load form
+document.getElementById('msg_select').addEventListener('change', async function() {
+    const msgId = this.value;
+    if (!msgId) {
+        document.getElementById('spbFormSection').style.display = 'none';
+        return;
+    }
+
+    // Update Núm.Msg
+    const msgNum = String(Math.floor(Math.random() * 900000) + 100000);
+    document.getElementById('numMsg').textContent = msgNum;
+
+    // Show loading
+    document.getElementById('spbFormSection').style.display = 'none';
+    document.getElementById('formLoading').style.display = 'block';
+
+    try {
+        const resp = await fetch(`/messages/api/form/${msgId}`);
+        if (!resp.ok) throw new Error('Failed to load form');
+        const data = await resp.json();
+        renderForm(data);
+    } catch (err) {
+        console.error('Error loading form:', err);
+        document.getElementById('formLoading').style.display = 'none';
+        document.getElementById('spbFieldsTable').innerHTML =
+            '<tr><td colspan="2" style="color:red;padding:10px;">Erro ao carregar formulário.</td></tr>';
+        document.getElementById('spbFormSection').style.display = 'block';
+    }
+});
 
 // Form submission
 document.getElementById('spbMessageForm').addEventListener('submit', async function(e) {
@@ -413,75 +663,44 @@ document.getElementById('spbMessageForm').addEventListener('submit', async funct
 
     const formData = new FormData(this);
 
-    // Convert date/datetime fields to Brazilian format
-    document.querySelectorAll('.date-field').forEach(field => {
-        if (field.value) {
-            formData.set(field.name, html5ToBrDate(field.value));
-        }
+    // Convert dates to BR format
+    document.querySelectorAll('.date-field').forEach(f => {
+        if (f.value) formData.set(f.name, html5ToBrDate(f.value));
     });
-
-    document.querySelectorAll('.datetime-field').forEach(field => {
-        if (field.value) {
-            formData.set(field.name, html5ToBrDateTime(field.value));
-        }
+    document.querySelectorAll('.datetime-field').forEach(f => {
+        if (f.value) formData.set(f.name, html5ToBrDateTime(f.value));
     });
 
     try {
-        const response = await fetch('/messages/submit', {
+        const resp = await fetch('/messages/submit', {
             method: 'POST',
             headers: { 'Accept': 'application/json' },
             body: formData
         });
-
-        const result = await response.json();
+        const result = await resp.json();
 
         if (result.success) {
-            // Show success alert
             document.getElementById('successNuOpe').textContent = result.nu_ope;
             document.getElementById('successTable').textContent = result.dest_table;
             document.getElementById('successQueue').textContent = result.queue_name;
-            const successAlert = document.getElementById('successAlert');
-            successAlert.style.display = 'block';
-            successAlert.classList.add('show');
-
-            // Reset form
-            this.reset();
-
-            // Scroll to top
+            document.getElementById('successAlert').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
-            // Show errors
-            const errorList = document.getElementById('errorList');
-            errorList.innerHTML = result.errors.map(err => `<li>${err}</li>`).join('');
-            const errorAlert = document.getElementById('errorAlert');
-            errorAlert.style.display = 'block';
-            errorAlert.classList.add('show');
-
-            // Scroll to top
+            const ul = document.getElementById('errorList');
+            ul.innerHTML = result.errors.map(e => `<li>${e}</li>`).join('');
+            document.getElementById('errorAlert').style.display = 'block';
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        const errorList = document.getElementById('errorList');
-        errorList.innerHTML = '<li>Erro ao enviar mensagem. Tente novamente.</li>';
-        const errorAlert = document.getElementById('errorAlert');
-        errorAlert.style.display = 'block';
-        errorAlert.classList.add('show');
+    } catch (err) {
+        console.error('Submit error:', err);
+        document.getElementById('errorList').innerHTML = '<li>Erro ao enviar mensagem.</li>';
+        document.getElementById('errorAlert').style.display = 'block';
     }
 });
 
-// Date conversion functions
-function html5ToBrDate(html5Date) {
-    if (!html5Date) return '';
-    const [year, month, day] = html5Date.split('-');
-    return `${day}/${month}/${year}`;
-}
-
-function html5ToBrDateTime(html5DateTime) {
-    if (!html5DateTime) return '';
-    const [datePart, timePart] = html5DateTime.split('T');
-    const [year, month, day] = datePart.split('-');
-    return `${day}/${month}/${year} ${timePart || '00:00:00'}`;
-}
+// ── Init ──
+buildSistemaDropdown();
+updateTimes();
+setInterval(updateTimes, 1000);
 </script>
 {% endblock %}
