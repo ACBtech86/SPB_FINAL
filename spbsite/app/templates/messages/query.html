@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block title %}Consultar Mensagens{% endblock %}
+
+{% block extra_head %}
+<style>
+    .legacy-page { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 12px; background: #e8e8e8; }
+    .legacy-page a { color: #003366; }
+
+    /* Filter form */
+    .filter-box { background: #f0f0f0; border: 1px solid #999; padding: 10px 14px; margin-bottom: 8px; }
+    .filter-box table { width: 100%; border-collapse: collapse; }
+    .filter-box td { padding: 2px 4px; vertical-align: middle; white-space: nowrap; }
+    .filter-box td.lbl { font-weight: bold; text-align: right; padding-right: 6px; color: #333; }
+    .filter-box input[type="text"], .filter-box select {
+        font-size: 11px; padding: 1px 3px; border: 1px solid #7f9db9;
+        background: #fff; font-family: inherit;
+    }
+    .filter-box input[type="text"]:focus, .filter-box select:focus {
+        border-color: #3399ff; outline: none;
+    }
+
+    /* Radio groups */
+    .radio-row { padding: 4px 0; }
+    .radio-row label { margin-right: 12px; font-weight: normal; cursor: pointer; }
+    .radio-row input[type="radio"] { margin-right: 2px; vertical-align: middle; }
+
+    /* Pagination bar */
+    .pag-bar { padding: 4px 8px; font-size: 12px; margin-bottom: 4px; }
+    .pag-bar input[type="button"], .pag-bar button {
+        font-size: 11px; padding: 2px 8px; margin: 0 2px;
+        border: 1px solid #666; background: #e0e0e0; cursor: pointer;
+    }
+    .pag-bar input[type="button"]:hover, .pag-bar button:hover { background: #d0d0d0; }
+
+    /* Buttons */
+    .btn-legacy {
+        font-size: 11px; padding: 3px 14px; margin: 0 4px;
+        border: 1px solid #666; background: #e0e0e0; cursor: pointer;
+        font-family: inherit;
+    }
+    .btn-legacy:hover { background: #d0d0d0; }
+
+    /* Results table */
+    .msg-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    .msg-table th {
+        background: #c0c0c0; border: 1px solid #999; padding: 3px 5px;
+        font-weight: bold; text-align: center; white-space: nowrap;
+        position: sticky; top: 0; z-index: 1;
+    }
+    .msg-table td { border: 1px solid #ccc; padding: 2px 5px; vertical-align: top; }
+    .msg-table tr:nth-child(even) td { background: #f5f5f5; }
+    .msg-table tr:nth-child(odd) td { background: #fff; }
+    .msg-table tr:hover td { background: #ffffcc; }
+
+    /* Situacao colors */
+    .sit-aguardando { background: #ffff00 !important; font-weight: bold; }
+    .sit-enviada { background: #90ee90 !important; }
+    .sit-confirmada { background: #00cc00 !important; color: #fff; }
+    .sit-erro { background: #ff6666 !important; color: #fff; font-weight: bold; }
+    .sit-cancelada { background: #999 !important; color: #fff; }
+
+    /* Scroll container */
+    .table-scroll { max-height: 60vh; overflow: auto; border: 1px solid #999; }
+
+    /* Title bar */
+    .title-bar { background: #d4d0c8; border-bottom: 1px solid #999; padding: 6px 10px; font-size: 14px; font-weight: bold; color: #333; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="legacy-page">
+    <div class="title-bar">Consultar Mensagens</div>
+
+    <form method="get" action="/messages/query" id="queryForm">
+    <div class="filter-box">
+        <table>
+            <tr>
+                <td class="lbl">Data entre:</td>
+                <td><input type="text" name="data_ini" id="data_ini" size="10" maxlength="10" value="{{ filters.data_ini or today }}" placeholder="dd/mm/aaaa"></td>
+                <td style="padding: 0 4px;">a</td>
+                <td><input type="text" name="data_fim" id="data_fim" size="10" maxlength="10" value="{{ filters.data_fim or today }}" placeholder="dd/mm/aaaa"></td>
+                <td style="width:20px;"></td>
+                <td class="lbl">Grupo Msg:</td>
+                <td>
+                    <select name="grupo_msg" style="width:110px;">
+                        <option value="Todos">Todos</option>
+                        {% for g in sistemas %}
+                        <option value="{{ g }}" {{ 'selected' if filters.grupo_msg == g else '' }}>{{ g }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td style="width:30px;"></td>
+                <td class="lbl">CPF/CNPJ:</td>
+                <td><input type="text" name="cpf_cnpj" size="18" value="{{ filters.cpf_cnpj or '' }}"></td>
+                <td style="width:20px;"></td>
+                <td class="lbl">Nome Cliente:</td>
+                <td><input type="text" name="nome_cliente" size="25" value="{{ filters.nome_cliente or '' }}"></td>
+            </tr>
+            <tr>
+                <td class="lbl">Horário entre:</td>
+                <td><input type="text" name="hora_ini" size="8" maxlength="8" value="{{ filters.hora_ini or '' }}" placeholder="HH:MM:SS"></td>
+                <td style="padding: 0 4px;">a</td>
+                <td><input type="text" name="hora_fim" size="8" maxlength="8" value="{{ filters.hora_fim or '' }}" placeholder="HH:MM:SS"></td>
+                <td></td>
+                <td class="lbl">Tipo Msg:</td>
+                <td>
+                    <select name="tipo_msg" style="width:110px;">
+                        <option value="">Todas</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="lbl">Conta Creditada:</td>
+                <td><input type="text" name="conta_creditada" size="18" value="{{ filters.conta_creditada or '' }}"></td>
+                <td></td>
+                <td class="lbl">Conta Debitada:</td>
+                <td><input type="text" name="conta_debitada" size="18" value="{{ filters.conta_debitada or '' }}"></td>
+            </tr>
+            <tr>
+                <td class="lbl">Valor entre:</td>
+                <td><input type="text" name="valor_ini" size="10" value="{{ filters.valor_ini or '' }}"></td>
+                <td style="padding: 0 4px;">a</td>
+                <td><input type="text" name="valor_fim" size="10" value="{{ filters.valor_fim or '' }}"></td>
+                <td></td>
+                <td class="lbl">Num.Ctrl STR/PAG:</td>
+                <td><input type="text" name="num_ctrl" size="18" value="{{ filters.num_ctrl or '' }}"></td>
+                <td></td>
+                <td class="lbl">Agência Creditada:</td>
+                <td><input type="text" name="agencia_cred" size="6" value="{{ filters.agencia_cred or '' }}"></td>
+                <td></td>
+                <td class="lbl" style="white-space:nowrap;">Agência Debitada:</td>
+                <td><input type="text" name="agencia_deb" size="6" value="{{ filters.agencia_deb or '' }}"></td>
+            </tr>
+            <tr>
+                <td class="lbl">Situação:</td>
+                <td colspan="3">
+                    <select name="situacao" style="width:170px;">
+                        <option value="Todos">Todos</option>
+                        <option value="aguardando" {{ 'selected' if filters.situacao == 'aguardando' else '' }}>Aguardando Piloto</option>
+                        <option value="enviada" {{ 'selected' if filters.situacao == 'enviada' else '' }}>Enviada</option>
+                        <option value="confirmada" {{ 'selected' if filters.situacao == 'confirmada' else '' }}>Confirmada</option>
+                        <option value="erro" {{ 'selected' if filters.situacao == 'erro' else '' }}>Erro</option>
+                        <option value="cancelada" {{ 'selected' if filters.situacao == 'cancelada' else '' }}>Cancelada</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="lbl">IF Contra-parte:</td>
+                <td>
+                    <select name="if_contraparte" style="width:170px;">
+                        <option value="Todos">Todos</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="lbl">Cod Leg:</td>
+                <td>
+                    <select name="cod_leg" style="width:90px;">
+                        <option value="Todos">Todos</option>
+                    </select>
+                </td>
+                <td></td>
+                <td class="lbl">Núm. Msg:</td>
+                <td><input type="text" name="num_msg" size="10" value="{{ filters.num_msg or '' }}"></td>
+            </tr>
+        </table>
+
+        <!-- Radio filters -->
+        <div class="radio-row" style="border-top: 1px solid #ccc; margin-top: 4px; padding-top: 4px;">
+            <strong>Mensagens:</strong>
+            <label><input type="radio" name="mensagens" value="todas" {{ 'checked' if filters.mensagens == 'todas' else '' }}> Todas</label>
+            <label><input type="radio" name="mensagens" value="enviadas" {{ 'checked' if filters.mensagens == 'enviadas' else '' }}> Enviadas</label>
+            <label><input type="radio" name="mensagens" value="recebidas" {{ 'checked' if filters.mensagens == 'recebidas' else '' }}> Recebidas</label>
+            <label><input type="radio" name="mensagens" value="todas_r1" {{ 'checked' if filters.mensagens == 'todas_r1' else '' }}> Todas+R1</label>
+        </div>
+        <div class="radio-row">
+            <strong>Ordenar por:</strong>
+            <label><input type="radio" name="ordenar" value="num_msg" {{ 'checked' if filters.ordenar == 'num_msg' else '' }}> Núm.Msg</label>
+            <label><input type="radio" name="ordenar" value="valor" {{ 'checked' if filters.ordenar == 'valor' else '' }}> Valor</label>
+            <label><input type="radio" name="ordenar" value="if_contraparte" {{ 'checked' if filters.ordenar == 'if_contraparte' else '' }}> IF Contra-parte</label>
+            <label><input type="radio" name="ordenar" value="hora" {{ 'checked' if filters.ordenar == 'hora' else '' }}> Hora</label>
+            <label><input type="radio" name="ordenar" value="hora_desc" {{ 'checked' if filters.ordenar == 'hora_desc' else '' }}> Hora Decresc.</label>
+            <label><input type="radio" name="ordenar" value="hora_retorno" {{ 'checked' if filters.ordenar == 'hora_retorno' else '' }}> Hora Retorno.</label>
+            <label><input type="radio" name="ordenar" value="hora_retorno_desc" {{ 'checked' if filters.ordenar == 'hora_retorno_desc' else '' }}> Hora Retorno Decresc.</label>
+        </div>
+
+        <div style="text-align: center; padding-top: 4px; border-top: 1px solid #ccc; margin-top: 4px;">
+            <button type="button" class="btn-legacy" onclick="limpar()">Limpar</button>
+            <button type="submit" class="btn-legacy">Pesquisar</button>
+        </div>
+    </div>
+    </form>
+
+    {% if result %}
+    <!-- Pagination -->
+    <div class="pag-bar">
+        Página {{ result.page }} de {{ result.total_pages }}
+        {% if result.page > 1 %}
+        <button type="button" onclick="goPage(1)">Primeira</button>
+        <button type="button" onclick="goPage({{ result.page - 1 }})">Anterior</button>
+        {% else %}
+        <button type="button" disabled style="color:#999;">Primeira</button>
+        <button type="button" disabled style="color:#999;">Anterior</button>
+        {% endif %}
+        {% if result.page < result.total_pages %}
+        <button type="button" onclick="goPage({{ result.page + 1 }})">Próxima</button>
+        <button type="button" onclick="goPage({{ result.total_pages }})">Última</button>
+        {% else %}
+        <button type="button" disabled style="color:#999;">Próxima</button>
+        <button type="button" disabled style="color:#999;">Última</button>
+        {% endif %}
+        &nbsp; ({{ result.total }} mensagens)
+    </div>
+
+    <!-- Results table -->
+    <div class="table-scroll">
+        <table class="msg-table">
+            <thead>
+                <tr>
+                    <th>Num.Msg.</th>
+                    <th>Data Movimento</th>
+                    <th>Data Registro</th>
+                    <th>Hora Registro</th>
+                    <th>Hora Retorno</th>
+                    <th>Tipo Msg</th>
+                    <th>Descrição</th>
+                    <th>IF Contraparte</th>
+                    <th>Valor</th>
+                    <th>D/C</th>
+                    <th>Situação</th>
+                    <th>Status</th>
+                    <th>Num. Controle IF</th>
+                    <th>Num OP</th>
+                    <th>CPF/CNPJ Cred.</th>
+                    <th>Nome Cliente Cred.</th>
+                    <th>Conta Cred.</th>
+                    <th>Agência Cred.</th>
+                    <th>CPF/CNPJ Deb.</th>
+                    <th>Nome Cliente Deb.</th>
+                    <th>Conta Deb.</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in result.rows %}
+                <tr>
+                    <td style="text-align:right;">{{ row.num_msg_seq }}</td>
+                    <td>{{ row.data_mov }}</td>
+                    <td>{{ row.data_reg }}</td>
+                    <td>{{ row.hora_reg }}</td>
+                    <td>{{ row.hora_retorno_str }}</td>
+                    <td>{{ row.cod_msg }}</td>
+                    <td style="white-space:nowrap;">{{ row.descricao }}</td>
+                    <td>{{ row.if_contraparte }}</td>
+                    <td style="text-align:right;">{{ row.valor }}</td>
+                    <td style="text-align:center;">{{ row.dc }}</td>
+                    <td class="{% if 'Aguardando' in row.situacao %}sit-aguardando{% elif row.situacao == 'Enviada' %}sit-enviada{% elif row.situacao == 'Confirmada' %}sit-confirmada{% elif row.situacao == 'Erro' %}sit-erro{% elif row.situacao == 'Cancelada' %}sit-cancelada{% endif %}"
+                        style="white-space:nowrap;">{{ row.situacao }}</td>
+                    <td style="text-align:center;">{{ row.status }}</td>
+                    <td>{{ row.num_ctrl_if }}</td>
+                    <td style="font-size:10px;">{{ row.nu_ope }}</td>
+                    <td>{{ row.cpf_cnpj_cred }}</td>
+                    <td style="white-space:nowrap;">{{ row.nome_cli_cred }}</td>
+                    <td>{{ row.conta_cred }}</td>
+                    <td>{{ row.ag_cred }}</td>
+                    <td>{{ row.cpf_cnpj_deb }}</td>
+                    <td style="white-space:nowrap;">{{ row.nome_cli_deb }}</td>
+                    <td>{{ row.conta_deb }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% elif result is not none %}
+    <div style="padding: 20px; text-align: center; color: #666;">
+        Nenhuma mensagem encontrada com os filtros informados.
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+function limpar() {
+    const form = document.getElementById('queryForm');
+    form.querySelectorAll('input[type="text"]').forEach(i => i.value = '');
+    form.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+    document.querySelector('input[name="mensagens"][value="todas"]').checked = true;
+    document.querySelector('input[name="ordenar"][value="num_msg"]').checked = true;
+}
+
+function goPage(p) {
+    const params = new URLSearchParams(window.location.search);
+    params.set('page', p);
+    window.location.href = '/messages/query?' + params.toString();
+}
+</script>
+{% endblock %}
