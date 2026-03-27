@@ -526,7 +526,7 @@ class CBacenRsp(CThreadMQ):
         self.m_pRS.m_MQ_CORREL_ID = md.CorrelId if hasattr(md, 'CorrelId') else md['CorrelId']
         self.m_pRS.m_DB_DATETIME = self.m_t
         self.m_pRS.m_STATUS_MSG = self.m_StatusMsg
-        self.m_pRS.m_FLAG_PROC = 'N'
+        self.m_pRS.m_FLAG_PROC = 'E'
         self.m_pRS.m_MQ_QN_ORIGEM = self.pMainSrv.pInitSrv.m_MqQlBacenCidadeRsp
         self.m_pRS.m_MQ_DATETIME = self._parse_mq_datetime(md)
         self.m_pRS.m_MQ_HEADER = self._serialize_md(md)
@@ -579,6 +579,7 @@ class CBacenRsp(CThreadMQ):
             write_log(self.m_szTaskName, 8078, False)
             return True
 
+        self.m_StatusMsg = 'R'
         return False
 
     # ------------------------------------------------------------------
@@ -593,6 +594,7 @@ class CBacenRsp(CThreadMQ):
             write_log(self.m_szTaskName, 8078, False)
             return True
 
+        self.m_StatusMsg = 'R'
         return False
 
     # ------------------------------------------------------------------
@@ -607,6 +609,7 @@ class CBacenRsp(CThreadMQ):
             write_log(self.m_szTaskName, 8078, False)
             return True
 
+        self.m_StatusMsg = 'R'
         return False
 
     # ------------------------------------------------------------------
@@ -643,7 +646,7 @@ class CBacenRsp(CThreadMQ):
 
         self.m_pRSApp.m_DB_DATETIME = self.m_t
         self.m_pRSApp.m_STATUS_MSG = 'P'
-        self.m_pRSApp.m_FLAG_PROC = 'N'
+        self.m_pRSApp.m_FLAG_PROC = 'P'
         self.m_pRSApp.m_MQ_QN_DESTINO = self.pMainSrv.pInitSrv.m_MqQrCidadeBacenRep
         self.m_pRSApp.m_NU_OPE = ''
         self.m_pRSApp.m_COD_MSG = 'REPORT'

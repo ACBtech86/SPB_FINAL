@@ -869,7 +869,7 @@ class CBacenReq(CThreadMQ):
 
         self.m_pRSApp.m_DB_DATETIME = self.m_t
         self.m_pRSApp.m_STATUS_MSG = 'P'
-        self.m_pRSApp.m_FLAG_PROC = 'N'
+        self.m_pRSApp.m_FLAG_PROC = 'P'
         self.m_pRSApp.m_MQ_QN_DESTINO = self.pMainSrv.pInitSrv.m_MqQrCidadeBacenRsp
         self.m_pRSApp.m_NU_OPE = self.m_NuOpe
         self.m_pRSApp.m_COD_MSG = cod_msg
@@ -1038,7 +1038,7 @@ class CBacenReq(CThreadMQ):
 
         self.m_pRSApp.m_DB_DATETIME = self.m_t
         self.m_pRSApp.m_STATUS_MSG = 'P'
-        self.m_pRSApp.m_FLAG_PROC = 'N'
+        self.m_pRSApp.m_FLAG_PROC = 'P'
         self.m_pRSApp.m_MQ_QN_DESTINO = self.pMainSrv.pInitSrv.m_MqQrCidadeBacenRep
         self.m_pRSApp.m_NU_OPE = ''
         self.m_pRSApp.m_COD_MSG = 'REPORT'

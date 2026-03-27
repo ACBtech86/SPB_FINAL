@@ -232,6 +232,8 @@ def _decode_situacao(flag_proc: str, status_msg: str) -> str:
         return 'Enviada'
     elif flag_proc == 'E' and status_msg == 'S':
         return 'Confirmada'
+    elif flag_proc == 'E' and status_msg == 'R':
+        return 'Recebida'
     elif flag_proc == 'E' and status_msg == 'E':
         return 'Erro'
     elif flag_proc == 'N' and status_msg == 'S':
