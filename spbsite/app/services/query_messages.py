@@ -162,12 +162,20 @@ async def query_messages(
 
 
 def _build_row(
-    db_row, direction: str, msg_descr_map: dict, xml_data: dict
+    db_row, direction: str, msg_descr_map: dict, xml_data: dict,
 ) -> dict[str, Any]:
     """Build display row dict from DB row + XML data."""
     cod_msg = getattr(db_row, 'cod_msg', '') or ''
     nu_ope = getattr(db_row, 'nu_ope', '') or ''
     db_dt = db_row.db_datetime
+
+    # Build viewer link: /viewer/{table}/{db_datetime_iso}_{mq_msg_id_hex}
+    table_name = 'spb_local_to_bacen' if direction == 'E' else 'spb_bacen_to_local'
+    mq_msg_id = getattr(db_row, 'mq_msg_id', None)
+    viewer_url = ''
+    if db_dt and mq_msg_id:
+        msg_id_hex = mq_msg_id.hex() if isinstance(mq_msg_id, (bytes, bytearray)) else str(mq_msg_id)
+        viewer_url = f"/viewer/{table_name}/{db_dt.isoformat()}_{msg_id_hex}"
 
     # Determine D/C from message type
     dc = ''
@@ -221,6 +229,7 @@ def _build_row(
         'conta_deb': xml_data.get('conta_deb', ''),
         'ag_deb': xml_data.get('ag_deb', ''),
         'direction': direction,
+        'viewer_url': viewer_url,
     }
 
 
@@ -267,11 +276,12 @@ async def _query_sent(db: AsyncSession, filters: dict) -> list:
     if num_msg_filter:
         conditions.append(cast(model.db_datetime, String).like(f'%{num_msg_filter}%'))
 
-    # R1 filter: exclude R1/R2 messages unless explicitly requested
+    # Hide response messages (R1/R2/RE) unless explicitly requested with 'todas_r1'
     msg_filter = filters.get('mensagens', 'todas')
-    if msg_filter == 'enviadas':
+    if msg_filter != 'todas_r1':
         conditions.append(~model.cod_msg.like('%R1'))
         conditions.append(~model.cod_msg.like('%R2'))
+        conditions.append(~model.cod_msg.like('%RE'))
 
     stmt = select(model)
     if conditions:
@@ -303,10 +313,14 @@ async def _query_received(db: AsyncSession, filters: dict) -> list:
         conditions.append(model.cod_msg.like(f'{grupo_msg}%'))
 
     msg_filter = filters.get('mensagens', 'todas')
-    if msg_filter == 'recebidas':
-        pass  # No extra filter
-    elif msg_filter == 'enviadas':
+    if msg_filter == 'enviadas':
         return []  # Don't query received table for "enviadas" filter
+
+    # Hide response messages (R1/R2/RE) unless explicitly requested with 'todas_r1'
+    if msg_filter != 'todas_r1':
+        conditions.append(~model.cod_msg.like('%R1'))
+        conditions.append(~model.cod_msg.like('%R2'))
+        conditions.append(~model.cod_msg.like('%RE'))
 
     stmt = select(model)
     if conditions:

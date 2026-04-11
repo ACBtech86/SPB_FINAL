@@ -110,6 +110,39 @@ async def view_xml(
         if root is not None:
             tree = xml_to_tree(root)
 
+    # Look up the related response (R1/RE) by mq_correl_id
+    # If this record is in spb_local_to_bacen, the response lives in spb_bacen_to_local
+    # (and vice versa). The link is response.mq_correl_id == this.mq_msg_id.
+    response_xml = None
+    response_tree = None
+    response_cod_msg = None
+    if table != "fila" and record is not None and record.mq_msg_id:
+        if table == "spb_local_to_bacen":
+            response_model = SPBBacenToLocal
+        elif table == "spb_bacen_to_local":
+            response_model = SPBLocalToBacen
+        elif table == "spb_local_to_selic":
+            response_model = SPBSelicToLocal
+        elif table == "spb_selic_to_local":
+            response_model = SPBLocalToSelic
+        else:
+            response_model = None
+
+        if response_model is not None:
+            resp_result = await db.execute(
+                select(response_model)
+                .where(response_model.mq_correl_id == record.mq_msg_id)
+                .order_by(response_model.db_datetime.asc())
+                .limit(1)
+            )
+            resp_record = resp_result.scalar_one_or_none()
+            if resp_record is not None:
+                response_xml = resp_record.msg
+                response_cod_msg = resp_record.cod_msg
+                resp_root = parse_xml(response_xml)
+                if resp_root is not None:
+                    response_tree = xml_to_tree(resp_root)
+
     return templates.TemplateResponse(
         "messages/viewer.html",
         {
@@ -119,5 +152,9 @@ async def view_xml(
             "tree": tree,
             "table": table,
             "record_id": record_id,
+            "cod_msg": getattr(record, "cod_msg", None) if record is not None else None,
+            "response_xml": response_xml,
+            "response_tree": response_tree,
+            "response_cod_msg": response_cod_msg,
         },
     )

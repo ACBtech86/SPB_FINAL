@@ -240,8 +240,14 @@
             </thead>
             <tbody>
                 {% for row in result.rows %}
-                <tr>
-                    <td style="text-align:right;">{{ row.num_msg_seq }}</td>
+                <tr {% if row.viewer_url %}class="clickable-row" data-href="{{ row.viewer_url }}" style="cursor:pointer;"{% endif %}>
+                    <td style="text-align:right;">
+                        {% if row.viewer_url %}
+                        <a href="{{ row.viewer_url }}" target="_blank" style="color:#2980b9; text-decoration:none; font-weight:bold;">{{ row.num_msg_seq }}</a>
+                        {% else %}
+                        {{ row.num_msg_seq }}
+                        {% endif %}
+                    </td>
                     <td>{{ row.data_mov }}</td>
                     <td>{{ row.data_reg }}</td>
                     <td>{{ row.hora_reg }}</td>
@@ -291,5 +297,18 @@ function goPage(p) {
     params.set('page', p);
     window.location.href = '/messages/query?' + params.toString();
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('tr.clickable-row').forEach(function(tr) {
+        tr.addEventListener('click', function(e) {
+            // Don't trigger if user clicked the link directly (it has its own target=_blank handling)
+            if (e.target.tagName === 'A') return;
+            const url = tr.getAttribute('data-href');
+            if (url) window.open(url, '_blank');
+        });
+        tr.addEventListener('mouseenter', function() { tr.style.background = '#fff9c4'; });
+        tr.addEventListener('mouseleave', function() { tr.style.background = ''; });
+    });
+});
 </script>
 {% endblock %}

@@ -29,7 +29,7 @@
 
 {% if tree %}
 <div class="xml-viewer">
-    <h3>Estrutura da Mensagem</h3>
+    <h3>Mensagem{% if cod_msg %} &mdash; {{ cod_msg }}{% endif %}</h3>
     <div class="xml-tree">
         {{ render_tree(tree) }}
     </div>
@@ -38,11 +38,34 @@
 
 {% if xml_content is defined and xml_content %}
 <div class="xml-raw">
-    <h3>XML Original</h3>
+    <h3>XML Original{% if cod_msg %} &mdash; {{ cod_msg }}{% endif %}</h3>
     <pre class="xml-code">{{ xml_content }}</pre>
 </div>
 {% elif not tree %}
 <div class="alert alert-warning">Nenhuma mensagem XML encontrada.</div>
+{% endif %}
+
+{% if response_tree or response_xml %}
+<hr style="margin:32px 0; border:none; border-top:2px solid #2980b9;">
+<div style="background:#eaf2f8; padding:8px 16px; border-left:4px solid #2980b9; margin-bottom:16px;">
+    <strong>Resposta correlacionada</strong>{% if response_cod_msg %} &mdash; {{ response_cod_msg }}{% endif %}
+</div>
+
+{% if response_tree %}
+<div class="xml-viewer">
+    <h3>Estrutura da Resposta</h3>
+    <div class="xml-tree">
+        {{ render_tree(response_tree) }}
+    </div>
+</div>
+{% endif %}
+
+{% if response_xml %}
+<div class="xml-raw">
+    <h3>XML da Resposta{% if response_cod_msg %} &mdash; {{ response_cod_msg }}{% endif %}</h3>
+    <pre class="xml-code">{{ response_xml }}</pre>
+</div>
+{% endif %}
 {% endif %}
 {% endblock %}
 
