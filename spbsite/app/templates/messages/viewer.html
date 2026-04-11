@@ -1,85 +1,203 @@
 {% extends "base.html" %}
 
-{% block title %}Visualizador XML{% endblock %}
-
-{% macro render_tree(node) %}
-<div class="xml-node" style="margin-left: {{ node.level * 20 }}px;">
-    <span class="xml-node-toggle">-</span>
-    <span class="xml-tag">&lt;{{ node.tag }}{% for k, v in node.attributes.items() %} {{ k }}="{{ v }}"{% endfor %}&gt;</span>
-    {% if node.text %}<span class="xml-text">{{ node.text }}</span>{% endif %}
-    {% if node.children %}
-    <div class="xml-children">
-        {% for child in node.children %}
-            {{ render_tree(child) }}
-        {% endfor %}
-    </div>
-    {% endif %}
-    <span class="xml-tag">&lt;/{{ node.tag }}&gt;</span>
-</div>
-{% endmacro %}
+{% block title %}Visualizador de Mensagem{% endblock %}
 
 {% block content %}
-<div class="page-header">
-    <h1>Visualizador de Mensagem XML</h1>
-</div>
-
-{% if error is defined and error %}
+{% if error %}
 <div class="alert alert-error">{{ error }}</div>
-{% endif %}
+{% else %}
 
-{% if tree %}
-<div class="xml-viewer">
-    <h3>Mensagem{% if cod_msg %} &mdash; {{ cod_msg }}{% endif %}</h3>
-    <div class="xml-tree">
-        {{ render_tree(tree) }}
+<style>
+    .legacy-viewer {
+        max-width: 980px;
+        margin: 16px auto;
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 11px;
+        color: #000;
+    }
+    .legacy-viewer table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+    }
+    .legacy-viewer .header-bar {
+        background: #2e6da4;
+        color: #fff;
+        font-weight: bold;
+        padding: 6px 8px;
+    }
+    .legacy-viewer .header-bar td {
+        border: 1px solid #2e6da4;
+        padding: 6px 10px;
+    }
+    .legacy-viewer .col-head {
+        background: #5b9bd5;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px 8px;
+        border: 1px solid #2e6da4;
+    }
+    .legacy-viewer .field-table td {
+        border: 1px solid #b9c9d9;
+        padding: 4px 8px;
+        background: #fff;
+    }
+    .legacy-viewer .field-table td.label {
+        background: #eaf2f8;
+        font-weight: bold;
+        width: 200px;
+    }
+    .legacy-viewer .field-table td.formatted {
+        color: #c0392b;
+        font-weight: bold;
+    }
+    .legacy-viewer .section-header {
+        background: #2e6da4;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px 8px;
+        margin-top: 10px;
+    }
+    .legacy-viewer .auth-header {
+        background: #707070;
+        color: #fff;
+        font-weight: bold;
+        padding: 5px 8px;
+    }
+    .legacy-viewer .button-bar {
+        text-align: center;
+        margin-top: 16px;
+        padding: 10px;
+        background: #f0f0f0;
+        border: 1px solid #b9c9d9;
+    }
+    .legacy-viewer .button-bar button {
+        margin: 0 6px;
+        padding: 4px 18px;
+        font-size: 11px;
+        border: 1px solid #888;
+        background: linear-gradient(to bottom, #fff, #d6d6d6);
+        cursor: pointer;
+        font-family: Verdana, Arial, sans-serif;
+    }
+    .legacy-viewer .button-bar button:hover {
+        background: linear-gradient(to bottom, #fff, #b8d4e8);
+    }
+    @media print {
+        .legacy-viewer .button-bar { display: none; }
+        body { background: #fff; }
+    }
+</style>
+
+<div class="legacy-viewer">
+
+    <!-- Header bar -->
+    <table>
+        <tr class="header-bar">
+            <td style="width:33%;">Número Mensagem: {{ msg_num }}</td>
+            <td style="width:34%; text-align:center;">{{ direction_label }}</td>
+            <td style="width:33%; text-align:right;">Hora Prevista: {{ hora_prevista }} &nbsp; Hora Limite: {{ hora_limite }}</td>
+        </tr>
+    </table>
+
+    <!-- Field table -->
+    <table class="field-table" style="margin-top:0;">
+        <tr>
+            <td class="col-head" style="width:200px;">Descrição Tag</td>
+            <td class="col-head">Conteúdo</td>
+            <td class="col-head">Conteúdo Formatado</td>
+        </tr>
+        {% for f in fields %}
+        <tr>
+            <td class="label">{{ f.descr }}</td>
+            <td>{{ f.conteudo }}</td>
+            <td class="formatted">{{ f.formatado }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Mensagens Relacionadas -->
+    <div class="section-header">Mensagens Relacionadas</div>
+    <table class="field-table" style="margin-top:0;">
+        <tr>
+            <td class="col-head" style="width:120px;">Hora</td>
+            <td class="col-head" style="width:160px;">Mensagem</td>
+            <td class="col-head">Situação</td>
+        </tr>
+        {% if related %}
+            {% for r in related %}
+            <tr>
+                <td>{{ r.hora }}</td>
+                <td>
+                    {% if r.viewer_url %}
+                    <a href="{{ r.viewer_url }}" style="color:#2980b9; font-weight:bold; text-decoration:none;">{{ r.cod_msg }}</a>
+                    {% else %}
+                    {{ r.cod_msg }}
+                    {% endif %}
+                </td>
+                <td>{{ r.situacao }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr><td colspan="3" style="text-align:center; color:#888;">Sem mensagens relacionadas</td></tr>
+        {% endif %}
+    </table>
+
+    <!-- Autorizações -->
+    <div class="auth-header">Autorizações</div>
+    <table class="field-table" style="margin-top:0;">
+        <tr>
+            <td class="col-head">Cód. Usuário</td>
+            <td class="col-head">Tipo</td>
+            <td class="col-head">Nome</td>
+            <td class="col-head">Situação</td>
+            <td class="col-head">Data</td>
+            <td class="col-head">Hora</td>
+            <td class="col-head">Área Negócio</td>
+        </tr>
+        {% if autorizacoes %}
+            {% for a in autorizacoes %}
+            <tr>
+                <td>{{ a.cod_usuario }}</td>
+                <td>{{ a.tipo }}</td>
+                <td>{{ a.nome }}</td>
+                <td>{{ a.situacao }}</td>
+                <td>{{ a.data }}</td>
+                <td>{{ a.hora }}</td>
+                <td>{{ a.area }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+        <tr><td colspan="7" style="text-align:center; color:#888;">Sem registros de auditoria</td></tr>
+        {% endif %}
+    </table>
+
+    <!-- Buttons -->
+    <div class="button-bar">
+        <button type="button" onclick="window.print()">Imprimir</button>
+        <button type="button" onclick="copyMessage()">Copiar Mensagem</button>
+        <button type="button" onclick="window.open('{{ xml_url }}', '_blank')">XML</button>
+        <button type="button" onclick="window.history.back()">Voltar</button>
     </div>
-</div>
-{% endif %}
 
-{% if xml_content is defined and xml_content %}
-<div class="xml-raw">
-    <h3>XML Original{% if cod_msg %} &mdash; {{ cod_msg }}{% endif %}</h3>
-    <pre class="xml-code">{{ xml_content }}</pre>
-</div>
-{% elif not tree %}
-<div class="alert alert-warning">Nenhuma mensagem XML encontrada.</div>
-{% endif %}
-
-{% if response_tree or response_xml %}
-<hr style="margin:32px 0; border:none; border-top:2px solid #2980b9;">
-<div style="background:#eaf2f8; padding:8px 16px; border-left:4px solid #2980b9; margin-bottom:16px;">
-    <strong>Resposta correlacionada</strong>{% if response_cod_msg %} &mdash; {{ response_cod_msg }}{% endif %}
+    <textarea id="msg-xml-source" style="position:absolute; left:-9999px;">{{ xml_content or '' }}</textarea>
 </div>
 
-{% if response_tree %}
-<div class="xml-viewer">
-    <h3>Estrutura da Resposta</h3>
-    <div class="xml-tree">
-        {{ render_tree(response_tree) }}
-    </div>
-</div>
-{% endif %}
-
-{% if response_xml %}
-<div class="xml-raw">
-    <h3>XML da Resposta{% if response_cod_msg %} &mdash; {{ response_cod_msg }}{% endif %}</h3>
-    <pre class="xml-code">{{ response_xml }}</pre>
-</div>
-{% endif %}
-{% endif %}
-{% endblock %}
-
-{% block extra_scripts %}
 <script>
-// Toggle XML tree nodes
-document.querySelectorAll('.xml-node-toggle').forEach(function(el) {
-    el.addEventListener('click', function() {
-        var children = this.parentElement.querySelector('.xml-children');
-        if (children) {
-            children.classList.toggle('collapsed');
-            this.textContent = children.classList.contains('collapsed') ? '+' : '-';
-        }
-    });
-});
+function copyMessage() {
+    const ta = document.getElementById('msg-xml-source');
+    ta.select();
+    try {
+        document.execCommand('copy');
+        alert('Mensagem copiada para a área de transferência.');
+    } catch (e) {
+        navigator.clipboard.writeText(ta.value).then(
+            () => alert('Mensagem copiada para a área de transferência.'),
+            () => alert('Falha ao copiar mensagem.')
+        );
+    }
+}
 </script>
+
+{% endif %}
 {% endblock %}
